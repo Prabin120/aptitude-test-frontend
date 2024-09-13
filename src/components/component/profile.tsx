@@ -1,5 +1,4 @@
 "use client"
-
 import { useEffect, useState } from "react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
@@ -23,72 +22,79 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
-import { IUser, TestAttempt } from "@/app/profile/userSchema"
 import { useForm } from "react-hook-form"
 import { editPasswordSchema, editProfileSchema } from "@/app/login/zod_schema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
 import CircleLoading from "../ui/circleLoading"
 import { z } from "zod"
+import { useRouter, notFound } from "next/navigation"
+import { useAppDispatch, useAppSelector } from "@/redux/store"
+import { IUserState, setUserState, userInitialState } from "@/redux/user/userSlice"
+import Loading from "@/app/loading"
+import { toast } from "sonner"
 import { handlePostMethod, handlePutMethod } from "@/utils/apiCall"
-import { deletingStorageValue, gettingStorageValue, settingStorageValue } from "@/utils/localStorageSaving"
-import { useRouter } from "next/navigation"
+import { changePasswordEndpoint, editProfile } from "@/consts"
 
-interface UserProfileProps {
-  user?: IUser
-  testAttempts: TestAttempt[]
-}
+const testAttempts = [
+  {
+    id: 1,
+    rank: 45,
+    score: 80,
+    date: '2022-01-01',
+  },
+  {
+    id: 2,
+    rank: 10,
+    score: 90,
+    date: '2022-01-02',
+  },
+]
 
 type ModalContent = "edit" | "password"
 
-export default function UserProfile({ user, testAttempts = [] }: UserProfileProps) {
+export default function UserProfile() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [modalContent, setModalContent] = useState<ModalContent>("edit")
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
+  const [userDetail, setUserDetail] = useState<IUserState>(userInitialState)
   const router = useRouter();
-  const [userDetail, setUserDetail] = useState<IUser|''>(user||'');
-
-  useEffect(() => {
-    setUserDetail(user??'');
-  }, [user])
+  const user = useAppSelector((state) => state.user);
+  const dispatch = useAppDispatch();
 
   const editForm = useForm({
     resolver: zodResolver(editProfileSchema),
-    defaultValues: { name: '', institute: '', mobile: '' }, 
+    defaultValues: { name: '', institute: '', mobile: '' },
   })
 
   const editPasswordForm = useForm({
     resolver: zodResolver(editPasswordSchema),
     defaultValues: { oldPassword: '', newPassword: '', confirmPassword: '' },
   })
-  
-  if (!user) {
-    return (
-      <div className="container mx-auto py-8">
-        <Card>
-          <CardContent className="p-6">
-            <p className="text-center text-muted-foreground">User data is not available.</p>
-          </CardContent>
-        </Card>
-      </div>
-    )
+
+  useEffect(() => {
+    setUserDetail(user);
+  }, [])
+
+  if (!userDetail) return <Loading />
+  if (!userDetail) {
+    return notFound();
   }
-  
+
   const handleEditSubmit = async (values: z.infer<typeof editProfileSchema>) => {
     setLoading(true)
-    const response = await handlePutMethod("/api/v1/user/profile", values)
+    const response = await handlePutMethod(editProfile, values)
     if (response.status === 200 || response.status === 201) {
-      console.log(gettingStorageValue('user'));
-      settingStorageValue('user', JSON.stringify(response.data));
-      console.log(gettingStorageValue('user'));
-      setUserDetail(response.data as IUser ?? '');
+      const responseData = await response.json()
+      dispatch(setUserState(responseData.data));
+      setUserDetail(responseData.data)
       editForm.reset()
       setIsModalOpen(false)
-      console.log(userDetail);
-      
+      toast("Profile updated successfully");
     }
-    else if(response.status === 401 || response.status === 403){
+    else if (response.status === 401 || response.status === 403) {
+      dispatch(setUserState(userInitialState));
       router.push('/login')
       return;
     }
@@ -100,11 +106,19 @@ export default function UserProfile({ user, testAttempts = [] }: UserProfileProp
 
   const handlePasswordChange = async (values: z.infer<typeof editPasswordSchema>) => {
     setLoading(true)
-    const response = await handlePostMethod("/api/v1/user/chnange-password", values)
-    if (!(response.status === 200 || response.status === 201)) {
+    const response = await handlePostMethod(changePasswordEndpoint, values)
+    if (response.status === 200 || response.status === 201) {
+      toast("Password updated successfully");
+      setIsModalOpen(false)
+    }
+    else if (response.status === 401 || response.status === 403) {
+      dispatch(setUserState(userInitialState));
+      router.push('/login')
+      return;
+    }
+    else{
       setError(response.message);
       setLoading(false)
-      setIsModalOpen(false)
     }
   }
   const openModal = (content: ModalContent) => {
@@ -157,7 +171,7 @@ export default function UserProfile({ user, testAttempts = [] }: UserProfileProp
                                 <FormItem>
                                   <FormLabel>Name</FormLabel>
                                   <FormControl>
-                                    <Input placeholder="John Doe" {...field} required  />
+                                    <Input placeholder="John Doe" {...field} required />
                                   </FormControl>
                                   <FormMessage />
                                 </FormItem>

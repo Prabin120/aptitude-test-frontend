@@ -1,15 +1,19 @@
+'use client'
 import HomePage from "@/components/component/home";
 import Header from "@/components/ui/header";
 import Footer from "@/components/ui/footer";
+import ReduxProvider from "@/redux/redux-provider";
 
 export default function Home() {
   return (
-    <main className="m-auto">
-      <Header/>
-      <main className="flex justify-center">
-        <HomePage/>
+    <ReduxProvider>
+      <main className="m-auto">
+        <Header/>
+        <main className="flex justify-center">
+          <HomePage/>
+        </main>
+        <Footer/>
       </main>
-      <Footer/>
-    </main>
+    </ReduxProvider>
   );
 }

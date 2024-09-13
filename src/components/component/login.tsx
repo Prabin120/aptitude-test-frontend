@@ -9,48 +9,61 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import {useForm} from "react-hook-form"
-import {z} from 'zod'
+import { useForm } from "react-hook-form"
+import { z } from 'zod'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
 import { loginFormSchema, signupFormSchema } from "@/app/login/zod_schema"
 import { useState } from "react"
 import CircleLoading from "../ui/circleLoading"
-import { handlePostMethod } from "@/utils/apiCall"
-import { settingStorageValue } from "@/utils/localStorageSaving"
 import { useRouter } from "next/navigation"
+import { useAppSelector, useAppDispatch } from "@/redux/store"
+import { setAuthState } from "@/redux/auth/authSlice"
+import { setUserState } from "@/redux/user/userSlice"
+import { apiEntryPoint, loginEndpoint, signupEndpoint } from "@/consts"
+
+const postingData = async (data: object, endPoint: string) => {
+  const response = await fetch(apiEntryPoint + endPoint, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+    body: JSON.stringify(data), // Send form data as JSON
+  });
+  const responseData = await response.json();
+  return responseData;
+}
 
 export function LoginComponent() {
+  const dispatch = useAppDispatch();
   const router = useRouter();
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const handleLoginSubmit = async(values: z.infer<typeof loginFormSchema>) => {
-    // console.log('Login Values:', values);
+  const handleLoginSubmit = async (values: z.infer<typeof loginFormSchema>) => {
     setLoading(true);
-    const response = await handlePostMethod('/api/v1/auth/login', values);
-    if(response.status === 200){
-        settingStorageValue('authenticated', 'true');
-        settingStorageValue('user', JSON.stringify(response.data));
-        router.push('/');
-    } else{
-        setError(response.message);
+    const response = await postingData(values, loginEndpoint);
+    if (response.data) {
+      dispatch(setUserState(response.data));
+      dispatch(setAuthState(true));
+      router.push('/');
+    } else {
+      setError(response.message);
     }
     setLoading(false);
   };
-  
-  const handleSignupSubmit = async(values: z.infer<typeof signupFormSchema>) => {
-    // console.log('Signup Values:', values);
+
+  const handleSignupSubmit = async (values: z.infer<typeof signupFormSchema>) => {
     setLoading(true);
-    const response = await handlePostMethod("/api/v1/auth/sign-up", values)
-        if(response.status === 200 || response.status === 201){
-            settingStorageValue('authenticated', 'true');
-            settingStorageValue('user', JSON.stringify(response.data));
-            router.push('/');
-        } else{
-            setError(response.message);
-        }
-        // console.log(form);
-        setLoading(false);
+    const response = await postingData(values, signupEndpoint);
+    if (response.data) {
+      dispatch(setAuthState(true));
+      dispatch(setUserState(response.data));
+      router.push('/');
+    } else {
+      setError(response.message);
+    }
+    setLoading(false);
   };
 
   const loginForm = useForm({
@@ -63,7 +76,7 @@ export function LoginComponent() {
     resolver: zodResolver(signupFormSchema),
     defaultValues: { email: '', password: '', confirmPassword: '', name: '', mobile: "", institute: '' }
   });
-  
+
   return (
     <div className="mx-auto max-w-[600px] space-y-6 py-12 md:py-24">
       <Tabs defaultValue="login" className="w-full">
@@ -81,46 +94,46 @@ export function LoginComponent() {
               <Form {...loginForm}>
                 <form onSubmit={loginForm.handleSubmit(handleLoginSubmit)} className="space-y-4">
                   <FormField
-                  control={loginForm.control}
-                  name="email"
-                  render={({field}) => (
-                    <FormItem>
-                      <FormLabel>Email</FormLabel>
+                    control={loginForm.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Email</FormLabel>
                         <FormControl>
-                          <Input placeholder="m@gmail.com" {...field} required/>
+                          <Input placeholder="m@gmail.com" {...field} required />
                         </FormControl>
                         <FormMessage />
-                    </FormItem>
-                  )}
+                      </FormItem>
+                    )}
                   />
                   <FormField
-                  control={loginForm.control}
-                  name="password"
-                  render={({field}) => (
-                    <FormItem>
-                      <FormLabel>Password</FormLabel>
+                    control={loginForm.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Password</FormLabel>
                         <FormControl>
-                          <Input placeholder="*********" {...field} required type="password"/>
+                          <Input placeholder="*********" {...field} required type="password" />
                         </FormControl>
                         <FormMessage />
-                    </FormItem> 
-                  )}
+                      </FormItem>
+                    )}
                   />
                   {
-                    loading?
+                    loading ?
                       <Button type="submit" className="w-full" disabled>
-                        <CircleLoading color="bg-neutral-50"/>
+                        <CircleLoading color="bg-neutral-50" />
                       </Button>
-                    :
+                      :
                       <Button type="submit" className="w-full">
                         Login
                       </Button>
                   }
                 </form>
-                { error && (
-                    <div className="my-3 text-center text-sm text-red-600">
-                        <span>{error}</span>
-                    </div>
+                {error && (
+                  <div className="my-3 text-center text-sm text-red-600">
+                    <span>{error}</span>
+                  </div>
                 )}
               </Form>
             </CardContent>
@@ -133,101 +146,101 @@ export function LoginComponent() {
               <CardDescription>Create a new account by entering your details below.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-            <Form {...signupForm}>
+              <Form {...signupForm}>
                 <form onSubmit={signupForm.handleSubmit(handleSignupSubmit)} className="space-y-4">
                   <FormField
-                  control={signupForm.control}
-                  name="name"
-                  render={({field}) => (
-                    <FormItem>
-                      <FormLabel>Name</FormLabel>
+                    control={signupForm.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Name</FormLabel>
                         <FormControl>
-                          <Input placeholder="John Doe" {...field} required/>
+                          <Input placeholder="John Doe" {...field} required />
                         </FormControl>
                         <FormMessage />
-                    </FormItem>
-                  )}
+                      </FormItem>
+                    )}
                   />
                   <FormField
-                  control={signupForm.control}
-                  name="email"
-                  render={({field}) => (
-                    <FormItem>
-                      <FormLabel>Email</FormLabel>
+                    control={signupForm.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Email</FormLabel>
                         <FormControl>
-                          <Input placeholder="m@gmail.com" {...field} required/>
+                          <Input placeholder="m@gmail.com" {...field} required />
                         </FormControl>
                         <FormMessage />
-                    </FormItem> 
-                  )}
+                      </FormItem>
+                    )}
                   />
                   <FormField
-                  control={signupForm.control}
-                  name="mobile"
-                  render={({field}) => (
-                    <FormItem>
-                      <FormLabel>Mobile</FormLabel>
+                    control={signupForm.control}
+                    name="mobile"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Mobile</FormLabel>
                         <FormControl>
-                          <Input placeholder="1234567890" {...field} required/>
+                          <Input placeholder="1234567890" {...field} required />
                         </FormControl>
                         <FormMessage />
-                    </FormItem>
-                  )}
+                      </FormItem>
+                    )}
                   />
                   <FormField
-                  control={signupForm.control}
-                  name="institute"
-                  render={({field}) => (
-                    <FormItem>
-                      <FormLabel>Institute Name</FormLabel>
+                    control={signupForm.control}
+                    name="institute"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Institute Name</FormLabel>
                         <FormControl>
                           <Input placeholder="Jolonda University" {...field} />
                         </FormControl>
                         <FormMessage />
-                    </FormItem> 
-                  )}
+                      </FormItem>
+                    )}
                   />
                   <FormField
-                  control={signupForm.control}
-                  name="password"
-                  render={({field}) => (
-                    <FormItem>
-                      <FormLabel>Password</FormLabel>
+                    control={signupForm.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Password</FormLabel>
                         <FormControl>
-                          <Input placeholder="********" {...field} type="password" required/>
+                          <Input placeholder="********" {...field} type="password" required />
                         </FormControl>
                         <FormMessage />
-                    </FormItem>
-                  )}
+                      </FormItem>
+                    )}
                   />
                   <FormField
-                  control={signupForm.control}
-                  name="confirmPassword"
-                  render={({field}) => (
-                    <FormItem>
-                      <FormLabel>Confirm Password</FormLabel>
+                    control={signupForm.control}
+                    name="confirmPassword"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Confirm Password</FormLabel>
                         <FormControl>
-                          <Input placeholder="********" {...field} type="password" required/>
+                          <Input placeholder="********" {...field} type="password" required />
                         </FormControl>
                         <FormMessage />
-                    </FormItem> 
-                  )}
+                      </FormItem>
+                    )}
                   />
                   {
-                    loading?
-                    <Button type="submit" className="w-full" disabled>
-                      <CircleLoading color="bg-neutral-50"/>
-                    </Button>
-                  :
-                    <Button type="submit" className="w-full">
-                      Sign Up
-                    </Button>
+                    loading ?
+                      <Button type="submit" className="w-full" disabled>
+                        <CircleLoading color="bg-neutral-50" />
+                      </Button>
+                      :
+                      <Button type="submit" className="w-full">
+                        Sign Up
+                      </Button>
                   }
                 </form>
-                { error && (
-                    <div className="my-3 text-center text-sm text-red-600">
-                        <span>{error}</span>
-                    </div>
+                {error && (
+                  <div className="my-3 text-center text-sm text-red-600">
+                    <span>{error}</span>
+                  </div>
                 )}
               </Form>
             </CardContent>

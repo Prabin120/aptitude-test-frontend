@@ -1,11 +1,14 @@
 'use client'
 import { LoginComponent } from '@/components/component/login'
+import ReduxProvider from '@/redux/redux-provider'
 import React from 'react'
 const Login = () => {
   return (
-    <main className='dark'>
-      <LoginComponent />
-    </main>
+    <ReduxProvider>
+      <main className='dark'>
+        <LoginComponent />
+      </main>
+    </ReduxProvider>
   )
 }
 
