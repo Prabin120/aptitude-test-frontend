@@ -1,7 +1,92 @@
-import { ArrowRight, User, Settings, LogOut } from "lucide-react"
+'use client'
+import { ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import Link from "next/link"
+import { useEffect, useState } from "react"
+import { handleGetMethod } from "@/utils/apiCall"
+import { upComingTest } from "@/consts"
+import { useAppDispatch } from "@/redux/store"
+import { useRouter } from "next/navigation"
+import { setAuthState } from "@/redux/auth/authSlice"
+import { setUserState, userInitialState } from "@/redux/user/userSlice"
+
+interface Countdown {
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+}
+const initialCountdown: Countdown = {
+  days: 0,
+  hours: 0,
+  minutes: 0,
+  seconds: 0,
+}
 
 export default function HomePage() {
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+  const [testStarted, setTestStarted] = useState(false);
+  const [registered, setRegistered] = useState(false);
+  const [countDown, setCountDown] = useState<Countdown>(initialCountdown);
+  const [attempted, setAttempted] = useState(false);
+  const [testId, setTestId] = useState("");
+
+  useEffect(() => {
+    (async () => {
+      const respose = await handleGetMethod(upComingTest);
+      if (respose.status === 401 || respose.status === 403) {
+        dispatch(setAuthState(false));
+        dispatch(setUserState(userInitialState));
+        router.push("/login");
+        return;
+      }
+      const responseData = await respose.json();
+      // console.log(responseData);
+
+      if (responseData.registered) {
+        setRegistered(true);
+        setTestId(responseData.data.test);
+        if (responseData.attemptedTest) {
+          setAttempted(true);
+          return;
+        }
+        const bookedTime = new Date(responseData.data.bookedTime);
+        if (responseData.data.paid && bookedTime < new Date()) {
+          setTestStarted(true);
+        }
+        else {
+          const calculateCountdown = () => {
+            const now = new Date().getTime();
+            const timeDifference = bookedTime.getTime() - now;
+            if (timeDifference <= 0) {
+              clearInterval(interval);
+              setCountDown(initialCountdown); // Time has passed, stop the countdown
+              setTestStarted(true);
+              return;
+            }
+
+            const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+
+            setCountDown({
+              days,
+              hours,
+              minutes,
+              seconds,
+            });
+          };
+
+          calculateCountdown(); // Initial call to set the countdown immediately
+          const interval = setInterval(calculateCountdown, 1000); // Update countdown every second
+          return () => clearInterval(interval); // Clear interval on unmount
+        }
+      }
+    }
+    )();
+  }, []);
 
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground">
@@ -19,10 +104,34 @@ export default function HomePage() {
                 </p>
               </div>
               <div className="space-x-4">
-                <Button variant="secondary" className="h-11 px-8 animate-pulse" size="lg">
-                  Start Test
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
+                {attempted ?
+                  (<Link href={`/score?testId=${testId}`}>
+                    <Button variant="secondary" className="h-11 px-8 animate-pulse" size="lg">
+                      View Score
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </Button>
+                  </Link>)
+                  :
+                  (registered ?
+                    (testStarted ?
+                      (<Link href={`/test?testId=${testId}`}>
+                        <Button  variant="secondary" className="h-11 px-8 animate-pulse" size="lg">
+                          Start Test
+                          <ArrowRight className="ml-2 h-5 w-5" />
+                        </Button>
+                      </Link>)
+                      :
+                      (<Button variant="secondary" className="h-11 px-8 animate-pulse" size="lg" disabled>
+                        {countDown.days}d {countDown.hours}h {countDown.minutes}m {countDown.seconds}s left to start
+                      </Button>))
+                    :
+                    (<Link href={`/test-registration?testId=${testId}`}>
+                      <Button variant="secondary" className="h-11 px-8 animate-pulse" size="lg">
+                        Register for a Test
+                        <ArrowRight className="ml-2 h-5 w-5" />
+                      </Button>
+                    </Link>))
+                }
               </div>
             </div>
           </div>

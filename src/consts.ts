@@ -9,3 +9,11 @@ export const changePasswordEndpoint = '/api/v1/auth/change-password'   // post
 
 // profile
 export const editProfile = '/api/v1/user/profile'   // put
+
+
+// test
+export const getTestEndpoint = '/api/v1/aptitude/test'   // get
+export const postTestEndpoint = '/api/v1/aptitude/test'   // post
+export const upComingTest = '/api/v1/aptitude/upcoming-test'   // get
+export const testRegistration = '/api/v1/aptitude/test-registration'   // post
+export const scoreCard = '/api/v1/aptitude/score-card'   // get

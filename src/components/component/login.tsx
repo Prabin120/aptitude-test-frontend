@@ -13,7 +13,7 @@ import { useForm } from "react-hook-form"
 import { z } from 'zod'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
-import { loginFormSchema, signupFormSchema } from "@/app/login/zod_schema"
+import { loginFormSchema, signupFormSchema } from "@/utils/zod_schema"
 import { useState } from "react"
 import CircleLoading from "../ui/circleLoading"
 import { useRouter } from "next/navigation"

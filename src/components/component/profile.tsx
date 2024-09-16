@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { useForm } from "react-hook-form"
-import { editPasswordSchema, editProfileSchema } from "@/app/login/zod_schema"
+import { editPasswordSchema, editProfileSchema } from "@/utils/zod_schema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
 import CircleLoading from "../ui/circleLoading"
@@ -35,6 +35,8 @@ import Loading from "@/app/loading"
 import { toast } from "sonner"
 import { handlePostMethod, handlePutMethod } from "@/utils/apiCall"
 import { changePasswordEndpoint, editProfile } from "@/consts"
+import { setAuthState } from "@/redux/auth/authSlice"
+import Link from "next/link"
 
 const testAttempts = [
   {
@@ -85,21 +87,23 @@ export default function UserProfile() {
   const handleEditSubmit = async (values: z.infer<typeof editProfileSchema>) => {
     setLoading(true)
     const response = await handlePutMethod(editProfile, values)
+    const responseData = await response.json()
     if (response.status === 200 || response.status === 201) {
-      const responseData = await response.json()
       dispatch(setUserState(responseData.data));
       setUserDetail(responseData.data)
       editForm.reset()
       setIsModalOpen(false)
       toast("Profile updated successfully");
+      setError("")
     }
     else if (response.status === 401 || response.status === 403) {
       dispatch(setUserState(userInitialState));
+      dispatch(setAuthState(false))
       router.push('/login')
       return;
     }
     else {
-      setError(response.message);
+      setError(responseData.message);
     }
     setLoading(false)
   }
@@ -107,19 +111,20 @@ export default function UserProfile() {
   const handlePasswordChange = async (values: z.infer<typeof editPasswordSchema>) => {
     setLoading(true)
     const response = await handlePostMethod(changePasswordEndpoint, values)
+    const responseData = await response.json()
     if (response.status === 200 || response.status === 201) {
       toast("Password updated successfully");
       setIsModalOpen(false)
-    }
-    else if (response.status === 401 || response.status === 403) {
+      setError("")
+    } else if (response.status === 401 || response.status === 403) {
       dispatch(setUserState(userInitialState));
       router.push('/login')
-      return;
     }
     else{
-      setError(response.message);
+      setError(responseData.message);
       setLoading(false)
     }
+    setLoading(false)
   }
   const openModal = (content: ModalContent) => {
     setModalContent(content)
@@ -376,9 +381,11 @@ export default function UserProfile() {
         </Tabs>
 
         <div className="mt-8 text-center">
-          <Button size="lg">
-            Take New Test
-          </Button>
+          <Link href={'/'}>
+            <Button size="lg">
+              Take New Test
+            </Button>
+          </Link>
         </div>
       </div>
     </div>
