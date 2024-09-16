@@ -7,7 +7,7 @@ import ReduxProvider from "@/redux/redux-provider";
 export default function Home() {
   return (
     <ReduxProvider>
-      <main className="m-auto">
+      <main className="m-auto dark">
         <Header/>
         <main className="flex justify-center">
           <HomePage/>

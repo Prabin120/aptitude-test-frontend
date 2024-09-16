@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, FormEvent } from "react"
+import { useState, useEffect, FormEvent, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
@@ -38,14 +38,18 @@ export default function TestPage() {
     const dispatch = useAppDispatch();
     const searchParams = useSearchParams()
 
+    const answersRef = useRef(answers);
+    useEffect(() => {
+        answersRef.current = answers;
+    }, [answers]);
+
     const handleEndTest = async () => {        
         if (remainingQuestions < mockQuestions.length && timeLeft > 1) {
             const confirmation = confirm(`You have ${mockQuestions.length - remainingQuestions} questions remaining. Are you sure you want to end the test? Remember, once the time runs out, your answes will automatically submitted.`);
             if (!confirmation) return;
         }
         try {
-            // console.log(answers);
-            
+            const answers = {...answersRef.current}
             const response = await handlePostMethod(postTestEndpoint, {answers}, searchParams.toString());
             const responseData = await response.json();
             if (response.status === 200 || response.status === 201) {
@@ -112,21 +116,21 @@ export default function TestPage() {
         }, 1000)
         return () => clearInterval(timer)
     }
-
-
     const handleAnswerChange = (questionId: string, answer: string | string[]) => {
         setAnswers((prevAnswers) => {
             const newAnswers = { ...prevAnswers };
             if (Array.isArray(answer) && answer.length === 0) {
                 answer.length === 0 && setRemainingQuestions(remainingQuestions - 1);
-                console.log("Answer is empty");
             }
             if (!Object.keys(newAnswers).includes(String(questionId))) {
                 setRemainingQuestions(remainingQuestions + 1);
             }
+            else if(Array.isArray(answer) && answer.length === 1 && prevAnswers[questionId].length === 0) {
+                setRemainingQuestions(remainingQuestions + 1);
+            }
             newAnswers[questionId] = answer;
             return newAnswers;
-        });
+        });        
     }
 
     const formatTime = (seconds: number) => {
