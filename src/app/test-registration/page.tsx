@@ -1,7 +1,7 @@
 'use client'
 
 import TestSetupAndPayment from '@/components/component/test-reg'
-import Header from '@/components/ui/header'
+import Header from '@/components/component/header'
 import ReduxProvider from '@/redux/redux-provider'
 import React from 'react'
 

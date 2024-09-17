@@ -15,7 +15,7 @@ import { bookingTimeSchema } from "@/app/test-registration/zod-schema"
 import { Form, FormField, FormItem, FormLabel } from "../ui/form"
 import { z } from "zod"
 import { handlePostMethod } from "@/utils/apiCall"
-import { testRegistration } from "@/consts"
+import { testRegistrationEndpoint } from "@/consts"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useAppDispatch } from "@/redux/store"
 import { setAuthState } from "@/redux/auth/authSlice"
@@ -58,7 +58,7 @@ export default function TestSetupAndPayment() {
         e.preventDefault()
         console.log("Form submitted");
         // const date = (dateTime.date as string).split('T')[0]
-        const response = await handlePostMethod(testRegistration, {dateTime}, searchParams.toString());
+        const response = await handlePostMethod(testRegistrationEndpoint, {dateTime}, searchParams.toString());
         const responseData = await response.json();
         if(response.status === 401 || response.status === 403){
             dispatch(setAuthState(false));

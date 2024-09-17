@@ -4,12 +4,14 @@ import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 import Link from 'next/link'
 import { LogOut, Settings, User } from 'lucide-react'
-import { Avatar, AvatarFallback, AvatarImage } from './avatar'
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import { useRouter } from 'next/navigation'
 import { setAuthState } from '@/redux/auth/authSlice'
 import { useAppDispatch, useAppSelector } from '@/redux/store'
 import Loading from '@/app/loading'
 import { setUserState, userInitialState } from '@/redux/user/userSlice'
+import { handleGetMethod } from '@/utils/apiCall'
+import { logoutEndpoint } from '@/consts'
 
 const Header = () => {
   const dispatch = useAppDispatch();
@@ -27,9 +29,10 @@ const Header = () => {
     return <Loading/>
   }
 
-  const handleLogout = () => {
+  const handleLogout = async() => {
     dispatch(setUserState(userInitialState));
     dispatch(setAuthState(false));
+    await handleGetMethod(logoutEndpoint);
     router.push('/login');
   }
 

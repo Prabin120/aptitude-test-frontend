@@ -1,6 +1,6 @@
 'use client'
 import ScoreCard from '@/components/component/scoreCard'
-import Header from '@/components/ui/header'
+import Header from '@/components/component/header'
 import ReduxProvider from '@/redux/redux-provider'
 import React from 'react'
 

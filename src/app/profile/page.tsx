@@ -1,7 +1,7 @@
 'use client'
 import UserProfile from '@/components/component/profile'
 import Footer from '@/components/ui/footer'
-import Header from '@/components/ui/header'
+import Header from '@/components/component/header'
 import ReduxProvider from '@/redux/redux-provider'
 
 const page = () => {

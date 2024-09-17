@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import { handleGetMethod } from "@/utils/apiCall"
-import { upComingTest } from "@/consts"
-import { useAppDispatch } from "@/redux/store"
+import { upComingTestEndpoint } from "@/consts"
+import { useAppDispatch, useAppSelector } from "@/redux/store"
 import { useRouter } from "next/navigation"
 import { setAuthState } from "@/redux/auth/authSlice"
 import { setUserState, userInitialState } from "@/redux/user/userSlice"
@@ -25,20 +25,21 @@ const initialCountdown: Countdown = {
 
 export default function HomePage() {
   const dispatch = useAppDispatch();
-  const router = useRouter();
   const [testStarted, setTestStarted] = useState(false);
   const [registered, setRegistered] = useState(false);
   const [countDown, setCountDown] = useState<Countdown>(initialCountdown);
   const [attempted, setAttempted] = useState(false);
   const [testId, setTestId] = useState("");
+  const [authenticated, setAuthenticated] = useState(false);
+  const authenticate = useAppSelector((state)=> state.auth.authState)
 
   useEffect(() => {
+    setAuthenticated(authenticate);
     (async () => {
-      const respose = await handleGetMethod(upComingTest);
+      const respose = await handleGetMethod(upComingTestEndpoint);
       if (respose.status === 401 || respose.status === 403) {
         dispatch(setAuthState(false));
         dispatch(setUserState(userInitialState));
-        router.push("/login");
         return;
       }
       const responseData = await respose.json();
@@ -104,33 +105,42 @@ export default function HomePage() {
                 </p>
               </div>
               <div className="space-x-4">
-                {attempted ?
-                  (<Link href={`/score?testId=${testId}`}>
+                {authenticated ?
+                  (attempted ?
+                    (<Link href={`/score?testId=${testId}`}>
+                      <Button variant="secondary" className="h-11 px-8 animate-pulse" size="lg">
+                        View Score
+                        <ArrowRight className="ml-2 h-5 w-5" />
+                      </Button>
+                    </Link>)
+                    :
+                    (registered ?
+                      (testStarted ?
+                        (<Link href={`/test?testId=${testId}`}>
+                          <Button variant="secondary" className="h-11 px-8 animate-pulse" size="lg">
+                            Start Test
+                            <ArrowRight className="ml-2 h-5 w-5" />
+                          </Button>
+                        </Link>)
+                        :
+                        (<Button variant="secondary" className="h-11 px-8 animate-pulse" size="lg" disabled>
+                          {countDown.days}d {countDown.hours}h {countDown.minutes}m {countDown.seconds}s left to start
+                        </Button>))
+                      :
+                      (<Link href={`/test-registration?testId=${testId}`}>
+                        <Button variant="secondary" className="h-11 px-8 animate-pulse" size="lg">
+                          Register for a Test
+                          <ArrowRight className="ml-2 h-5 w-5" />
+                        </Button>
+                      </Link>))
+                  )
+                  :
+                  (<Link href={`/login`}>
                     <Button variant="secondary" className="h-11 px-8 animate-pulse" size="lg">
-                      View Score
+                      Let's Enter
                       <ArrowRight className="ml-2 h-5 w-5" />
                     </Button>
                   </Link>)
-                  :
-                  (registered ?
-                    (testStarted ?
-                      (<Link href={`/test?testId=${testId}`}>
-                        <Button  variant="secondary" className="h-11 px-8 animate-pulse" size="lg">
-                          Start Test
-                          <ArrowRight className="ml-2 h-5 w-5" />
-                        </Button>
-                      </Link>)
-                      :
-                      (<Button variant="secondary" className="h-11 px-8 animate-pulse" size="lg" disabled>
-                        {countDown.days}d {countDown.hours}h {countDown.minutes}m {countDown.seconds}s left to start
-                      </Button>))
-                    :
-                    (<Link href={`/test-registration?testId=${testId}`}>
-                      <Button variant="secondary" className="h-11 px-8 animate-pulse" size="lg">
-                        Register for a Test
-                        <ArrowRight className="ml-2 h-5 w-5" />
-                      </Button>
-                    </Link>))
                 }
               </div>
             </div>

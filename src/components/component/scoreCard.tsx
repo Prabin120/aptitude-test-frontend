@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { CheckCircle2, XCircle } from "lucide-react"
 import { handleGetMethod } from "@/utils/apiCall"
-import { scoreCard } from "@/consts"
+import { scoreCardEndpoint } from "@/consts"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useAppDispatch } from "@/redux/store"
 import { setAuthState } from "@/redux/auth/authSlice"
@@ -22,7 +22,6 @@ interface UserAnswer {
     answer: string | string[]
 }
 
-
 export default function ScoreCard() {
     const [questions, setQuestions] = useState<Question[]>([])
     const [userAnswers, setUserAnswers] = useState<UserAnswer[]>([])
@@ -34,16 +33,14 @@ export default function ScoreCard() {
     const searchParams = useSearchParams()
 
     useEffect(() => {
-        const loadData = async () => {
-            const response = await handleGetMethod(scoreCard,searchParams.toString())
+        (async () => {
+            const response = await handleGetMethod(scoreCardEndpoint,searchParams.toString())
             if (response.status === 401 || response.status === 403) {
                 dispatch(setAuthState(false));
                 dispatch(setUserState(userInitialState));
                 router.push("/login");
             }
-            const responseData = await response.json();
-            console.log(responseData);
-            
+            const responseData = await response.json();            
             const userTest = responseData.data
             if (response.ok) {
                 setQuestions(responseData.questions)
@@ -54,8 +51,7 @@ export default function ScoreCard() {
             else{
                 setError(responseData.message ?? "Failed to fetch test data.")
             }
-        }
-        loadData()
+        })()
     }, [])
     
     if(error) return <p className="text-red-500 text-center">{error}</p>
