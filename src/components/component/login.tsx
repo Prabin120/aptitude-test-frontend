@@ -6,7 +6,7 @@
 'use client'
 
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { useForm } from "react-hook-form"
@@ -21,6 +21,7 @@ import { useAppSelector, useAppDispatch } from "@/redux/store"
 import { setAuthState } from "@/redux/auth/authSlice"
 import { setUserState } from "@/redux/user/userSlice"
 import { apiEntryPoint, loginEndpoint, signupEndpoint } from "@/consts"
+import Link from "next/link"
 
 const postingData = async (data: object, endPoint: string) => {
   const response = await fetch(apiEntryPoint + endPoint, {
@@ -137,6 +138,11 @@ export function LoginComponent() {
                 )}
               </Form>
             </CardContent>
+            <CardFooter>
+              <Link href="forgot-password" className="text-sm text-end w-full font-medium hover:underline underline-offset-4">
+                Forgot Password
+              </Link>
+            </CardFooter>
           </Card>
         </TabsContent>
         <TabsContent value="signup">

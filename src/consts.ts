@@ -6,6 +6,8 @@ export const loginEndpoint = '/api/v1/auth/login'   // post
 export const signupEndpoint = '/api/v1/auth/signup'   // post
 export const changePasswordEndpoint = '/api/v1/auth/change-password'   // post
 export const logoutEndpoint = '/api/v1/auth/logout'   // post
+export const forgotPassword = '/api/v1/auth/forgot-password'   // post
+export const resetPassword = '/api/v1/auth/reset-password'   // post
 
 
 // profile

@@ -43,4 +43,18 @@ const editPasswordSchema = z.object({
   }
 );
 
-export { loginFormSchema, signupFormSchema, editProfileSchema , editPasswordSchema};
+const resetPasswordSchema = z.object({
+  password: z.string().min(8,{message:"Password must be at least 8 characters"}), 
+  confirmPassword: z.string().min(8,{message:"Password must be at least 8 characters"}),
+}).superRefine(({password, confirmPassword}, ctx) => {
+  if(password !== confirmPassword) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: 'Passwords is not matching',
+      path: ['confirmPassword']
+    })
+    }
+}
+);
+
+export { loginFormSchema, signupFormSchema, editProfileSchema , editPasswordSchema, resetPasswordSchema};
