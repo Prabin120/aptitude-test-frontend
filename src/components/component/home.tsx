@@ -101,7 +101,7 @@ export default function HomePage() {
       }
     }
     )();
-  }, [authenticate]);
+  }, [authenticate, dispatch]);
 
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground">

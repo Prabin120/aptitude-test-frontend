@@ -41,7 +41,7 @@ const handleGetMethod = async (endpoint: string, params?: string): Promise<ApiRe
   }
 };
 
-const handlePutMethod = async (endpoint: string, data: object): Promise<any> => {
+const handlePutMethod = async (endpoint: string, data: object): Promise<ApiResponse | ErrorResponse> => {
   try {
     const response = await fetch(apiEntryPoint + endpoint, {
       method: "PUT",

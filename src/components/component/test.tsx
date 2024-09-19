@@ -107,7 +107,7 @@ export default function TestPage() {
         }, 1000);
 
         return () => clearInterval(timer);
-    }, []);
+    }, ['dispatch', 'handleEndTest', 'router', 'searchParams']);
 
     if (mockQuestions.length === 0) {
         return (

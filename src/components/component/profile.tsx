@@ -77,7 +77,7 @@ export default function UserProfile() {
 
   useEffect(() => {
     setUserDetail(user);
-  }, [userDetail])
+  }, [userDetail, user])
 
   if (!userDetail) return <Loading />
   if (!userDetail) {
@@ -87,23 +87,27 @@ export default function UserProfile() {
   const handleEditSubmit = async (values: z.infer<typeof editProfileSchema>) => {
     setLoading(true)
     const response = await handlePutMethod(editProfile, values)
-    const responseData = await response.json()
-    if (response.status === 200 || response.status === 201) {
-      dispatch(setUserState(responseData.data));
-      setUserDetail(responseData.data)
-      editForm.reset()
-      setIsModalOpen(false)
-      toast("Profile updated successfully");
-      setError("")
-    }
-    else if (response.status === 401 || response.status === 403) {
-      dispatch(setUserState(userInitialState));
-      dispatch(setAuthState(false))
-      router.push('/login')
-      return;
-    }
-    else {
-      setError(responseData.message);
+    if(response instanceof Response){
+      const responseData = await response.json()
+      if (response.status === 200 || response.status === 201) {
+        dispatch(setUserState(responseData.data));
+        setUserDetail(responseData.data)
+        editForm.reset()
+        setIsModalOpen(false)
+        toast("Profile updated successfully");
+        setError("")
+      }
+      else if (response.status === 401 || response.status === 403) {
+        dispatch(setUserState(userInitialState));
+        dispatch(setAuthState(false))
+        router.push('/login')
+        return;
+      }
+      else {
+        setError(responseData.message);
+      }
+    } else{
+      setError(response.message);
     }
     setLoading(false)
   }
