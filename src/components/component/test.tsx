@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, FormEvent, useRef } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
@@ -16,7 +16,7 @@ import { getTestEndpoint, postTestEndpoint } from "@/consts"
 import { useRouter, useSearchParams } from "next/navigation"
 import Loading from "@/app/loading"
 import { useAppDispatch } from "@/redux/store"
-import { authReducer, setAuthState } from "@/redux/auth/authSlice"
+import { setAuthState } from "@/redux/auth/authSlice"
 import { setUserState, userInitialState } from "@/redux/user/userSlice"
 
 interface Question {

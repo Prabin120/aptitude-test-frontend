@@ -6,7 +6,6 @@ import { useEffect, useState } from "react"
 import { handleGetMethod } from "@/utils/apiCall"
 import { upComingTestEndpoint } from "@/consts"
 import { useAppDispatch, useAppSelector } from "@/redux/store"
-import { useRouter } from "next/navigation"
 import { setAuthState } from "@/redux/auth/authSlice"
 import { setUserState, userInitialState } from "@/redux/user/userSlice"
 
