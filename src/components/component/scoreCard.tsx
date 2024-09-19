@@ -35,24 +35,29 @@ export default function ScoreCard() {
     useEffect(() => {
         (async () => {
             const response = await handleGetMethod(scoreCardEndpoint,searchParams.toString())
-            if (response.status === 401 || response.status === 403) {
-                dispatch(setAuthState(false));
-                dispatch(setUserState(userInitialState));
-                router.push("/login");
-            }
-            const responseData = await response.json();            
-            const userTest = responseData.data
-            if (response.ok) {
-                setQuestions(responseData.questions)
-                setUserAnswers(userTest.answers)
-                setScore(userTest.marksAchieved)
-                setTotalScore(userTest.totalMarks)
+            if (response instanceof Response) {
+                const responseData = await response.json();
+                if (response.status === 200 || response.status === 201) {
+                    const userTest = responseData.data
+                    setQuestions(responseData.questions)
+                    setUserAnswers(userTest.answers)
+                    setScore(userTest.marksAchieved)
+                    setTotalScore(userTest.totalMarks)
+                }
+                else if (response.status === 401 || response.status === 403) {
+                    dispatch(setAuthState(false));
+                    dispatch(setUserState(userInitialState));
+                    router.push("/login");
+                }
+                else{
+                    setError(responseData.message ?? "Failed to fetch test data.")
+                }
             }
             else{
-                setError(responseData.message ?? "Failed to fetch test data.")
+                setError(response.message ?? "Failed to fetch test data.")
             }
         })()
-    }, [])
+    }, [dispatch, router, searchParams])
     
     if(error) return <p className="text-red-500 text-center">{error}</p>
 

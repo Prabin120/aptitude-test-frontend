@@ -30,15 +30,17 @@ const ResetPasswordComponent = () => {
     const handlePasswordChange = async (value: z.infer<typeof resetPasswordSchema>) => {
         setIsLoading(true)
         const response = await handlePostMethod(resetPassword, value, searchParams.toString())
-        console.log(response);
-        const responseData = await response.json()
-        if (response.status === 200 || response.status === 201) {
-            dispatch(setUserState(responseData.data))
-            dispatch(setAuthState(true))
-            router.push('/')
-        }
-        else {
-            setError(responseData.message)
+        if(response instanceof Response){
+            const responseData = await response.json()
+            if (response.status === 200 || response.status === 201) {
+                dispatch(setUserState(responseData.data))
+                dispatch(setAuthState(true))
+                router.push('/')
+            } else {
+                setError(responseData.message)
+            }
+        } else {
+            setError(response.message)
         }
         setIsLoading(false)
     }

@@ -77,7 +77,7 @@ export default function UserProfile() {
 
   useEffect(() => {
     setUserDetail(user);
-  }, [])
+  }, [userDetail])
 
   if (!userDetail) return <Loading />
   if (!userDetail) {
@@ -111,17 +111,23 @@ export default function UserProfile() {
   const handlePasswordChange = async (values: z.infer<typeof editPasswordSchema>) => {
     setLoading(true)
     const response = await handlePostMethod(changePasswordEndpoint, values)
-    const responseData = await response.json()
-    if (response.status === 200 || response.status === 201) {
-      toast("Password updated successfully");
-      setIsModalOpen(false)
-      setError("")
-    } else if (response.status === 401 || response.status === 403) {
-      dispatch(setUserState(userInitialState));
-      router.push('/login')
+    if(response instanceof Response){
+      const responseData = await response.json()
+      if (response.status === 200 || response.status === 201) {
+        toast("Password updated successfully");
+        setIsModalOpen(false)
+        setError("")
+      } else if (response.status === 401 || response.status === 403) {
+        dispatch(setUserState(userInitialState));
+        router.push('/login')
+      }
+      else{
+        setError(responseData.message);
+        setLoading(false)
+      }
     }
     else{
-      setError(responseData.message);
+      setError(response.message);
       setLoading(false)
     }
     setLoading(false)

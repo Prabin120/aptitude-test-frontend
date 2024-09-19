@@ -32,7 +32,6 @@ export default function TestPage() {
     const [answers, setAnswers] = useState<Record<string, string | string[]>>({})
     const [showInstructions, setShowInstructions] = useState(true)
     const [remainingQuestions, setRemainingQuestions] = useState(0)
-    const [error, setError] = useState<string>("")
     const router = useRouter();
     const [mockQuestions, setMockQuestions] = useState<Question[]>([]);
     const dispatch = useAppDispatch();
@@ -51,13 +50,17 @@ export default function TestPage() {
         try {
             const answers = {...answersRef.current}
             const response = await handlePostMethod(postTestEndpoint, {answers}, searchParams.toString());
-            const responseData = await response.json();
-            if (response.status === 200 || response.status === 201) {
-                router.replace("/thank-you");
-                return;
-            }
-            else{
-                alert(responseData.message);
+            if(response instanceof Response){
+                const responseData = await response.json();
+                if (response.status === 200 || response.status === 201) {
+                    router.replace("/thank-you");
+                    return;
+                }
+                else{
+                    alert(responseData.message);
+                }
+            } else{
+                alert(response.message);
             }
         } catch (error) {
             alert(error);
@@ -74,18 +77,21 @@ export default function TestPage() {
                     dispatch(setUserState(userInitialState));
                     return;
                 }
-                const responseData = await response.json();
-                if (response.ok) {
-                    setMockQuestions(responseData.questions);
-                    setRemainingQuestions(0);  // Updated to use response data
-                    const endTime = new Date(responseData.bookedTime);
-                    const remaining = endTime.getTime() + (responseData.test.duration * 60 * 1000) - new Date().getTime();
-                    setTimeLeft(remaining / 1000);
-                } else {
-                    setError(responseData.message || "Failed to fetch test data.");
+                if(response instanceof Response){
+                    const responseData = await response.json();
+                    if (response.status === 200 || response.status === 201) {
+                        setMockQuestions(responseData.questions);
+                        setRemainingQuestions(0);  // Updated to use response data
+                        const endTime = new Date(responseData.bookedTime);
+                        const remaining = endTime.getTime() + (responseData.test.duration * 60 * 1000) - new Date().getTime();
+                        setTimeLeft(remaining / 1000);
+                    } 
                 }
+                // else {
+                    // setError(responseData.message || "Failed to fetch test data.");
+                // }
             } catch (error) {
-                setError("An error occurred while fetching test data.");
+                // setError("An error occurred while fetching test data.");
                 console.error("API error:", error);
             }
         })();

@@ -30,64 +30,78 @@ export default function HomePage() {
   const [attempted, setAttempted] = useState(false);
   const [testId, setTestId] = useState("");
   const [authenticated, setAuthenticated] = useState(false);
-  const authenticate = useAppSelector((state)=> state.auth.authState)
+  const authenticate = useAppSelector((state) => state.auth.authState)
 
   useEffect(() => {
     setAuthenticated(authenticate);
     (async () => {
-      const respose = await handleGetMethod(upComingTestEndpoint);
-      if (respose.status === 401 || respose.status === 403) {
-        dispatch(setAuthState(false));
-        dispatch(setUserState(userInitialState));
-        setAuthenticated(false);
-        return;
-      }
-      const responseData = await respose.json();
-      // console.log(responseData);
-
-      if (responseData.registered) {
-        setRegistered(true);
-        setTestId(responseData.data.test);
-        if (responseData.attemptedTest) {
-          setAttempted(true);
+      const response = await handleGetMethod(upComingTestEndpoint);
+      // Check if the response is an ErrorResponse
+      if ('message' in response && 'status' in response) {
+        if (response.status === 401 || response.status === 403) {
+          dispatch(setAuthState(false));
+          dispatch(setUserState(userInitialState));
+          setAuthenticated(false);
+          return;
+        } else if (response.status === 500) {
+          console.error(response.message);
           return;
         }
-        const bookedTime = new Date(responseData.data.bookedTime);
-        if (responseData.data.paid && bookedTime < new Date()) {
-          setTestStarted(true);
+      }
+      
+      if(response instanceof Response){
+        if (response.status === 401 || response.status === 403) {
+          dispatch(setAuthState(false));
+          dispatch(setUserState(userInitialState));
+          setAuthenticated(false);
+          return;
         }
-        else {
-          const calculateCountdown = () => {
-            const now = new Date().getTime();
-            const timeDifference = bookedTime.getTime() - now;
-            if (timeDifference <= 0) {
-              clearInterval(interval);
-              setCountDown(initialCountdown); // Time has passed, stop the countdown
-              setTestStarted(true);
-              return;
-            }
+        const responseData = await response.json();
 
-            const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
-
-            setCountDown({
-              days,
-              hours,
-              minutes,
-              seconds,
-            });
-          };
-
-          calculateCountdown(); // Initial call to set the countdown immediately
-          const interval = setInterval(calculateCountdown, 1000); // Update countdown every second
-          return () => clearInterval(interval); // Clear interval on unmount
+        if (responseData.registered) {
+          setRegistered(true);
+          setTestId(responseData.data.test);
+          if (responseData.attemptedTest) {
+            setAttempted(true);
+            return;
+          }
+          const bookedTime = new Date(responseData.data.bookedTime);
+          if (responseData.data.paid && bookedTime < new Date()) {
+            setTestStarted(true);
+          }
+          else {
+            const calculateCountdown = () => {
+              const now = new Date().getTime();
+              const timeDifference = bookedTime.getTime() - now;
+              if (timeDifference <= 0) {
+                clearInterval(interval);
+                setCountDown(initialCountdown); // Time has passed, stop the countdown
+                setTestStarted(true);
+                return;
+              }
+  
+              const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+              const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+              const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+              const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+  
+              setCountDown({
+                days,
+                hours,
+                minutes,
+                seconds,
+              });
+            };
+  
+            calculateCountdown(); // Initial call to set the countdown immediately
+            const interval = setInterval(calculateCountdown, 1000); // Update countdown every second
+            return () => clearInterval(interval); // Clear interval on unmount
+          }
         }
       }
     }
     )();
-  }, []);
+  }, [authenticate]);
 
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground">
@@ -137,7 +151,7 @@ export default function HomePage() {
                   :
                   (<Link href={`/login`}>
                     <Button variant="secondary" className="h-11 px-8 animate-pulse" size="lg">
-                      Let's Enter
+                      Let&apos;s Enter
                       <ArrowRight className="ml-2 h-5 w-5" />
                     </Button>
                   </Link>)

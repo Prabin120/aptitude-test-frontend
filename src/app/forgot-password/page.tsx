@@ -15,12 +15,14 @@ const ForgotPassword = () => {
         e.preventDefault()
         setIsLoading(true)
         const response = await handlePostMethod(forgotPassword, { email })
-        const responseData = await response.json()
-        if (response.status === 200 || response.status === 201) {
-            setError("")
-        }
-        else {
-            setError(responseData.message)
+        if(response instanceof Response){
+            const responseData = await response.json()
+            if (response.status === 200 || response.status === 201) {
+                setError("")
+            }
+            else {
+                setError(responseData.message)
+            }
         }
         setIsLoading(false)
     }

@@ -49,29 +49,32 @@ export default function TestSetupAndPayment() {
         const date = `${year}-${month}-${day}`;        
         const dateTimeStr = `${date}T${values.time}:00`; // Adding seconds for valid ISO string
         // console.log("Formatted DateTime String:", dateTimeStr);
-        setDateTime(dateTimeStr); // Store the final date-time string
+        const dateTime = new Date(dateTimeStr);
+        setDateTime(dateTime.toISOString()); // Store the final date-time string
         setStep(step + 1); // Move to the next step
         setError("");
     }
     
     const handleSubmit = async(e: React.FormEvent) => {
         e.preventDefault()
-        console.log("Form submitted");
-        // const date = (dateTime.date as string).split('T')[0]
         const response = await handlePostMethod(testRegistrationEndpoint, {dateTime}, searchParams.toString());
-        const responseData = await response.json();
-        if(response.status === 401 || response.status === 403){
-            dispatch(setAuthState(false));
-            dispatch(setUserState(userInitialState));
-            router.replace('/login')
-        }
-        if(response.ok){
-            setTimeout(() => {
-                router.push('/')
-            }, 1000)
-        }
-        else{
-            setError(responseData.message)
+        if(response instanceof Response){
+            const responseData = await response.json();
+            if(response.status === 401 || response.status === 403){
+                dispatch(setAuthState(false));
+                dispatch(setUserState(userInitialState));
+                router.replace('/login')
+            }
+            else if(response.status === 200 || response.status === 201){
+                setTimeout(() => {
+                    router.push('/')
+                }, 1000)
+            }
+            else{
+                setError(responseData.message)
+            }
+        } else {
+            setError(response.message)
         }
     }
     return (
