@@ -32,8 +32,7 @@ const postingData = async (data: object, endPoint: string) => {
     credentials: 'include',
     body: JSON.stringify(data), // Send form data as JSON
   });
-  const responseData = await response.json();
-  return responseData;
+  return response;
 }
 
 export function LoginComponent() {
@@ -44,12 +43,13 @@ export function LoginComponent() {
   const handleLoginSubmit = async (values: z.infer<typeof loginFormSchema>) => {
     setLoading(true);
     const response = await postingData(values, loginEndpoint);
-    if (response.data) {
-      dispatch(setUserState(response.data));
+    const responseData = await response.json();
+    if (response.status === 200 || response.status === 201) {
+      dispatch(setUserState(responseData.data));
       dispatch(setAuthState(true));
       router.push('/');
     } else {
-      setError(response.message);
+      setError(responseData.message);
     }
     setLoading(false);
   };
@@ -57,12 +57,13 @@ export function LoginComponent() {
   const handleSignupSubmit = async (values: z.infer<typeof signupFormSchema>) => {
     setLoading(true);
     const response = await postingData(values, signupEndpoint);
-    if (response.data) {
+    const responseData = await response.json();
+    if (response.status === 200 || response.status === 201) {
       dispatch(setAuthState(true));
-      dispatch(setUserState(response.data));
+      dispatch(setUserState(responseData.data));
       router.push('/');
     } else {
-      setError(response.message);
+      setError(responseData.message);
     }
     setLoading(false);
   };

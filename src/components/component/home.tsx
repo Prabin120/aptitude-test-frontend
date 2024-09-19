@@ -39,6 +39,7 @@ export default function HomePage() {
       if (respose.status === 401 || respose.status === 403) {
         dispatch(setAuthState(false));
         dispatch(setUserState(userInitialState));
+        setAuthenticated(false);
         return;
       }
       const responseData = await respose.json();

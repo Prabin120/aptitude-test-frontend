@@ -2,7 +2,7 @@ import { apiEntryPoint } from "@/consts";
 
 const handlePostMethod = async (endpoint: string, data: object, params?: string): Promise<any> => {
   try {    
-    const response = await fetch(apiEntryPoint + endpoint + "?" + params??"", {
+    const response = await fetch(apiEntryPoint + endpoint + "?" + params, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -19,7 +19,7 @@ const handlePostMethod = async (endpoint: string, data: object, params?: string)
 
 const handleGetMethod = async (endpoint: string, params?: string): Promise<any> => {
   try {
-    const response = await fetch(apiEntryPoint + endpoint + "?" + params??"" ,{
+    const response = await fetch(apiEntryPoint + endpoint + "?" + params ,{
       method: "GET",
       credentials: "include",
     });
