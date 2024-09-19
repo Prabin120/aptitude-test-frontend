@@ -1,5 +1,5 @@
-export const apiEntryPoint = 'http://localhost:8000'
 
+export const apiEntryPoint = process.env.API_ENDPOINT
 
 // auth
 export const loginEndpoint = '/api/v1/auth/login'   // post
