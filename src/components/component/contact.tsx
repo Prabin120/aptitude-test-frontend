@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -116,7 +115,7 @@ export default function ContactPage() {
           <CardHeader>
             <CardTitle>Feedback Form</CardTitle>
             <CardDescription>
-              We'd love to hear your feedback. Please fill out the form below.
+              We&apos;d love to hear your feedback. Please fill out the form below.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -180,7 +179,11 @@ export default function ContactPage() {
                 />
                 {isFeedbackSubmitted ? 
                     <Button type="button" className="w-full" disabled> 
-                        Thank you for your feedback &#10084;
+                    {error? 
+                        error 
+                    :   
+                        <p>Thank you for your feedback &#10084;</p>
+                    }
                     </Button>
                 :
                 <Button type="submit" className="w-full" disabled={isSubmitting}>

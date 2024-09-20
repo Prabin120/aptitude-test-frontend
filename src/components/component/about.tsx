@@ -22,7 +22,7 @@ export default function AboutUsPage() {
           </CardHeader>
           <CardContent>
             <p className="text-lg">
-              At TestMaster, we're committed to revolutionizing the way people prepare for and take tests. Our mission is to provide a cutting-edge, adaptive testing platform that helps individuals achieve their full potential and succeed in their academic and professional pursuits.
+              At TestMaster, we&apos;re committed to revolutionizing the way people prepare for and take tests. Our mission is to provide a cutting-edge, adaptive testing platform that helps individuals achieve their full potential and succeed in their academic and professional pursuits.
             </p>
           </CardContent>
         </Card>
@@ -35,10 +35,10 @@ export default function AboutUsPage() {
           </CardHeader>
           <CardContent>
             <p className="mb-4">
-              Founded in 2024, TestMaster was born out of a desire to make test-taking less stressful and more effective. Our team of educators, technologists, and designers came together with a shared vision: to create a platform that adapts to each user's needs and provides personalized learning experiences.
+              Founded in 2024, TestMaster was born out of a desire to make test-taking less stressful and more effective. Our team of educators, technologists, and designers came together with a shared vision: to create a platform that adapts to each user&apos;s needs and provides personalized learning experiences.
             </p>
             <p>
-              Since our inception, we've helped thousands of students and professionals achieve their goals through our innovative approach to testing and assessment. We continue to evolve and improve our platform, always keeping our users' success at the forefront of everything we do.
+              Since our inception, we&apos;ve helped thousands of students and professionals achieve their goals through our innovative approach to testing and assessment. We continue to evolve and improve our platform, always keeping our users&apos; success at the forefront of everything we do.
             </p>
           </CardContent>
         </Card>
