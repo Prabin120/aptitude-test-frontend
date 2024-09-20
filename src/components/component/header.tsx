@@ -42,10 +42,10 @@ const Header = () => {
         <span className="font-bold text-lg">AptiTest</span>
       </Link>
       <nav className="ml-auto flex gap-4 sm:gap-6 items-center">
-        <Link className="text-sm font-medium hover:underline underline-offset-4" href="#">
+        <Link className="text-sm font-medium hover:underline underline-offset-4" href="/about-us">
           About
         </Link>
-        <Link className="text-sm font-medium hover:underline underline-offset-4" href="#">
+        <Link className="text-sm font-medium hover:underline underline-offset-4" href="/contact-us">
           Contact
         </Link>
         {authenticate ?

@@ -20,3 +20,7 @@ export const postTestEndpoint = '/api/v1/aptitude/test'   // post
 export const upComingTestEndpoint = '/api/v1/aptitude/upcoming-test'   // get
 export const testRegistrationEndpoint = '/api/v1/aptitude/test-registration'   // post
 export const scoreCardEndpoint = '/api/v1/aptitude/score-card'   // get
+
+
+// feedback
+export const feedbackEndpoint = '/api/v1/feedback'   // post
