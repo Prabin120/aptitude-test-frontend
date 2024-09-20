@@ -36,6 +36,7 @@ export default function TestPage() {
     const [mockQuestions, setMockQuestions] = useState<Question[]>([]);
     const dispatch = useAppDispatch();
     const searchParams = useSearchParams()
+    const timerRef = useRef<NodeJS.Timeout | null>(null)
 
     const answersRef = useRef(answers);
     useEffect(() => {
@@ -68,6 +69,43 @@ export default function TestPage() {
     }
 
     useEffect(() => {
+        const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+            e.preventDefault()
+            e.returnValue = ''
+        }
+
+        const handlePopState = async(e: PopStateEvent) => {
+            e.preventDefault()
+            if (window.confirm('Are you sure you want to leave?')) {
+                await handleEndTest()
+                router.back()
+            } else {
+                window.history.pushState(null, '', window.location.href)
+            }
+        }
+
+        const handleVisibilityChange = () => {
+        if (document.hidden) {
+            console.log('Tab switched or minimized')
+            // You can add additional logic here, such as pausing the timer or marking the attempt
+        }
+        }
+
+        window.addEventListener('beforeunload', handleBeforeUnload)
+        window.addEventListener('popstate', handlePopState)
+        document.addEventListener('visibilitychange', handleVisibilityChange)
+
+        // Push a new state to prevent immediate back navigation
+        window.history.pushState(null, '', window.location.href)
+
+        return () => {
+        window.removeEventListener('beforeunload', handleBeforeUnload)
+        window.removeEventListener('popstate', handlePopState)
+        document.removeEventListener('visibilitychange', handleVisibilityChange)
+        }
+    }, [router])
+
+    useEffect(() => {
         (async () => {
             try {
                 const response = await handleGetMethod(getTestEndpoint, searchParams.toString());
@@ -95,19 +133,32 @@ export default function TestPage() {
                 console.error("API error:", error);
             }
         })();
-        const timer = setInterval(() => {
+    }, ['dispatch', 'handleEndTest', 'router', 'searchParams']);
+
+    useEffect(() => {
+        if (timerRef.current) {
+            clearInterval(timerRef.current)
+        }
+
+        timerRef.current = setInterval(() => {
             setTimeLeft((prevTime) => {
                 if (prevTime <= 1) {
-                    clearInterval(timer);  // Stop the timer
-                    handleEndTest();       // Call handleEndTest when time runs out
-                    return 0;
+                    if (timerRef.current) {
+                        clearInterval(timerRef.current)
+                    }
+                    handleEndTest()
+                    return 0
                 }
-                return prevTime - 1;
-            });
-        }, 1000);
+                return prevTime - 1
+            })
+        }, 1000)
 
-        return () => clearInterval(timer);
-    }, ['dispatch', 'handleEndTest', 'router', 'searchParams']);
+        return () => {
+            if (timerRef.current) {
+                clearInterval(timerRef.current)
+            }
+        }
+    }, [handleEndTest])
 
     if (mockQuestions.length === 0) {
         return (

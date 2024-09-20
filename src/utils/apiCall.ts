@@ -8,9 +8,7 @@ interface ErrorResponse {
 }
 
 const handlePostMethod = async (endpoint: string, data: object, params?: string): Promise<ApiResponse | ErrorResponse> => {
-  try {    
-    console.log("calling post");
-    
+  try {        
     const response = await fetch(apiEntryPoint + endpoint + "?" + params, {
       method: "POST",
       headers: {
@@ -27,9 +25,7 @@ const handlePostMethod = async (endpoint: string, data: object, params?: string)
 };
 
 const handleGetMethod = async (endpoint: string, params?: string): Promise<ApiResponse | ErrorResponse> => {
-  try {
-    console.log("calling get");
-    
+  try {    
     const response = await fetch(apiEntryPoint + endpoint + "?" + params ,{
       method: "GET",
       credentials: "include",
