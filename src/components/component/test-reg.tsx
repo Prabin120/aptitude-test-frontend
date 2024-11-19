@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -8,27 +8,38 @@ import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
 import { format, startOfDay } from "date-fns"
-import { ArrowLeft, Calendar as CalendarIcon, CreditCard } from "lucide-react"
+import { Calendar as CalendarIcon} from "lucide-react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { bookingTimeSchema } from "@/app/test-registration/zod-schema"
 import { Form, FormField, FormItem, FormLabel } from "../ui/form"
 import { z } from "zod"
 import { handlePostMethod } from "@/utils/apiCall"
-import { testRegistrationEndpoint } from "@/consts"
-import { useRouter, useSearchParams } from "next/navigation"
+import { paymentCreateOrderEndpoint, verifyPaymentEndpoint } from "@/consts"
+import { useRouter } from "next/navigation"
 import { useAppDispatch } from "@/redux/store"
 import { setAuthState } from "@/redux/auth/authSlice"
 import { setUserState, userInitialState } from "@/redux/user/userSlice"
+import { useToast } from "@/hooks/use-toast"
+import { useAppSelector } from "@/redux/store"
+import CircleLoading from "../ui/circleLoading"
+declare global {
+    interface Window {
+        Razorpay: any;
+    }
+}
 
 export default function TestSetupAndPayment() {
     const [step, setStep] = useState(1)
     const [startTime, setStartTime] = useState("")
     const [dateTime, setDateTime] = useState("")
     const [error, setError] = useState("")
+    const [loading, setLoading] = useState(false)
+    const [razorpayScriptLoaded, setRazorpayScriptLoaded] = useState<boolean>(false);
+    const { toast } = useToast()
     const router = useRouter();
-    const searchParams = useSearchParams()
     const dispatch = useAppDispatch();
+    const user = useAppSelector((state) => state.user);
 
     const dateTimeForm = useForm({
         resolver: zodResolver(bookingTimeSchema),
@@ -46,35 +57,114 @@ export default function TestSetupAndPayment() {
         const year = values.date.getFullYear();
         const month = (values.date.getMonth() + 1).toString().padStart(2, '0'); // Ensure two digits for month
         const day = values.date.getDate().toString().padStart(2, '0'); // Ensure two digits for day
-        const date = `${year}-${month}-${day}`;        
+        const date = `${year}-${month}-${day}`;
         const dateTimeStr = `${date}T${values.time}:00`; // Adding seconds for valid ISO string
-        // console.log("Formatted DateTime String:", dateTimeStr);
         const dateTime = new Date(dateTimeStr);
         setDateTime(dateTime.toISOString()); // Store the final date-time string
         setStep(step + 1); // Move to the next step
         setError("");
     }
-    
-    const handleSubmit = async(e: React.FormEvent) => {
-        e.preventDefault()
-        const response = await handlePostMethod(testRegistrationEndpoint, {dateTime}, searchParams.toString());
-        if(response instanceof Response){
-            const responseData = await response.json();
-            if(response.status === 401 || response.status === 403){
-                dispatch(setAuthState(false));
-                dispatch(setUserState(userInitialState));
-                router.replace('/login')
+
+    const loadRazorpayScript = () => {
+        return new Promise((resolve) => {
+            const script = document.createElement("script");
+            script.src = "https://checkout.razorpay.com/v1/checkout.js";
+            script.onload = () => resolve(true);
+            script.onerror = () => resolve(false);
+            document.body.appendChild(script);
+        });
+    };
+
+    useEffect(() => {
+        const loadScript = async () => {
+            const isScriptLoaded = await loadRazorpayScript();
+            if (isScriptLoaded) {
+                setRazorpayScriptLoaded(true);
+            } else {
+                console.error("Failed to load Razorpay script");
             }
-            else if(response.status === 200 || response.status === 201){
-                setTimeout(() => {
-                    router.push('/')
-                }, 1000)
+        };
+        loadScript();
+    }, []);
+
+    const handlePayment = async () => {
+        setLoading(true);
+        try {
+            if (!razorpayScriptLoaded) {
+                alert("Razorpay SDK failed to load. Are you online?");
+                return;
             }
-            else{
-                setError(responseData.message)
+            const data = {
+                amount: 2000 * 100,
+                dateTime: dateTime
             }
-        } else {
-            setError(response.message)
+            const response = await handlePostMethod(paymentCreateOrderEndpoint, data);
+            console.log(response);
+            if (response instanceof Response) {
+                if (response.status === 401 || response.status === 403) {
+                    dispatch(setAuthState(false));
+                    dispatch(setUserState(userInitialState));
+                    router.replace('/login')
+                }
+                if (!response.ok) {
+                    throw new Error('Failed to create order')
+                }
+
+                const order = await response.json()
+                const options = {
+                    key: order.key_id,
+                    amount: order.amount,
+                    currency: "INR",
+                    name: "AptiTest",
+                    description: "Test Registration",
+                    order_id: order.id,
+                    handler: async function (response: any) {
+                        const data = {
+                            razorpay_order_id: response.razorpay_order_id,
+                            razorpay_payment_id: response.razorpay_payment_id,
+                            razorpay_signature: response.razorpay_signature,
+                        };
+                        console.log(data);
+                        const result = await handlePostMethod(verifyPaymentEndpoint, data)
+                        if (result instanceof Response) {
+                            if (result.ok) {
+                                toast({
+                                    title: "Payment Successful",
+                                    description: `Payment ID: ${response.razorpay_payment_id}`,
+                                })
+                                router.replace('/')
+                            } else {
+                                toast({
+                                    title: "Payment Failed",
+                                    description: "An error occurred while processing your payment.",
+                                    variant: "destructive",
+                                })
+                            }
+                        } else {
+                            throw new Error('Payment verification failed')
+                        }
+                    },
+                    prefill: {
+                        name: user.name,
+                        email: user.email,
+                        contact: user.mobile
+                    },
+                    theme: {
+                        color: "#09090a"
+                    }
+                }
+                const paymentObject = new window.Razorpay(options)
+                paymentObject.open()
+            }
+        } catch (error) {
+            console.error('Payment error:', error)
+            toast({
+                title: "Payment Error",
+                description: "An error occurred while processing your payment.",
+                variant: "destructive",
+            })
+        } finally {
+            setLoading(false);
         }
     }
     return (
@@ -155,69 +245,40 @@ export default function TestSetupAndPayment() {
                         </Form>
                     )}
                     {step === 2 && (
-                        <form onSubmit={handleSubmit}>
-                            <div className="space-y-4">
-                                <div className="space-y-2">
-                                    <Label htmlFor="card-number">Card Number</Label>
-                                    <Input
-                                        id="card-number"
-                                        placeholder="1234 5678 9012 3456"
-                                        // value={cardNumber}
-                                        // onChange={(e) => setCardNumber(e.target.value)}
-                                        // required
-                                    />
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="card-name">Name on Card</Label>
-                                    <Input
-                                        id="card-name"
-                                        placeholder="John Doe"
-                                        // value={cardName}
-                                        // onChange={(e) => setCardName(e.target.value)}
-                                        // required
-                                    />
-                                </div>
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div className="space-y-2">
-                                        <Label htmlFor="card-expiry">Expiry Date</Label>
+                        <>
+                            <CardContent>
+                                <div className="grid w-full items-center gap-4">
+                                    <div className="flex flex-col space-y-4">
+                                        <Label htmlFor="amount">Amount (in INR)</Label>
                                         <Input
-                                            id="card-expiry"
-                                            placeholder="MM/YY"
-                                            // value={cardExpiry}
-                                            // onChange={(e) => setCardExpiry(e.target.value)}
-                                            // required
-                                        />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <Label htmlFor="card-cvc">CVC</Label>
-                                        <Input
-                                            id="card-cvc"
-                                            placeholder="123"
-                                            // value={cardCVC}
-                                            // onChange={(e) => setCardCVC(e.target.value)}
-                                            // required
+                                            id="amount"
+                                            placeholder="Enter amount"
+                                            type="number"
+                                            value={2000}
+                                            disabled
+                                            // onChange={(e) => setAmount(e.target.value)}
                                         />
                                     </div>
                                 </div>
-                                <div className="w-full flex flex-row space-x-3">
-                                    <Button onClick={() => setStep(1)} variant={"outline"}>
-                                        <ArrowLeft size={20} />
-                                        Back
-                                    </Button>
-                                    <Button className="" onClick={handleSubmit}>
-                                        <CreditCard className="mr-2 h-4 w-4" /> Pay ${10} and Book Test
-                                    </Button>
-                                </div>
-                            </div>
-                        </form>
+                            </CardContent>
+                            <CardFooter>
+                                <Button onClick={handlePayment} className="w-full" disabled={loading}>
+                                    {loading?
+                                        <CircleLoading/>
+                                        :
+                                        "Pay Now"
+                                    }
+                                </Button>
+                            </CardFooter>
+                        </>
                     )}
                 </CardContent>
                 <CardFooter>
-                    {error?
+                    {error ?
                         <div className="my-3 w-full text-center text-sm text-red-600">
                             <span>{error}</span>
                         </div>
-                        :null
+                        : null
                     }
                 </CardFooter>
             </Card>

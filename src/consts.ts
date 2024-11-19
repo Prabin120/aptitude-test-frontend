@@ -24,3 +24,8 @@ export const scoreCardEndpoint = '/api/v1/aptitude/score-card'   // get
 
 // feedback
 export const feedbackEndpoint = '/api/v1/feedback'   // post
+
+
+// payment
+export const paymentCreateOrderEndpoint = '/api/v1/payment/create-order'   // post
+export const verifyPaymentEndpoint = '/api/v1/payment/verify-payment'   // post
