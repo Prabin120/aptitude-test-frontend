@@ -85,12 +85,12 @@ export default function ModifyQuestionForm() {
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         setLoading(true)
-        console.log(values)
         try {
             const response = await updateQuestion(questionId, values)
             alert(response)
         } catch (error) {
             console.error('Error updating question:', error)
+            alert("Error updating question")
         }
         setLoading(false)
     }

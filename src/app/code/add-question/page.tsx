@@ -82,15 +82,16 @@ export default function QuestionSubmissionForm() {
     })
     const [loading, setLoading] = useState(false);
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
-        setLoading(true)
-        console.log(values)
+        setLoading(true);
         try {
-            const response = await addQuestion(values)
-            alert(response)
+            const response = await addQuestion(values);
+            alert(response);
         } catch (error) {
-            console.error('Error submitting question:', error)
+            console.error('Error submitting question:', error);
+            alert('Failed to submit question. Please try again.'); // User-friendly error message
+        } finally {
+            setLoading(false);
         }
-        setLoading(false)
     }
 
     return (
