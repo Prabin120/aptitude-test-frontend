@@ -47,3 +47,5 @@ interface SubmissionResultProps {
         timeTaken: number
     }
 }
+
+export type { QuestionPage, Problem, DefaultCode, UserCode, TestCase, SubmissionStatus, SubmissionResultProps }
