@@ -27,9 +27,10 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Plus, Minus, Search } from "lucide-react"
 import CircleLoading from "@/components/ui/circleLoading"
-import ReactQuill from "react-quill"
 import "react-quill/dist/quill.snow.css"
 import { getQuestionById, updateQuestion } from "../apiCalls"
+import dynamic from "next/dynamic";
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 const languageOptions = ["py", "js", "java", "c", "cpp", "go"]
 

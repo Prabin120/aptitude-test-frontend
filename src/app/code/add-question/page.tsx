@@ -28,7 +28,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Plus, Minus } from "lucide-react"
 import { addQuestion } from "../apiCalls"
 import CircleLoading from "@/components/ui/circleLoading"
-import ReactQuill from "react-quill"
+import dynamic from "next/dynamic";
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css"
 
 const languageOptions = ["py", "js", "java", "c", "cpp", "go"]
