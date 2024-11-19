@@ -58,8 +58,6 @@ const formSchema = z.object({
     isPublic: z.boolean(),
 })
 
-type JsonErrorsType = { [key: number]: string | null };
-
 export default function ModifyQuestionForm() {
     const [questionId, setQuestionId] = useState("")
     const [loading, setLoading] = useState(false)

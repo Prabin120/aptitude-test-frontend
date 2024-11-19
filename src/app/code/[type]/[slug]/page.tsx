@@ -18,6 +18,7 @@ import { getQuestionBySlug, runTest, submitCodeAPI } from "../../apiCalls"
 import CircleLoading from "@/components/ui/circleLoading"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import SubmissionResult from "./result"
+import { DefaultCode, QuestionPage, SubmissionResultProps, TestCase, UserCode } from "../../commonInterface"
 
 export default function CodingPlatformPage(context: { params: Params }) {
     const [code, setCode] = useState<UserCode>()
@@ -62,7 +63,7 @@ export default function CodingPlatformPage(context: { params: Params }) {
             setTestCases(response.sampleTestCases)
             setTestCaseVariableNames(response.testCaseVariableNames)
         })()
-    }, [])
+    })
     const runCode = async () => {
         setLoading(true)
         if (!code || !language || !question) {

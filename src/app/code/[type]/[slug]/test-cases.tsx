@@ -5,6 +5,7 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Plus } from 'lucide-react';
 import React, { useEffect, useState } from 'react'
+import { TestCase } from '../../commonInterface';
 
 interface TestCaseProps {
     testCases: TestCase[] | undefined;
@@ -15,10 +16,10 @@ interface TestCaseProps {
 
 const TestCases: React.FC<TestCaseProps> = ({ testCases, testCaseVariableNames, loading, error }) => {
     const [activeTestCase, setActiveTestCase] = useState("0")
-    const [newTestcase, setNewTestcase] = useState<boolean>(false)
+    // const [newTestcase, setNewTestcase] = useState<boolean>(false)
     const [activeTab, setActiveTab] = useState("testcases");
     // Trigger the "Test Results" tab when loading is true
-    
+    const newTestcase = false;
     useEffect(() => {
         if (loading) {
             setActiveTab("results");

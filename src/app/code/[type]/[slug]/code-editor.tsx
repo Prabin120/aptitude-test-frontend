@@ -8,6 +8,7 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { Expand, RotateCcw } from 'lucide-react';
+import { DefaultCode, UserCode } from '../../commonInterface';
 
 const languageHighlighter = (val: string) => {
     return {

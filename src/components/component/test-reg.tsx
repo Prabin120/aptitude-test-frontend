@@ -8,7 +8,7 @@ import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
 import { format, startOfDay } from "date-fns"
-import { Calendar as CalendarIcon} from "lucide-react"
+import { Calendar as CalendarIcon } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { bookingTimeSchema } from "@/app/test-registration/zod-schema"
@@ -23,10 +23,11 @@ import { setUserState, userInitialState } from "@/redux/user/userSlice"
 import { useToast } from "@/hooks/use-toast"
 import { useAppSelector } from "@/redux/store"
 import CircleLoading from "../ui/circleLoading"
-declare global {
-    interface Window {
-        Razorpay: any;
-    }
+
+interface RazorpayOptions {
+    razorpay_order_id: string,
+    razorpay_payment_id: string,
+    razorpay_signature: string
 }
 
 export default function TestSetupAndPayment() {
@@ -118,13 +119,12 @@ export default function TestSetupAndPayment() {
                     name: "AptiTest",
                     description: "Test Registration",
                     order_id: order.id,
-                    handler: async function (response: any) {
+                    handler: async function (response: RazorpayOptions) {
                         const data = {
                             razorpay_order_id: response.razorpay_order_id,
                             razorpay_payment_id: response.razorpay_payment_id,
                             razorpay_signature: response.razorpay_signature,
                         };
-                        console.log(data);
                         const result = await handlePostMethod(verifyPaymentEndpoint, data)
                         if (result instanceof Response) {
                             if (result.ok) {
@@ -256,15 +256,15 @@ export default function TestSetupAndPayment() {
                                             type="number"
                                             value={2000}
                                             disabled
-                                            // onChange={(e) => setAmount(e.target.value)}
+                                        // onChange={(e) => setAmount(e.target.value)}
                                         />
                                     </div>
                                 </div>
                             </CardContent>
                             <CardFooter>
                                 <Button onClick={handlePayment} className="w-full" disabled={loading}>
-                                    {loading?
-                                        <CircleLoading/>
+                                    {loading ?
+                                        <CircleLoading />
                                         :
                                         "Pay Now"
                                     }

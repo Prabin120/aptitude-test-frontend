@@ -6,6 +6,7 @@ import QuestionsFilters from "./filters"
 import Header from "@/components/component/header"
 import ReduxProvider from "@/redux/redux-provider"
 import { getAllQuestions } from "../apiCalls"
+import { Problem } from "../commonInterface"
 
 export default function ProblemListPage() {
     const [problems, setProblems] = useState<Problem[]>()
