@@ -5,15 +5,6 @@ interface ErrorResponse {
 	status: number;
 }
 
-/*************  ✨ Codeium Command ⭐  *************/
-/**
- * Makes a POST request to the specified endpoint with the given data
- * and returns the response, or an ErrorResponse if the request fails.
- * @param endpoint The endpoint to make the request to.
- * @param data The data to send in the request body.
- * @returns A Promise that resolves to a Response object or an ErrorResponse.
- */
-/******  68724f8b-a264-45c2-938d-0bdb383ccb3b  *******/
 const handlePostMethod = async (
 	endpoint: string,
 	data: object
