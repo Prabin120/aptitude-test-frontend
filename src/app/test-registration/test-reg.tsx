@@ -12,7 +12,7 @@ import { Calendar as CalendarIcon } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { bookingTimeSchema } from "@/app/test-registration/zod-schema"
-import { Form, FormField, FormItem, FormLabel } from "../ui/form"
+import { Form, FormField, FormItem, FormLabel } from "../../components/ui/form"
 import { z } from "zod"
 import { handlePostMethod } from "@/utils/apiCall"
 import { paymentCreateOrderEndpoint, verifyPaymentEndpoint } from "@/consts"
@@ -22,7 +22,7 @@ import { setAuthState } from "@/redux/auth/authSlice"
 import { setUserState, userInitialState } from "@/redux/user/userSlice"
 import { useToast } from "@/hooks/use-toast"
 import { useAppSelector } from "@/redux/store"
-import CircleLoading from "../ui/circleLoading"
+import CircleLoading from "../../components/ui/circleLoading"
 
 interface RazorpayOptions {
     razorpay_order_id: string,
@@ -86,7 +86,7 @@ export default function TestSetupAndPayment() {
             }
         };
         loadScript();
-    }, []);
+    }, [loadRazorpayScript]);
 
     const handlePayment = async () => {
         setLoading(true);

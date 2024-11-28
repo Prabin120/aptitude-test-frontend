@@ -19,6 +19,9 @@ import { Plus, Minus, Search } from "lucide-react"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Textarea } from "@/components/ui/textarea"
 import { addTestCases, getQuestionById } from "../apiCalls"
+import { useAppDispatch } from "@/redux/store"
+import { useRouter } from "next/navigation"
+import { checkAuthorization } from "@/utils/authorization"
 
 const formSchema = z.object({
   questionId: z.string().min(1, "Question ID is required"),
@@ -34,7 +37,8 @@ export default function TestCaseSubmissionPage() {
   const [questionTitle, setQuestionTitle] = useState<string | null>(null)
   const [searchError, setSearchError] = useState<string | null>(null)
   const [isSearching, setIsSearching] = useState(false)
-
+  const dispatch = useAppDispatch()
+  const router = useRouter()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -52,7 +56,15 @@ export default function TestCaseSubmissionPage() {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     console.log(values)
     const response = await addTestCases(values)
-    alert(response)
+    if (response instanceof Response) {
+      await checkAuthorization(response, dispatch, router, true)
+      const res = await response.json();
+      if (response.status === 200 || response.status === 201) {
+        alert("Test cases added successfully");
+      }
+      return alert(res.message);
+    }
+    return alert("Server error, please try again later.");
   }
 
   const searchQuestion = async () => {

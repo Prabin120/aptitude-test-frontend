@@ -1,8 +1,8 @@
 'use client'
 import Footer from '@/components/ui/footer'
-import Header from '@/components/component/header'
+import Header from '@/components/header'
 import ReduxProvider from '@/redux/redux-provider'
-import ContactPage from '@/components/component/contact'
+import ContactPage from '@/app/contact-us/contact'
 
 const page = () => {
     return (

@@ -1,19 +1,16 @@
 'use client'
-import UserProfile from '@/app/profile/profile'
-import Footer from '@/components/ui/footer'
 import Header from '@/components/header'
 import ReduxProvider from '@/redux/redux-provider'
+import AptitudeQuestionPage from './question'
 
-const page = () => {
+export default function AboutUs(context: Readonly<{ params: { slug: string }}>){
+    const { slug } = context.params
     return (
         <ReduxProvider>
             <Header />
             <main className='dark'>
-                <UserProfile />
+                <AptitudeQuestionPage slug={slug}/>
             </main>
-            <Footer />
         </ReduxProvider>
     )
 }
-
-export default page;

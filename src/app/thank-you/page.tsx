@@ -1,6 +1,6 @@
 'use client'
-import ThankYouPage from '@/components/component/thankYou'
-import Header from '@/components/component/header'
+import ThankYouPage from '@/app/thank-you/thankYou'
+import Header from '@/components/header'
 import ReduxProvider from '@/redux/redux-provider'
 import React from 'react'
 

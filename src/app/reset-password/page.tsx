@@ -1,6 +1,6 @@
 'use client'
 
-import ResetPasswordComponent from '@/components/component/password-reset'
+import ResetPasswordComponent from '@/app/reset-password/password-reset'
 import ReduxProvider from '@/redux/redux-provider'
 import React from 'react'
 

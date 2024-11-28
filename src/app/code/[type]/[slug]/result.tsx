@@ -8,7 +8,6 @@ import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { SubmissionResultProps, SubmissionStatus } from "../../commonInterface"
 
-
 export default function SubmissionResult({
     status,
     passedTestCases,

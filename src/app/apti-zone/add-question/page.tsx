@@ -1,19 +1,15 @@
 'use client'
-import UserProfile from '@/app/profile/profile'
-import Footer from '@/components/ui/footer'
 import Header from '@/components/header'
 import ReduxProvider from '@/redux/redux-provider'
+import QuestionCreationPage from './addQuestion'
 
-const page = () => {
+export default function AddAptiQuestion(){
     return (
         <ReduxProvider>
             <Header />
             <main className='dark'>
-                <UserProfile />
+                <QuestionCreationPage />
             </main>
-            <Footer />
         </ReduxProvider>
     )
 }
-
-export default page;

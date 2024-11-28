@@ -3,7 +3,7 @@
 import QuestionTable from "./table"
 import { useEffect, useState } from "react"
 import QuestionsFilters from "./filters"
-import Header from "@/components/component/header"
+import Header from "@/components/header"
 import ReduxProvider from "@/redux/redux-provider"
 import { getAllQuestions } from "../apiCalls"
 import { Problem } from "../commonInterface"
@@ -11,12 +11,14 @@ import { Problem } from "../commonInterface"
 export default function ProblemListPage() {
     const [problems, setProblems] = useState<Problem[]>()
     const [searchQuery, setSearchQuery] = useState("")
-    useEffect(()=>{
-        (async()=>{
+    useEffect(() => {
+        (async () => {
             const data = await getAllQuestions()
+            console.log("data", data);
             setProblems(data)
         })()
-    },[])
+    }, [getAllQuestions])
+
     const filteredProblems = problems?.filter(problem =>
         problem.title.toLowerCase().includes(searchQuery.toLowerCase())
     )

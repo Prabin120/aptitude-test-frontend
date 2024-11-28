@@ -1,6 +1,6 @@
 'use client'
-import HomePage from "@/components/component/home";
-import Header from "@/components/component/header";
+import HomePage from "@/app/home";
+import Header from "@/components/header";
 import Footer from "@/components/ui/footer";
 import ReduxProvider from "@/redux/redux-provider";
 

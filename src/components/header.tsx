@@ -1,10 +1,11 @@
 'use client'
+
 import React, { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 import Link from 'next/link'
 import { LogOut, Settings, User } from 'lucide-react'
-import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import { useRouter } from 'next/navigation'
 import { setAuthState } from '@/redux/auth/authSlice'
 import { useAppDispatch, useAppSelector } from '@/redux/store'
@@ -23,7 +24,7 @@ const Header = () => {
 
   useEffect(() => {
     setIsClient(true);
-  }, []);
+  }, [userDetail]);
 
   if(!isClient){
     return <Loading/>
@@ -48,7 +49,7 @@ const Header = () => {
         <Link className="text-sm font-medium hover:underline underline-offset-4" href="code/problems">
           CodeZone
         </Link>
-        <Link className="text-sm font-medium hover:underline underline-offset-4" href="/about-us">
+        <Link className="text-sm font-medium hover:underline underline-offset-4" href="/apti-zone">
           AptiZone
         </Link>
         <Link className="text-sm font-medium hover:underline underline-offset-4" href="/about-us">

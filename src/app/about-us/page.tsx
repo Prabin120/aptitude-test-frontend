@@ -1,10 +1,10 @@
 'use client'
 import Footer from '@/components/ui/footer'
-import Header from '@/components/component/header'
+import Header from '@/components/header'
 import ReduxProvider from '@/redux/redux-provider'
-import AboutUsPage from '@/components/component/about'
+import AboutUsPage from '@/app/about-us/about'
 
-const page = () => {
+export default function AboutUs() {
     return (
         <ReduxProvider>
             <Header />
@@ -15,5 +15,3 @@ const page = () => {
         </ReduxProvider>
     )
 }
-
-export default page;

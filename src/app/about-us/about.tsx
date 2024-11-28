@@ -14,7 +14,7 @@ export default function AboutUsPage() {
   return (
     <div className="container mx-auto py-10 px-4">
       <h1 className="text-4xl font-bold mb-8 text-center">About TestMaster</h1>
-      
+
       <section className="mb-12">
         <Card>
           <CardHeader>

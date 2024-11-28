@@ -20,7 +20,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import SubmissionResult from "./result"
 import { DefaultCode, QuestionPage, SubmissionResultProps, TestCase, UserCode } from "../../commonInterface"
 
-export default function CodingPlatformPage(context: { params: Params }) {
+export default function CodingPlatformPage(context: Readonly<{ params: Params }>) {
     const [code, setCode] = useState<UserCode>()
     const [language, setLanguage] = useState("py")
     const [question, setQustion] = useState<QuestionPage>()
@@ -63,7 +63,7 @@ export default function CodingPlatformPage(context: { params: Params }) {
             setTestCases(response.sampleTestCases)
             setTestCaseVariableNames(response.testCaseVariableNames)
         })()
-    })
+    },[slug])
     const runCode = async () => {
         setLoading(true)
         if (!code || !language || !question) {

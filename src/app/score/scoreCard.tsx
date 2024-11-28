@@ -57,7 +57,7 @@ export default function ScoreCard() {
                 setError(response.message ?? "Failed to fetch test data.")
             }
         })()
-    }, [dispatch, router, searchParams])
+    }, [dispatch, scoreCardEndpoint, searchParams])
     
     if(error) return <p className="text-red-500 text-center">{error}</p>
 
