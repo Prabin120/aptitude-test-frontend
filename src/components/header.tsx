@@ -46,7 +46,7 @@ const Header = () => {
         <Link className="text-md font-medium hover:underline underline-offset-4 animate-pulse text-orange-400" href="/about-us">
           Test the Gain 💪
         </Link>
-        <Link className="text-sm font-medium hover:underline underline-offset-4" href="code/problems">
+        <Link className="text-sm font-medium hover:underline underline-offset-4" href="/code/problems">
           CodeZone
         </Link>
         <Link className="text-sm font-medium hover:underline underline-offset-4" href="/apti-zone">
