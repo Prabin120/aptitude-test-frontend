@@ -86,27 +86,35 @@ export default function CodingPlatformPage(context: Readonly<{ params: Params }>
 
     const submitCode = async () => {
         setLoading(true)
-        if (!code || !language || !question) {
-            return
-        }
-        const response = await submitCodeAPI(code ? code[language] : "", language, question._id)
-        if (response instanceof Response) {
-            const res = await response.json()
-            let status = "runtime_error"
-            if(res.status){
-                if(res.data.failedCase == null){
-                    status = "accepted"
-                } else{
-                    status = "wrong_answer"
-                }
+        try{
+            if (!code || !language || !question) {
+                return
             }
-            res.data.status = status
-            setSubmissionResult(res.data)
-            setIsResultModalOpen(true)
-        } else {
-            setError(response.message)
+            const response = await submitCodeAPI(code ? code[language] : "", language, question._id)
+            if (response instanceof Response) {
+                const res = await response.json()
+                let status = "runtime_error"                
+                if(res.status){
+                    if(res.data.failedCase == null){
+                        status = "accepted"
+                    } else{
+                        status = "wrong_answer"
+                    }
+                } else{
+                    setError(res.message)
+                    return
+                }
+                res.data.status = status
+                setSubmissionResult(res.data)
+                setIsResultModalOpen(true)
+            } else {
+                setError(response.message)
+            }
+        } catch(error){
+            setError(error as string)
+        } finally{
+            setLoading(false)
         }
-        setLoading(false)
     }
 
     if (!question || !code || !language) {
