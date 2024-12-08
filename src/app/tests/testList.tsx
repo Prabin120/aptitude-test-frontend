@@ -41,7 +41,7 @@ function TestCardComponent({ test, type }: Readonly<{ test: TestCard, type: stri
 export default function AptitudeListingPage() {
     const [topicFields, setTopicFields] = useState<{ _id: string, value: string, summary: string }[]>([])
     const [categoryFields, setCategoryFields] = useState<{ _id: string, value: string, summary: string }[]>([])
-    const [companyFields, setCompanyFields] = useState<{ _id: string, value: string, summary: string }[]>([])
+    // const [companyFields, setCompanyFields] = useState<{ _id: string, value: string, summary: string }[]>([])
     useEffect(() => {
         (async () => {
             const response = await handleGetMethod(getAptiQuestionTagEndpoint)
@@ -51,7 +51,7 @@ export default function AptitudeListingPage() {
                     const { topics, categories, companies } = res
                     setTopicFields(topics)
                     setCategoryFields(categories)
-                    setCompanyFields(companies)
+                    // setCompanyFields(companies)
                 } else {
                     alert("Error fetching question tags")
                 }

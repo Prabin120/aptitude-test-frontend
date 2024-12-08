@@ -9,7 +9,6 @@ import {
 import CodeQuestion from "./question"
 import CodeEditor from "./code-editor"
 import TestCases from "./test-cases"
-import { Params } from "next/dist/shared/lib/router/utils/route-matcher"
 import { getQuestionBySlug, runTest, submitCodeAPI } from "../../apiCalls"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import SubmissionResult from "./result"

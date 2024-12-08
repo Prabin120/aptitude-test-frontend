@@ -41,9 +41,6 @@ const isExcludedPath = (pathname: string) => {
 
 const Header = () => {
     const pathname = usePathname()
-    if (isExcludedPath(pathname)) {
-        return null; // Render nothing if the pathname matches the excluded URLs
-    }
     const dispatch = useAppDispatch();
     const authenticate = useAppSelector((state) => state.auth.authState);
     const userDetail = useAppSelector((state) => state.user)
@@ -60,7 +57,11 @@ const Header = () => {
         })()
         setIsClient(true)
     }, [codeCompileApiEntryPoint, checkTokenValidation]);
-
+    
+    if (isExcludedPath(pathname)) {
+        return null; // Render nothing if the pathname matches the excluded URLs
+    }
+    
     if (!isClient) {
         return <Loading />
     }
