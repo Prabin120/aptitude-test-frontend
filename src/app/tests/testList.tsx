@@ -48,7 +48,7 @@ export default function AptitudeListingPage() {
             if (response instanceof Response) {
                 const res = await response.json()
                 if (response.status === 200 || response.status === 201) {
-                    const { topics, categories, companies } = res
+                    const { topics, categories } = res
                     setTopicFields(topics)
                     setCategoryFields(categories)
                     // setCompanyFields(companies)

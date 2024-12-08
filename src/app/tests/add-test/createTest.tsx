@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { useForm, useFieldArray } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 import { Button } from "@/components/ui/button"
@@ -15,13 +15,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Plus, Minus, Search, CalendarIcon } from 'lucide-react'
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Textarea } from "@/components/ui/textarea"
-import { useAppDispatch } from "@/redux/store"
-import { useRouter } from "next/navigation"
-import { checkAuthorization } from "@/utils/authorization"
-import { getQuestionById } from "@/app/code/apiCalls"
+import { Search, CalendarIcon } from 'lucide-react'
 import { format, startOfDay } from "date-fns"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
@@ -39,13 +33,8 @@ const formSchema = z.object({
 })
 
 export default function TestsPage() {
-    const [searchError, setSearchError] = useState<string | null>(null)
-    const [isValidate, setIsValidate] = useState(false)
     const [loading, setLoading] = useState(false)
     const [startTime, setStartTime] = useState("")
-    const [buttonText, setButtonText] = useState("Submit")
-    const dispatch = useAppDispatch()
-    const router = useRouter()
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema)
     })
@@ -53,7 +42,7 @@ export default function TestsPage() {
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         setLoading(true)
         try {
-            
+            console.log(values);
         } catch (error) {
             console.error("Error submitting test cases:", error);
             alert("An error occurred while submitting test cases. Please try again.");
@@ -226,7 +215,7 @@ export default function TestsPage() {
                                         :
                                         <Search className="mr-2 h-4 w-4" />
                                     }
-                                    {buttonText}
+                                    Submit
                                 </>
                                 </Button>
                             </div>
