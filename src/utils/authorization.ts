@@ -7,13 +7,13 @@ import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.share
 export const checkAuthorization = async (
     response: Response,
     dispatch: AppDispatch,
-    router: AppRouterInstance,
+    router?: AppRouterInstance,
     forward?: boolean
 ) => {
     if (response.status === 401 || response.status === 403) {
         dispatch(setAuthState(false));
         dispatch(setUserState(userInitialState));
-        if(forward) router.push("/login");
+        if(router && forward) router.push("/login");
     } else if (response.status === 500) {
         console.error("Server Error");
     }

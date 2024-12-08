@@ -3,7 +3,6 @@
 import QuestionTable from "./table"
 import { useEffect, useState } from "react"
 import QuestionsFilters from "./filters"
-import Header from "@/components/header"
 import ReduxProvider from "@/redux/redux-provider"
 import { getAllQuestions } from "../apiCalls"
 import { Problem } from "../commonInterface"
@@ -26,7 +25,6 @@ export default function ProblemListPage() {
         <ReduxProvider>
             <div className="container mx-auto">
                 <div className="sticky top-0 bg-neutral-950 z-50">
-                    <Header />
                     <div className="pt-3">
                         <QuestionsFilters searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
                     </div>

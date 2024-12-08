@@ -9,11 +9,20 @@ export const changePasswordEndpoint = '/api/v1/auth/change-password'   // post
 export const logoutEndpoint = '/api/v1/auth/logout'   // post
 export const forgotPassword = '/api/v1/auth/forgot-password'   // post
 export const resetPassword = '/api/v1/auth/reset-password'   // post
-
+export const checkTokenValidation = "/is-authenticated"     // go server call
 
 // profile
 export const editProfile = '/api/v1/user/profile'   // put
 
+
+// code
+export const codeRunCode = "/run-code"
+export const codeSubmitCode = "/submit-code"
+export const codeQuestion = "/question"
+export const codeQuestions = "/questions"
+
+// test cases
+export const testCases = "/test-cases"
 
 // apti question
 export const addAptiQuestionEndpoint = '/api/v1/aptitude/questions'   // post
@@ -27,6 +36,7 @@ export const addAptiQuestionTagEndpoint = '/api/v1/aptitude/question-tag'   // p
 export const getAptiQuestionTagEndpoint = '/api/v1/aptitude/question-tag'   // get
 
 // test
+export const validateTestQuestion = '/api/v1/test/validate-questions'
 export const getTestEndpoint = '/api/v1/test'   // get
 export const postTestEndpoint = '/api/v1/test'   // post
 export const upComingTestEndpoint = '/api/v1/test/upcoming-test'   // get

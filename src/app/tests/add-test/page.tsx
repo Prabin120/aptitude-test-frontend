@@ -1,17 +1,17 @@
 'use client'
-import UserProfile from '@/app/profile/profile'
-import Footer from '@/components/ui/footer'
 import ReduxProvider from '@/redux/redux-provider'
+import React from 'react'
+import TestsPage from './createTest'
+import Footer from '@/components/ui/footer'
 
-const page = () => {
+function CreateTests() {
     return (
         <ReduxProvider>
             <main className='dark'>
-                <UserProfile />
+                <TestsPage />
             </main>
             <Footer />
         </ReduxProvider>
     )
 }
-
-export default page;
+export default CreateTests

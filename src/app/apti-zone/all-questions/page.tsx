@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react"
 import QuestionsFilters from "./filters"
-import Header from "@/components/header"
 import ReduxProvider from "@/redux/redux-provider"
 import { FilterQuestionProps, Problem } from "../commonInterface"
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher"
@@ -46,7 +45,6 @@ export default function ProblemListPage(context: Readonly<{ params: Params }>) {
         <ReduxProvider>
             <div className="container mx-auto">
                 <div className="sticky top-0 bg-neutral-950 z-50">
-                    <Header />
                     <div className="pt-3">
                         <QuestionsFilters searchQuery={searchQuery} setSearchQuery={setSearchQuery} handleSearchButton={handleSearchButton} />
                     </div>

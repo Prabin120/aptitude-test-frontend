@@ -1,6 +1,6 @@
 'use client'
 
-import TestScreen from '@/app/test/test'
+import TestScreen from '@/app/tests/test/test'
 import ReduxProvider from '@/redux/redux-provider'
 import React from 'react'
 

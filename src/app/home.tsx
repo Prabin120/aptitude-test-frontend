@@ -2,104 +2,104 @@
 import { ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { useEffect, useState } from "react"
-import { handleGetMethod } from "@/utils/apiCall"
-import { upComingTestEndpoint } from "@/consts"
-import { useAppDispatch, useAppSelector } from "@/redux/store"
-import { setAuthState } from "@/redux/auth/authSlice"
-import { setUserState, userInitialState } from "@/redux/user/userSlice"
+// import { useEffect, useState } from "react"
+// import { handleGetMethod } from "@/utils/apiCall"
+// import { upComingTestEndpoint } from "@/consts"
+// import { useAppDispatch, useAppSelector } from "@/redux/store"
+// import { setAuthState } from "@/redux/auth/authSlice"
+// import { setUserState, userInitialState } from "@/redux/user/userSlice"
 
-interface Countdown {
-    days: number;
-    hours: number;
-    minutes: number;
-    seconds: number;
-}
-const initialCountdown: Countdown = {
-    days: 0,
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-}
+// interface Countdown {
+//     days: number;
+//     hours: number;
+//     minutes: number;
+//     seconds: number;
+// }
+// const initialCountdown: Countdown = {
+//     days: 0,
+//     hours: 0,
+//     minutes: 0,
+//     seconds: 0,
+// }
 
 export default function HomePage() {
-    const dispatch = useAppDispatch();
-    const [testStarted, setTestStarted] = useState(false);
-    const [registered, setRegistered] = useState(false);
-    const [countDown, setCountDown] = useState<Countdown>(initialCountdown);
-    const [attempted, setAttempted] = useState(false);
-    const [testId, setTestId] = useState("");
-    const [authenticated, setAuthenticated] = useState(false);
-    const authenticate = useAppSelector((state) => state.auth.authState)
+    // const dispatch = useAppDispatch();
+    // const [testStarted, setTestStarted] = useState(false);
+    // const [registered, setRegistered] = useState(false);
+    // const [countDown, setCountDown] = useState<Countdown>(initialCountdown);
+    // const [attempted, setAttempted] = useState(false);
+    // const [testId, setTestId] = useState("");
+    // const [authenticated, setAuthenticated] = useState(false);
+    // const authenticate = useAppSelector((state) => state.auth.authState)
 
-    useEffect(() => {
-        setAuthenticated(authenticate);
-        (async () => {
-            const response = await handleGetMethod(upComingTestEndpoint);
-            // Check if the response is an ErrorResponse
-            if (response.status === 401 || response.status === 403) {
-                dispatch(setAuthState(false));
-                dispatch(setUserState(userInitialState));
-                setAuthenticated(false);
-                return;
-            } else if (response.status === 500) {
-                console.error("Server Error");
-                return;
-            }
+    // useEffect(() => {
+    //     setAuthenticated(authenticate);
+    //     (async () => {
+    //         const response = await handleGetMethod(upComingTestEndpoint);
+    //         // Check if the response is an ErrorResponse
+    //         if (response.status === 401 || response.status === 403) {
+    //             dispatch(setAuthState(false));
+    //             dispatch(setUserState(userInitialState));
+    //             setAuthenticated(false);
+    //             return;
+    //         } else if (response.status === 500) {
+    //             console.error("Server Error");
+    //             return;
+    //         }
 
-            if (response instanceof Response) {
-                if (response.status === 401 || response.status === 403) {
-                    dispatch(setAuthState(false));
-                    dispatch(setUserState(userInitialState));
-                    setAuthenticated(false);
-                    return;
-                }
-                const responseData = await response.json();
+    //         if (response instanceof Response) {
+    //             if (response.status === 401 || response.status === 403) {
+    //                 dispatch(setAuthState(false));
+    //                 dispatch(setUserState(userInitialState));
+    //                 setAuthenticated(false);
+    //                 return;
+    //             }
+    //             const responseData = await response.json();
 
-                if (responseData.registered) {
-                    setRegistered(true);
-                    setTestId(responseData.data.test);
-                    if (responseData.attemptedTest) {
-                        setAttempted(true);
-                        return;
-                    }
-                    const bookedTime = new Date(responseData.data.bookedTime);
-                    if (responseData.data.paid && bookedTime < new Date()) {
-                        setTestStarted(true);
-                    }
-                    else {
-                        const calculateCountdown = () => {
-                            const now = new Date().getTime();
-                            const timeDifference = bookedTime.getTime() - now;
-                            if (timeDifference <= 0) {
-                                clearInterval(interval);
-                                setCountDown(initialCountdown); // Time has passed, stop the countdown
-                                setTestStarted(true);
-                                return;
-                            }
+    //             if (responseData.registered) {
+    //                 setRegistered(true);
+    //                 setTestId(responseData.data.test);
+    //                 if (responseData.attemptedTest) {
+    //                     setAttempted(true);
+    //                     return;
+    //                 }
+    //                 const bookedTime = new Date(responseData.data.bookedTime);
+    //                 if (responseData.data.paid && bookedTime < new Date()) {
+    //                     setTestStarted(true);
+    //                 }
+    //                 else {
+    //                     const calculateCountdown = () => {
+    //                         const now = new Date().getTime();
+    //                         const timeDifference = bookedTime.getTime() - now;
+    //                         if (timeDifference <= 0) {
+    //                             clearInterval(interval);
+    //                             setCountDown(initialCountdown); // Time has passed, stop the countdown
+    //                             setTestStarted(true);
+    //                             return;
+    //                         }
 
-                            const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-                            const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                            const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
-                            const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+    //                         const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+    //                         const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    //                         const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+    //                         const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
 
-                            setCountDown({
-                                days,
-                                hours,
-                                minutes,
-                                seconds,
-                            });
-                        };
+    //                         setCountDown({
+    //                             days,
+    //                             hours,
+    //                             minutes,
+    //                             seconds,
+    //                         });
+    //                     };
 
-                        calculateCountdown(); // Initial call to set the countdown immediately
-                        const interval = setInterval(calculateCountdown, 1000); // Update countdown every second
-                        return () => clearInterval(interval); // Clear interval on unmount
-                    }
-                }
-            }
-        }
-        )();
-    }, [authenticate, dispatch]);
+    //                     calculateCountdown(); // Initial call to set the countdown immediately
+    //                     const interval = setInterval(calculateCountdown, 1000); // Update countdown every second
+    //                     return () => clearInterval(interval); // Clear interval on unmount
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     )();
+    // }, [authenticate, dispatch]);
 
     return (
         <div className="flex flex-col min-h-screen bg-background text-foreground">
@@ -117,7 +117,7 @@ export default function HomePage() {
                                 </p>
                             </div>
                             <div className="space-x-4">
-                                {authenticated ?
+                                {/* {authenticated ?
                                     (attempted ?
                                         (<Link href={`/score?testId=${testId}`}>
                                             <Button variant="secondary" className="h-11 px-8 animate-pulse" size="lg">
@@ -153,7 +153,13 @@ export default function HomePage() {
                                             <ArrowRight className="ml-2 h-5 w-5" />
                                         </Button>
                                     </Link>)
-                                }
+                                } */}
+                                <Link href={`/tests`}>
+                                    <Button variant="secondary" className="h-11 px-8 animate-pulse" size="lg">
+                                        Register for a Test
+                                        <ArrowRight className="ml-2 h-5 w-5" />
+                                    </Button>
+                                </Link>
                             </div>
                         </div>
                     </div>
