@@ -71,7 +71,7 @@ export default function QuestionCreationPage() {
                 alert("Error fetching question tags")
             }
         })()
-    }, [answersFields])
+    }, [dispatch, router])
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),

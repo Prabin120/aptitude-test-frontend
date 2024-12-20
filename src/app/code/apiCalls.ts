@@ -180,4 +180,5 @@ export {
 	getQuestionBySlug,
 	addTestCases,
 	modifyTestCase,
+	handleGetMethod
 };

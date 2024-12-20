@@ -13,7 +13,6 @@ export default function ProblemListPage() {
     useEffect(() => {
         (async () => {
             const data = await getAllQuestions()
-            console.log("data", data);
             setProblems(data)
         })()
     }, [getAllQuestions])

@@ -6,6 +6,7 @@ import { ListIcon as Category } from 'lucide-react'
 import { handleGetMethod } from "@/utils/apiCall"
 import { usePathname } from 'next/navigation'
 import { getAptiQuestionTagEndpoint } from "@/consts"
+import Loading from "../loading"
 
 interface TestCard {
     _id: string
@@ -59,7 +60,12 @@ export default function AptitudeListingPage() {
                 alert("Error fetching question tags")
             }
         })()
-    }, [handleGetMethod, getAptiQuestionTagEndpoint])
+    }, [getAptiQuestionTagEndpoint])
+
+    if (topicFields.length === 0 && categoryFields.length === 0 && companyFields.length === 0) {
+        return <Loading />
+    }
+
     return (
         <div className="container mx-auto py-8">
             <div className="flex justify-between items-center mb-8">
@@ -68,15 +74,6 @@ export default function AptitudeListingPage() {
                     <Link href="/apti-zone/all-questions">See all Questions</Link>
                 </Button>
             </div>
-
-            {/* <section className="mb-12">
-                <h2 className="text-2xl font-semibold mb-4">Popular Tests</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {popularTests.map((test) => (
-                        <TestCardComponent key={test._id} test={test} />
-                    ))}
-                </div>
-            </section> */}
 
             <h2 className="text-lg mb-2">Topics</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">

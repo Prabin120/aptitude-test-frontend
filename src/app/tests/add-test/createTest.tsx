@@ -20,12 +20,15 @@ import { format, startOfDay } from "date-fns"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
 import { Calendar } from "@/components/ui/calendar"
+import { createTest, validateQuestion } from "../apiCalls"
 
 const formSchema = z.object({
     title: z.string().min(5, "title must be more than 5 words"),
     description: z.string().min(10, "desctiption of the test must be more than 10 words"),
-    aptiQuestions: z.string(),
-    codingQuestions: z.string(),
+    apti: z.string(),
+    aptiMarks: z.string(),
+    coding: z.string(),
+    codingMarks: z.string(),
     type: z.enum(["exam", "practice"]),
     testDate: z.date(),
     testTime: z.string().min(1,"Time is required"),
@@ -38,11 +41,43 @@ export default function TestsPage() {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema)
     })
-
+    const [invalidAptiQuestions, setInvalidAptiQuestions] = useState<string[]>([]);
+    const [invalidCodingQuestions, setInvalidCodingQuestions] = useState<string[]>([]);
+    
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         setLoading(true)
         try {
-            console.log(values);
+            const apti_list = values.apti.split(",").map((id: string) => id.trim());
+            const code_list = values.coding.split(",").map((id: string) => id.trim());
+            const res = await validateQuestion({apti_list, code_list});
+            setInvalidAptiQuestions(res.missingAptiIds);
+            setInvalidCodingQuestions(res.missingCodeIds);
+            if (!res.valid){
+                return
+            }
+            if(apti_list.length != values.aptiMarks.split(",").length){
+                alert("apti questions and marks are not same length")
+            }
+            if(code_list.length != values.codingMarks.split(",").length){
+                alert("Coding questions and marks are not same length")
+            }
+            const year = values.testDate.getFullYear();
+            const month = (values.testDate.getMonth() + 1).toString().padStart(2, '0'); // Ensure two digits for month
+            const day = values.testDate.getDate().toString().padStart(2, '0'); // Ensure two digits for day
+            const date = `${year}-${month}-${day}`;
+            const dateTimeStr = `${date}T${values.testTime}:00`; // Adding seconds for valid ISO string
+            const dateTime = new Date(dateTimeStr);
+            const response = await createTest({...values, apti_list, code_list, dateTime: dateTime.toISOString()});
+            if (response instanceof Response) {
+                const res = await response.json();
+                if (response.status === 200 || response.status === 201) {
+                    alert("Test set successfully");
+                } else {
+                    alert(res.message);
+                }
+            } else{
+                alert("Server error")
+            }
         } catch (error) {
             console.error("Error submitting test cases:", error);
             alert("An error occurred while submitting test cases. Please try again.");
@@ -128,7 +163,6 @@ export default function TestsPage() {
                                                             <span>Pick a date</span>
                                                         )}
                                                         <CalendarIcon className="ml-2 h-4 w-4" />
-                                                        {/* {startDate ? format(startDate, "PPP") : <span>Pick a date</span>} */}
                                                     </Button>
                                                 </PopoverTrigger>
                                                 <PopoverContent className="w-auto p-0">
@@ -184,27 +218,55 @@ export default function TestsPage() {
                                 />
                                 <FormField
                                     control={form.control}
-                                    name="aptiQuestions"
+                                    name="apti"
                                     render={({ field }) => (
                                         <FormItem className="flex-1">
                                             <FormLabel>Aptitude Question (Id separated with comma)</FormLabel>
                                             <FormControl>
                                                 <Input {...field} placeholder="1, 12, ..." />
                                             </FormControl>
-                                            <FormMessage />
+                                            {invalidAptiQuestions.length > 0 &&
+                                                <FormMessage>Invalid Question Ids: {invalidAptiQuestions.toString()}</FormMessage>
+                                            }
                                         </FormItem>
                                     )}
                                 />
                                 <FormField
                                     control={form.control}
-                                    name="codingQuestions"
+                                    name="aptiMarks"
+                                    render={({ field }) => (
+                                        <FormItem className="flex-1">
+                                            <FormLabel>Aptitude Questions Marks</FormLabel>
+                                            <FormControl>
+                                                <Input {...field} placeholder="1, 2, 1,..." />
+                                            </FormControl>
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="coding"
                                     render={({ field }) => (
                                         <FormItem className="flex-1">
                                             <FormLabel>Coding Question (Id separated with comma)</FormLabel>
                                             <FormControl>
                                                 <Input {...field} placeholder="1, 12, ..." />
                                             </FormControl>
-                                            <FormMessage />
+                                            { invalidCodingQuestions.length > 0 &&
+                                                <FormMessage>Invalid Question Ids: {invalidCodingQuestions.toString()}</FormMessage>
+                                            }
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="codingMarks"
+                                    render={({ field }) => (
+                                        <FormItem className="flex-1">
+                                            <FormLabel>Coding Questions Marks</FormLabel>
+                                            <FormControl>
+                                                <Input {...field} placeholder="1, 2, 1,..." />
+                                            </FormControl>
                                         </FormItem>
                                     )}
                                 />

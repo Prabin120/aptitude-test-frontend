@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Plus } from 'lucide-react';
 import React, { useEffect, useState } from 'react'
 import { TestCase } from '../../commonInterface';
+import { structuredTestCases } from '@/utils/commonFunction';
 
 interface TestCaseProps {
     testCases: TestCase[] | undefined;
@@ -35,39 +36,6 @@ const TestCases: React.FC<TestCaseProps> = ({ testCases, testCaseVariableNames, 
         //     setActiveTestCase(newId)
         // }
     }
-    interface StructuredInput {
-        [key: string]: number | string | string[] | number[];
-    }
-    const parseVariableNames = (variableData: string) => {
-        const variables = variableData.trim().split('\n').map((line) => {
-            const [name, structure, type] = line.trim().split(' ');
-            return { name, structure, type };
-        });
-        return variables;
-    };
-    const structuredTestCases = (testCase: string) => {
-        const variableInfo = parseVariableNames(testCaseVariableNames);
-        const inputLines = testCase.split('\n'); // Split input by newline
-        const numberOfLines = parseInt(inputLines[0]); // First line indicates number of variables
-        const structuredInput: StructuredInput = {};
-        for (let i = 1; i <= numberOfLines; i++) {
-            const { name, structure, type } = variableInfo[i - 1];
-            let data;
-            if (structure === 'array') {
-                if (type === 'number') {
-                    data = inputLines[i*2].split(' ').map(Number);
-                } else {
-                    data = inputLines[i*2].split(' ');
-                }
-            } else if (structure === 'number') {
-                data = parseInt(inputLines[i*2]);
-            } else {
-                data = inputLines[i*2];
-            }
-            structuredInput[name] = data;
-        }
-        return structuredInput;
-    };
 
     return (
         <ScrollArea className="h-full">
@@ -87,7 +55,7 @@ const TestCases: React.FC<TestCaseProps> = ({ testCases, testCaseVariableNames, 
                         <div className="flex items-center mb-2">
                             <TabsList>
                                 {testCases?.map((_, index) => (
-                                    <TabsTrigger key={index} value={`${index}`}>
+                                    <TabsTrigger key={index+1} value={`${index}`}>
                                         Case {index + 1}
                                     </TabsTrigger>
                                 ))}
@@ -99,10 +67,10 @@ const TestCases: React.FC<TestCaseProps> = ({ testCases, testCaseVariableNames, 
 
                         {testCases?.map((testCase, index) => {
                             // Process the structured input here for each test case
-                            const structuredInput = structuredTestCases(testCase.input);
+                            const structuredInput = structuredTestCases(testCase.input, testCaseVariableNames);
 
                             return (
-                                <TabsContent key={index} value={`${index}`} className="flex-1">
+                                <TabsContent key={index+1} value={`${index}`} className="flex-1">
                                     <ScrollArea className="h-full">
                                         <div className="p-2 bg-muted rounded-md">
                                             {Object.keys(structuredInput).map((key) => (
@@ -149,7 +117,7 @@ const TestCases: React.FC<TestCaseProps> = ({ testCases, testCaseVariableNames, 
 
                                 {testCases?.map((testCase, index) => {
                                     // Process the structured input here for each test case
-                                    const structuredInput = structuredTestCases(testCase.input);
+                                    const structuredInput = structuredTestCases(testCase.input, testCaseVariableNames);
 
                                     return (
                                         <TabsContent key={index} value={`${index}`} className="flex-1">

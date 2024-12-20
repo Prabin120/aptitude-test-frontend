@@ -16,7 +16,13 @@ export default function ProblemListPage(context: Readonly<{ params: Params }>) {
     const [error, setError] = useState("")
     const [page, setPage] = useState(1)
     const [totalPages, setTotalPages] = useState(1)
-    
+    const errorDetect = (error: string) => {
+        return error ?(
+            <div className="text-red-500">{error}</div>
+        ) : (
+            <QuestionTable data={problems} currentPage={page} totalPages={totalPages} onPageChange={setPage} />
+        )
+    }
     useEffect(() => {
         const fetchQuestions = async () => {
             setLoading(true);
@@ -34,13 +40,11 @@ export default function ProblemListPage(context: Readonly<{ params: Params }>) {
         fetchQuestions();
     }, [page, type, tag]); // Add `page` to dependency array
 
-    const filteredProblems = problems?.filter(problem =>
-        problem.title.toLowerCase().includes(searchQuery.title.toLowerCase())
-    )
-
     const handleSearchButton = (title: string) => {
-        console.log(title);
+        setSearchQuery({ ...searchQuery, title });
+        console.log(searchQuery);
     }
+
     return (
         <ReduxProvider>
             <div className="container mx-auto">
@@ -49,13 +53,11 @@ export default function ProblemListPage(context: Readonly<{ params: Params }>) {
                         <QuestionsFilters searchQuery={searchQuery} setSearchQuery={setSearchQuery} handleSearchButton={handleSearchButton} />
                     </div>
                 </div>
-                {loading ? (
-                    <div>Loading questions...</div>
-                ) : error ? (
-                    <div className="text-red-500">{error}</div>
-                ) : (
-                    <QuestionTable data={filteredProblems} currentPage={page} totalPages={totalPages} onPageChange={setPage} />
-                )}
+                {loading ?
+                    <div>Loading questions...</div> : 
+                    errorDetect(error)
+                } 
+                
             </div>
         </ReduxProvider>
     )

@@ -10,16 +10,18 @@ export const logoutEndpoint = '/api/v1/auth/logout'   // post
 export const forgotPassword = '/api/v1/auth/forgot-password'   // post
 export const resetPassword = '/api/v1/auth/reset-password'   // post
 export const checkTokenValidation = "/is-authenticated"     // go server call
+export const refreshToken = "/api/v1/auth/refresh-token"   // post
 
 // profile
 export const editProfile = '/api/v1/user/profile'   // put
 
-
 // code
 export const codeRunCode = "/run-code"
 export const codeSubmitCode = "/submit-code"
+export const getCodeSubmissions = "/code-submissions"
 export const codeQuestion = "/question"
 export const codeQuestions = "/questions"
+export const codeValidateQuestionIds = "/test/validate-questions"
 
 // test cases
 export const testCases = "/test-cases"
@@ -36,17 +38,17 @@ export const addAptiQuestionTagEndpoint = '/api/v1/aptitude/question-tag'   // p
 export const getAptiQuestionTagEndpoint = '/api/v1/aptitude/question-tag'   // get
 
 // test
-export const validateTestQuestion = '/api/v1/test/validate-questions'
-export const getTestEndpoint = '/api/v1/test'   // get
+export const getTestsEndpoint = '/api/v1/test'   // get
 export const postTestEndpoint = '/api/v1/test'   // post
+export const submitTestEndpoint = '/api/v1/test/submit-test'   // post
 export const upComingTestEndpoint = '/api/v1/test/upcoming-test'   // get
 export const testRegistrationEndpoint = '/api/v1/test/test-registration'   // post
 export const scoreCardEndpoint = '/api/v1/test/score-card'   // get
-
+export const aptiValidateQuestionIds = "/api/v1/test/validate-questions"
+export const getExamReport = "/api/v1/test/exam-report"
 
 // feedback
 export const feedbackEndpoint = '/api/v1/feedback'   // post
-
 
 // payment
 export const paymentCreateOrderEndpoint = '/api/v1/payment/create-order'   // post

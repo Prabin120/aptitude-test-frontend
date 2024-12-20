@@ -3,6 +3,7 @@ interface QuestionPage {
     title: string
     difficulty: string
     description: string
+    userStatus: string
     tags: []
 }
 
@@ -12,6 +13,7 @@ interface Problem {
     difficulty: string
     slug: string
     solution: boolean
+    userStatus: string
 }
 
 interface DefaultCode {
@@ -37,6 +39,8 @@ interface SubmissionResultProps {
     totalTestCases?: number
     code?: string
     message: string
+    language?: string
+    testCaseVariableNames: string
     failedCase?: {
         input: string
         actualOutput: string

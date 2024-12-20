@@ -27,7 +27,7 @@ const matchesPattern = (pathname: string, pattern: string) => {
     return regex.test(pathname);
 }
 
-const urls = ["/code/problems/*", "/apti-zone/*/*/test"]
+const urls = ["/code/*/*", "/apti-zone/*/*/test", "/tests/exam/*/"]
 
 const isExcludedPath = (pathname: string) => {
     for (const url of urls) {
@@ -56,7 +56,7 @@ const Header = () => {
             }
         })()
         setIsClient(true)
-    }, [codeCompileApiEntryPoint, checkTokenValidation]);
+    }, [authenticate, dispatch]);
     
     if (isExcludedPath(pathname)) {
         return null; // Render nothing if the pathname matches the excluded URLs

@@ -43,7 +43,7 @@ export default function AptitudeQuestionPage({ slug }: Readonly<{ slug: string }
         })()
             .catch(e => setError("Failed to load question. Please try again." + e))
             .finally(() => setLoading(false))
-    }, [getAptiQuestionBySlug, slug])
+    }, [slug])
 
     const handleAnswerChange = (answerIndexString: string) => {
         const answerIndex = Number(answerIndexString) + 1

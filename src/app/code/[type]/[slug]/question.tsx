@@ -1,6 +1,7 @@
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { BrainCircuit, CircleCheck } from 'lucide-react';
 import React from 'react'
 
 interface QuestionPage {
@@ -9,6 +10,7 @@ interface QuestionPage {
     description: string;
     difficulty: string;
     tags: string[];
+    userStatus: string
 }
 
 interface QuestionPageProps {
@@ -21,7 +23,15 @@ const CodeQuestion: React.FC<QuestionPageProps> = ({ data }) => {
             <CardHeader>
                 <div className="flex justify-between items-center">
                     <CardTitle>{data?._id}. {data?.title}</CardTitle>
-                    <Badge>{data?.difficulty}</Badge>
+                    <div className='flex space-x-4'>
+                        {data?.userStatus === "solved"?
+                            <span className='flex space-x-2 text-green-600'><CircleCheck /> Solved</span>
+                        :
+                        data?.userStatus === "attempted" &&
+                            <span className='flex space-x-2 text-yellow-600'><BrainCircuit /> Attempted</span>
+                        }
+                        <Badge>{data?.difficulty}</Badge>
+                    </div>
                 </div>
             </CardHeader>
             <CardContent>

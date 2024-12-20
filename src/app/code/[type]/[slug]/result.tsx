@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { SubmissionResultProps, SubmissionStatus } from "../../commonInterface"
+import { structuredTestCases } from "@/utils/commonFunction"
 
 export default function SubmissionResult({
     status,
@@ -15,6 +16,7 @@ export default function SubmissionResult({
     code = "",
     message,
     failedCase,
+    testCaseVariableNames,
 }: Readonly<SubmissionResultProps>) {
     const [activeTab, setActiveTab] = useState("result")
     const getStatusColor = (status: SubmissionStatus) => {
@@ -148,9 +150,14 @@ export default function SubmissionResult({
                                         <div className="space-y-2">
                                             <h3 className="text-lg font-semibold">Last Executed Input</h3>
                                             <div className="bg-zinc-800/50 rounded-lg p-4">
-                                                <pre className="font-mono text-sm">
-                                                    nums = {JSON.stringify(failedCase.input)}
-                                                </pre>
+                                                <div className="font-mono text-sm">
+                                                    {Object.keys(structuredTestCases(failedCase.input,testCaseVariableNames)).map((key) => (
+                                                        <div key={key} className='bg-neutral-950 p-2 m-2 rounded'>
+                                                            <p>{key} = </p>
+                                                            <p>{JSON.stringify(structuredTestCases(failedCase.input,testCaseVariableNames)[key])}</p>
+                                                        </div>
+                                                    ))}
+                                                </div>
                                             </div>
                                         </div>
                                     )}
@@ -163,7 +170,12 @@ export default function SubmissionResult({
                                             <h3 className="text-lg font-semibold mb-2">Input</h3>
                                             <div className="bg-zinc-800/50 rounded-lg p-4">
                                                 <pre className="font-mono text-sm">
-                                                    nums = {JSON.stringify(failedCase.input)}
+                                                    {Object.keys(structuredTestCases(failedCase.input,testCaseVariableNames)).map((key) => (
+                                                        <div key={key} className='bg-neutral-950 p-2 m-2 rounded'>
+                                                            <p>{key} = </p>
+                                                            <p>{JSON.stringify(structuredTestCases(failedCase.input,testCaseVariableNames)[key])}</p>
+                                                        </div>
+                                                    ))}
                                                 </pre>
                                             </div>
                                         </div>

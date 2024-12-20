@@ -86,7 +86,7 @@ export default function TestSetupAndPayment() {
             }
         };
         loadScript();
-    }, [loadRazorpayScript]);
+    }, [user]);
 
     const handlePayment = async () => {
         setLoading(true);

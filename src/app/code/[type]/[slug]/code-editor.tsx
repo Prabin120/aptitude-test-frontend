@@ -9,6 +9,8 @@ import {
 } from "@/components/ui/select";
 import { Expand, RotateCcw } from 'lucide-react';
 import { DefaultCode, UserCode } from '../../commonInterface';
+import { useDispatch } from 'react-redux';
+import { setUserCodeState } from '@/redux/userCode/userCode';
 
 const languageHighlighter = (val: string) => {
     return {
@@ -27,9 +29,11 @@ interface CodeEditorProps {
     language: string;
     setLanguage: (val: string) => void;
     defaultCode: DefaultCode | undefined;
+    questionNo: string
 }
 
-const CodeEditor = ({ code, setCode, language, setLanguage, defaultCode }: CodeEditorProps) => {
+const CodeEditor = ({ code, setCode, language, setLanguage, defaultCode, questionNo }: CodeEditorProps) => {
+    const dispatch = useDispatch();
     const resetCode = () => {
         if (confirm("Do you want to reset your code?")) {
             setCode({
@@ -47,6 +51,7 @@ const CodeEditor = ({ code, setCode, language, setLanguage, defaultCode }: CodeE
             ...code,
             [language]: val || ""
         })
+        dispatch(setUserCodeState({ questionNo, code: val || "", language }));        
     }
     return (
         <div className='h-full'>

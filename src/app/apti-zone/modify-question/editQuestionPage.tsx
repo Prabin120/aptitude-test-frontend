@@ -70,9 +70,6 @@ export default function EditQuestionPage() {
             companies: [],
         },
     })
-    useEffect(() => {
-        fetchQuestionTags();
-    }, [getAptiQuestionTagEndpoint])
 
     const fetchQuestionTags = async () => {
         try {
@@ -99,6 +96,10 @@ export default function EditQuestionPage() {
             alert("Error fetching question tags")
         }
     }
+
+    useEffect(() => {
+        fetchQuestionTags();
+    }, [router])
 
     const fetchQuestion = async () => {
         if (!questionNo) return;

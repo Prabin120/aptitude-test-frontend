@@ -3,6 +3,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import Link from 'next/link'
 import React from 'react'
 import { Problem } from '../commonInterface';
+import { BrainCircuit, CircleCheck } from 'lucide-react';
 
 interface QuestionTableProps {
     filteredProblems: Problem[] | undefined;
@@ -25,9 +26,16 @@ const QuestionTable: React.FC<QuestionTableProps> = ({ filteredProblems }) => {
                 {filteredProblems?.map((problem) => (
                     <TableRow key={problem._id} >
                         <TableCell>
-                            <Badge variant="outline" className="bg-green-100 text-green-800">
-                                Done
-                            </Badge>
+                            {problem.userStatus === "solved"?
+                                <Badge variant="outline" className="text-green-800">
+                                    <CircleCheck />
+                                </Badge>
+                            :
+                            problem.userStatus === "attempted" &&
+                                <Badge variant="outline" className="text-yellow-800">
+                                    <BrainCircuit />
+                                </Badge>
+                            }
                         </TableCell>
                         <TableCell>
                             <Link href={`/code/problems/${problem.slug}`}>
@@ -56,13 +64,6 @@ const QuestionTable: React.FC<QuestionTableProps> = ({ filteredProblems }) => {
                                 {problem.difficulty}
                             </Badge>
                         </TableCell>
-                        {/* <TableCell>
-                {problem.isFrequencyLocked && (
-                  <svg className="w-5 h-5 text-gray-400" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
-                    <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-                  </svg>
-                )}
-              </TableCell> */}
                     </TableRow>
                 ))}
             </TableBody>

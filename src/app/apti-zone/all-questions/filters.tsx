@@ -1,7 +1,6 @@
 import { Button } from '@/components/ui/button'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Input } from '@/components/ui/input'
-import { ChevronDown, Search } from 'lucide-react'
+import { Search } from 'lucide-react'
 import React from 'react'
 import { FilterQuestionProps } from '../commonInterface'
 
@@ -13,20 +12,7 @@ interface IfilterQuestionProps {
 
 const QuestionsFilters: React.FC<IfilterQuestionProps> = ({ searchQuery, setSearchQuery, handleSearchButton }: IfilterQuestionProps) => {
 	return (
-		<div className="flex justify-between items-center mb-6">
-			<div className="flex space-x-2">
-				<DropdownMenu>
-					<DropdownMenuTrigger asChild>
-						<Button variant="outline">
-							Type <ChevronDown className="ml-2 h-4 w-4" />
-						</Button>
-					</DropdownMenuTrigger>
-					<DropdownMenuContent>
-						<DropdownMenuItem onClick={() => setSearchQuery({ ...searchQuery, type: "MCQ" })}>MCQ</DropdownMenuItem>
-						<DropdownMenuItem onClick={() => setSearchQuery({ ...searchQuery, type: "MAQ" })}>MAQ</DropdownMenuItem>
-					</DropdownMenuContent>
-				</DropdownMenu>
-			</div>
+		<div className="flex justify-end items-center mb-6">
 			<div className="flex items-center space-x-2">
 				<Input
 					type="search"

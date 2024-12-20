@@ -15,6 +15,9 @@ import Loading from "@/app/loading"
 import { getAptiQuestionByTag } from "@/app/apti-zone/apicalls"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { CheckCircle2, XCircle } from "lucide-react"
+import { useAppDispatch, useAppSelector } from "@/redux/store"
+import { setAptiTestState } from "@/redux/testAnswers/aptiAnswers"
+import { calculateTimeLeft } from "@/utils/commonFunction"
 
 interface Question {
     _id: string
@@ -26,7 +29,7 @@ interface Question {
     marks: number
 }
 
-export default function TestPage({ type, tag }: Readonly<{ type: string, tag: string }>) {
+export default function TestPage({ type, tag, time }: Readonly<{ type: string, tag: string, time: string }>) {
     const [currentQuestionId, setCurrentQuestionId] = useState("")
     const [answers, setAnswers] = useState<Record<string, number | number[]>>({})
     const [remainingQuestions, setRemainingQuestions] = useState(0)
@@ -34,48 +37,62 @@ export default function TestPage({ type, tag }: Readonly<{ type: string, tag: st
     const router = useRouter();
     const [mockQuestions, setMockQuestions] = useState<Question[]>([]);
     const answersRef = useRef(answers);
+    const [timeLeft, setTimeLeft] = useState("")
+    const dispatch = useAppDispatch();
+    const aptitudeQuestions = useAppSelector(state => state.aptitude.questions);
+
+    useEffect(() => {
+        if (aptitudeQuestions && aptitudeQuestions.length > 0) {
+            const newAnswers = aptitudeQuestions.reduce<Record<string, number | number[]>>((acc, item) => {
+                acc[item.questionNo] = item.answer; // Map questionNo to answer
+                return acc;
+            }, {});
+            setAnswers(newAnswers); // Update state with the new answers object
+        } else {
+            setAnswers({}); // Clear answers if there are no aptitude answers
+        }
+    }, [aptitudeQuestions]);
+
     useEffect(() => {
         answersRef.current = answers;
     }, [answers]);
 
+    useEffect(() => {
+        if (type === "exam") {
+            const timeInterval = () => {
+                const {timeLeft, timeLeftString} = calculateTimeLeft(time)
+                if(timeLeft <= 0){
+                    router.back();
+                }
+                setTimeLeft(timeLeftString)
+            }
+            const interval = setInterval(timeInterval, 1000)
+            return () => clearInterval(interval)
+        }
+    }, [type, router, time]);
     const handleEndTest = async () => {
         if (remainingQuestions < mockQuestions.length) {
             const confirmation = confirm(`You have ${mockQuestions.length - remainingQuestions} questions remaining. Are you sure you want to end the test? Remember, once the time runs out, your answers will automatically be submitted.`);
             if (!confirmation) return;
         }
         setIsTestEnded(true);
-        // try {
-        //     const answers = {...answersRef.current}
-        // const response = await handlePostMethod(postTestEndpoint, {answers}, searchParams.toString());
-        // if(response instanceof Response){
-        //     const responseData = await response.json();
-        //     if (response.status === 200 || response.status === 201) {
-        //         // We're not redirecting immediately to allow the user to review their answers
-        //         // router.replace("/thank-you");
-        //         return;
-        //     }
-        //     else{
-        //         alert(responseData.message);
-        //     }
-        // } else{
-        //     alert(response.message);
-        // }
-        // } catch (error) {
-        //     alert(error);
-        // }
     }
 
     useEffect(() => {
         (async () => {
             try {
                 const response = await getAptiQuestionByTag(type, tag, 1, 30);
-                setMockQuestions(response.data);
+                if (type === "exam") {
+                    setMockQuestions(response.aptiQuestions);
+                } else {
+                    setMockQuestions(response.data);
+                }
                 setRemainingQuestions(0);  // Updated to use response data
             } catch (error) {
                 console.error("API error:", error);
             }
         })();
-    }, ['dispatch', 'handleEndTest', 'router', 'searchParams']);
+    }, [type, tag, time]);
 
     if (mockQuestions.length === 0) {
         return (
@@ -96,6 +113,15 @@ export default function TestPage({ type, tag }: Readonly<{ type: string, tag: st
             newAnswers[questionId] = answer;
             return newAnswers;
         });
+        if (type === "exam") {
+            dispatch(
+                setAptiTestState({
+                    questionNo: questionId,
+                    answer,
+                    questionKind: "aptitude",
+                })
+            );
+        }
     }
     const currentQuestion = mockQuestions.find(q => q._id === currentQuestionId) || mockQuestions[0]
 
@@ -111,14 +137,18 @@ export default function TestPage({ type, tag }: Readonly<{ type: string, tag: st
         <div className="min-h-screen flex flex-col">
             <header className="sticky top-0 bg-background z-10 p-4 border-b">
                 <div className="container mx-auto flex justify-between items-center">
+                    {type === "exam" &&
+                        <div className="text-lg font-semibold">Time Left: {timeLeft}</div>
+                    }
                     <div className="text-lg font-semibold">
                         Questions: {remainingQuestions}/{mockQuestions.length}
                     </div>
-                    {!isTestEnded ? (
+                    {!isTestEnded && type !== "exam" ? (
                         <Button variant="destructive" onClick={handleEndTest}>End Test</Button>
                     ) : (
-                        <Button onClick={() => router.replace("/thank-you")}>Back Home</Button>
-                    )}
+                        <Button className="px-6" onClick={() => type === "exam" ? router.back() : router.replace("/thank-you")}>Back</Button>
+                    )
+                    }
                 </div>
             </header>
 
@@ -127,7 +157,7 @@ export default function TestPage({ type, tag }: Readonly<{ type: string, tag: st
                     <ScrollArea className="h-[calc(100vh-10rem)] p-4">
                         {mockQuestions.map((question, index) => (
                             <Button
-                                key={index}
+                                key={index+1}
                                 variant="ghost"
                                 className={cn(
                                     "w-full justify-start mb-2",
@@ -137,7 +167,7 @@ export default function TestPage({ type, tag }: Readonly<{ type: string, tag: st
                                 )}
                                 onClick={() => setCurrentQuestionId(question._id)}
                             >
-                                {Array.isArray(answers[question._id]) ? (answers[question._id] as number[]).length > 0 ? "✓ " : "" : answers[question._id] ? "✓ " : ""} {index + 1}. {question.title.substring(0, 20)}...
+                                {Array.isArray(answers[question._id]) ? (answers[question._id] as number[]).length > 0 ? "✓ " : "" : answers[question._id] ? "✓ " : ""} {index + 1}. {question.title.substring(0, 30)}...
                             </Button>
                         ))}
                     </ScrollArea>

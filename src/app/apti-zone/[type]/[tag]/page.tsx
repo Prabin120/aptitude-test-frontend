@@ -30,7 +30,7 @@ export default function ProblemListPage(context: Readonly<{ params: Params }>) {
             .finally(() => {
                 setLoading(false)
             })
-    }, [getAptiQuestionByTag, type, tag, page])
+    }, [type, tag, page])
 
     return (
         <ReduxProvider>

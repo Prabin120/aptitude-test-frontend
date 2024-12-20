@@ -1,4 +1,4 @@
-import { getAllAptiQuestionsEndpoint, getAptiQuestionByCategoryEndpoint, getAptiQuestionByCompanyEndpoint, getAptiQuestionByTopicEndpoint, getAptiQuestionEndpoint } from "@/consts";
+import { getAllAptiQuestionsEndpoint, getAptiQuestionByCategoryEndpoint, getAptiQuestionByCompanyEndpoint, getAptiQuestionByTopicEndpoint, getAptiQuestionEndpoint, getTestsEndpoint } from "@/consts";
 import { handleGetMethod } from "@/utils/apiCall";
 
 const getAptiQuestionByTag = async (type: string, tag: string, page: number, limit: number) => {
@@ -11,6 +11,9 @@ const getAptiQuestionByTag = async (type: string, tag: string, page: number, lim
     }
     else if(type === "category"){
         response = await handleGetMethod(getAptiQuestionByCategoryEndpoint+"/"+tag, `page=${page}&limit=${limit}`);
+    }
+    else if(type === "exam"){
+        response = await handleGetMethod(getTestsEndpoint + `/${tag}?onlyApti=true`);
     }
     if(!response){
         return "Please choose a valid option";
