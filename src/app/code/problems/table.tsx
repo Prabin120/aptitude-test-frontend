@@ -1,16 +1,21 @@
 import { Badge } from '@/components/ui/badge'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import Link from 'next/link'
-import React from 'react'
+import React, { Dispatch, SetStateAction } from 'react'
 import { Problem } from '../commonInterface';
 import { BrainCircuit, CircleCheck } from 'lucide-react';
+import PaginationComponent from '@/components/pagination';
 
 interface QuestionTableProps {
     filteredProblems: Problem[] | undefined;
+    totalPages: number
+    currentPage: number
+    setCurrentPage: Dispatch<SetStateAction<number>>
 }
 
-const QuestionTable: React.FC<QuestionTableProps> = ({ filteredProblems }) => {
+const QuestionTable: React.FC<QuestionTableProps> = ({ filteredProblems, totalPages, currentPage, setCurrentPage }: QuestionTableProps) => {
     return (
+        <>
         <Table>
             <TableHeader>
                 <TableRow>
@@ -49,7 +54,6 @@ const QuestionTable: React.FC<QuestionTableProps> = ({ filteredProblems }) => {
                                 </svg>
                             )}
                         </TableCell>
-                        {/* <TableCell>{problem.acceptance.toFixed(1)}%</TableCell> */}
                         <TableCell>
                             <Badge
                                 variant="outline"
@@ -68,6 +72,12 @@ const QuestionTable: React.FC<QuestionTableProps> = ({ filteredProblems }) => {
                 ))}
             </TableBody>
         </Table>
+        <PaginationComponent
+            totalPages={totalPages}
+            currentPage={currentPage}
+            onChangePage={setCurrentPage}
+        />
+        </>
     )
 }
 

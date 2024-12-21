@@ -42,13 +42,11 @@ const QuestionTable: React.FC<QuestionTableProps> = ({ data, totalPages, current
                     ))}
                 </TableBody>
             </Table>
-            <div className='flex justify-start my-4'>
-                <PaginationComponent
-                    totalPages={totalPages}
-                    currentPage={currentPage}
-                    onChangePage={onPageChange}
-                />
-            </div>
+            <PaginationComponent
+                totalPages={totalPages}
+                currentPage={currentPage}
+                onChangePage={onPageChange}
+            />
         </>
     )
 }

@@ -1,4 +1,11 @@
-import { codeCompileApiEntryPoint, codeQuestion, codeQuestions, codeRunCode, codeSubmitCode, testCases } from "@/consts";
+import {
+	codeCompileApiEntryPoint,
+	codeQuestion,
+	codeQuestions,
+	codeRunCode,
+	codeSubmitCode,
+	testCases,
+} from "@/consts";
 import { checkRefresh } from "@/utils/apiCall";
 
 interface ErrorResponse {
@@ -9,22 +16,22 @@ interface ErrorResponse {
 const handlePostMethod = async (
 	endpoint: string,
 	data: object
-	): Promise<Response | ErrorResponse> => {
+): Promise<Response | ErrorResponse> => {
 	try {
 		const response = await fetch(codeCompileApiEntryPoint + endpoint, {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
-		},
-		credentials: "include",
-		body: JSON.stringify(data), // Send form data as JSON
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			credentials: "include",
+			body: JSON.stringify(data), // Send form data as JSON
 		});
-		if (response.status === 401 || response.status === 403) {        
+		if (response.status === 401 || response.status === 403) {
 			const refreshValid = await checkRefresh();
 			if (refreshValid.status === 200) {
 				return handlePostMethod(endpoint, data);
 			}
-		} 
+		}
 		return response;
 	} catch (err) {
 		console.error("Error during login:", err);
@@ -34,18 +41,18 @@ const handlePostMethod = async (
 
 const handleGetMethod = async (
 	endpoint: string
-	): Promise<Response | ErrorResponse> => {
+): Promise<Response | ErrorResponse> => {
 	try {
 		const response = await fetch(codeCompileApiEntryPoint + endpoint, {
-		method: "GET",
-		credentials: "include",
+			method: "GET",
+			credentials: "include",
 		});
-		if (response.status === 401 || response.status === 403) {        
+		if (response.status === 401 || response.status === 403) {
 			const refreshValid = await checkRefresh();
 			if (refreshValid.status === 200) {
 				return handleGetMethod(endpoint);
 			}
-		} 
+		}
 		return response;
 	} catch (err) {
 		console.error("Error during login:", err);
@@ -56,22 +63,22 @@ const handleGetMethod = async (
 const handlePutMethod = async (
 	endpoint: string,
 	data: object
-	): Promise<Response | ErrorResponse> => {
+): Promise<Response | ErrorResponse> => {
 	try {
 		const response = await fetch(codeCompileApiEntryPoint + endpoint, {
-		method: "PUT",
-		headers: {
-			"Content-Type": "application/json",
-		},
-		credentials: "include",
-		body: JSON.stringify(data), // Send form data as JSON
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			credentials: "include",
+			body: JSON.stringify(data), // Send form data as JSON
 		});
-		if (response.status === 401 || response.status === 403) {        
+		if (response.status === 401 || response.status === 403) {
 			const refreshValid = await checkRefresh();
 			if (refreshValid.status === 200) {
 				return handlePutMethod(endpoint, data);
 			}
-		} 
+		}
 		return response;
 	} catch (err) {
 		console.error("Error during login:", err);
@@ -83,7 +90,7 @@ const runTest = async (
 	code: string,
 	langauge: string,
 	questionId: string
-	): Promise<Response | ErrorResponse> => {
+): Promise<Response | ErrorResponse> => {
 	const data = {
 		code: code,
 		language: langauge,
@@ -97,7 +104,7 @@ const submitCodeAPI = async (
 	code: string,
 	langauge: string,
 	questionId: string
-	): Promise<Response | ErrorResponse> => {
+): Promise<Response | ErrorResponse> => {
 	const data = {
 		code: code,
 		language: langauge,
@@ -111,23 +118,24 @@ const addQuestion = async (data: object) => {
 	const response = await handlePostMethod(codeQuestion, data);
 	if (response instanceof Response) {
 		if (response.status === 200 || response.status === 201) {
-		return "Question added successfully";
+			return "Question added successfully";
 		} else {
-		const res = await response.json();
-		return res.message;
+			const res = await response.json();
+			return res.message;
 		}
 	}
 	return "Server error, please try again later.";
 };
 
-const getAllQuestions = async () => {
-	const response = await handleGetMethod(codeQuestions);
+const getAllQuestions = async (search: string) => {
+	console.log(codeQuestion+search);
+	const response = await handleGetMethod(codeQuestions + search);
 	if (response instanceof Response) {
 		const res = await response.json();
 		if (response.status === 200 || response.status === 201) {
-		return res.data;
+			return res.data;
 		} else {
-		return res.message;
+			return res.message;
 		}
 	}
 	return "Server error, please try again later.";
@@ -138,9 +146,9 @@ const getQuestionById = async (id: string) => {
 	if (response instanceof Response) {
 		const res = await response.json();
 		if (response.status === 200 || response.status === 201) {
-		return res.data;
+			return res.data;
 		} else {
-		return res.message;
+			return res.message;
 		}
 	}
 	return "Server error, please try again later.";
@@ -151,9 +159,9 @@ const getQuestionBySlug = async (slug: string) => {
 	if (response instanceof Response) {
 		const res = await response.json();
 		if (response.status === 200 || response.status === 201) {
-		return res.data;
+			return res.data;
 		} else {
-		return res.message;
+			return res.message;
 		}
 	}
 	return "Server error, please try again later.";
@@ -163,10 +171,10 @@ const updateQuestion = async (id: string, data: object) => {
 	const response = await handlePutMethod(`${codeQuestion}?id=${id}`, data);
 	if (response instanceof Response) {
 		if (response.status === 200 || response.status === 201) {
-		return "Question added successfully";
+			return "Question added successfully";
 		} else {
-		const res = await response.json();
-		return res.message;
+			const res = await response.json();
+			return res.message;
 		}
 	}
 	return "Server error, please try again later.";
@@ -180,10 +188,10 @@ const modifyTestCase = async (id: string, data: object) => {
 	const response = await handlePutMethod(`${testCases}?id=${id}`, data);
 	if (response instanceof Response) {
 		if (response.status === 200 || response.status === 201) {
-		return "Test cases added successfully";
+			return "Test cases added successfully";
 		} else {
-		const res = await response.json();
-		return res.message;
+			const res = await response.json();
+			return res.message;
 		}
 	}
 	return "Server error, please try again later.";
@@ -199,5 +207,5 @@ export {
 	getQuestionBySlug,
 	addTestCases,
 	modifyTestCase,
-	handleGetMethod
+	handleGetMethod,
 };

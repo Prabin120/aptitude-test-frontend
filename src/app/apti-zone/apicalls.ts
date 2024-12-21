@@ -29,8 +29,9 @@ const getAptiQuestionByTag = async (type: string, tag: string, page: number, lim
     return "Server error, please try again later.";
 };
 
-const getAllAptiQuestions = async (page: number, limit: number) => {
-    const response = await handleGetMethod(getAllAptiQuestionsEndpoint, `page=${page}&limit=${limit}`);
+const getAllAptiQuestions = async (page: number, search?: string) => {
+    search = search??""
+    const response = await handleGetMethod(getAllAptiQuestionsEndpoint, `page=${page}&search=${search}`);
     if (response instanceof Response) {
         const res = await response.json();
         if (response.status === 200 || response.status === 201) {
