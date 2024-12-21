@@ -17,7 +17,6 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { CheckCircle2, XCircle } from "lucide-react"
 import { useAppDispatch, useAppSelector } from "@/redux/store"
 import { setAptiTestState } from "@/redux/testAnswers/aptiAnswers"
-import { calculateTimeLeft } from "@/utils/commonFunction"
 
 interface Question {
     _id: string
@@ -59,15 +58,22 @@ export default function TestPage({ type, tag, time }: Readonly<{ type: string, t
 
     useEffect(() => {
         if (type === "exam") {
-            const timeInterval = () => {
-                const {timeLeft, timeLeftString} = calculateTimeLeft(time)
-                if(timeLeft <= 0){
-                    router.back();
+            let animationFrame: number;
+            const calculateTimeLeft = () => {
+                const now = new Date().getTime();
+                const test = new Date(time).getTime();
+                const testTime = test - now;
+                if (testTime <= 0) {
+                    router.back()
                 }
-                setTimeLeft(timeLeftString)
-            }
-            const interval = setInterval(timeInterval, 1000)
-            return () => clearInterval(interval)
+                const hours = Math.floor((testTime / (1000 * 60 * 60)) % 24);
+                const minutes = Math.floor((testTime / (1000 * 60)) % 60);
+                const seconds = Math.floor((testTime / 1000) % 60);
+                setTimeLeft(`${hours}h ${minutes}m ${seconds}s`);
+                animationFrame = requestAnimationFrame(calculateTimeLeft);
+            };
+            calculateTimeLeft(); // Start the loop
+            return () => cancelAnimationFrame(animationFrame); // Clean up on unmount
         }
     }, [type, router, time]);
     const handleEndTest = async () => {

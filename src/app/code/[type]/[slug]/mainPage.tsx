@@ -181,7 +181,8 @@ export default function CodingPlatformPage(parameters: Readonly<{ slug: string, 
                         defaultValue={activeTabQuestion} className='w-full items-center bg-neutral-800 h-7'>
                         <TabsList className="h-6">
                             <TabsTrigger value={"question"}>Description</TabsTrigger>
-                            <TabsTrigger value="submissions">Submissions</TabsTrigger>
+                            { type !== "exam" && 
+                                <TabsTrigger value="submissions">Submissions</TabsTrigger>}
                         </TabsList>
                         <TabsContent value="question">
                             <CodeQuestion key={"question"} data={question} />

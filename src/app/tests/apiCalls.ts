@@ -4,13 +4,19 @@ import { checkRefresh, handlePostMethod } from "@/utils/apiCall";
 
 const getVerifyQuestions = async(question_list: string[], keyVal: string, entryPoint: string, endPoint: string) =>{
     try {
+        let keyPair = {}
+        if(keyVal === "apti") {
+            keyPair = {apti:question_list}
+        } else {
+            keyPair = {coding:question_list}
+        }
         const response = await fetch(entryPoint + endPoint, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
             credentials: "include",
-            body: JSON.stringify({keyVal:question_list}), // Send form data as JSON
+            body: JSON.stringify(keyPair)
         });
         if (response.status === 401 || response.status === 403) {        
             const refreshValid = await checkRefresh();

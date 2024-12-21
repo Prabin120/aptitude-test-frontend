@@ -9,7 +9,6 @@ import { setAuthState } from '@/redux/auth/authSlice'
 import { useAppDispatch, useAppSelector } from '@/redux/store'
 import { setUserState, userInitialState } from '@/redux/user/userSlice'
 import { handleGetMethod } from '@/utils/apiCall'
-import { calculateTimeLeft } from '@/utils/commonFunction'
 import { LogOut, Play, Send, Settings, User } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -39,18 +38,25 @@ function CodeHeader({ runCode, submitCode, loading, type, time }: Readonly<Heade
     }
     
     useEffect(() => {
-            if (type === "exam") {
-                const timeInterval = () => {
-                    const {timeLeft, timeLeftString} = calculateTimeLeft(time)
-                    if(timeLeft <= 0){
-                        router.back();
-                    }
-                    setTimeLeft(timeLeftString)
+        if (type === "exam") {
+            let animationFrame: number;
+            const calculateTimeLeft = () => {
+                const now = new Date().getTime();
+                const test = new Date(time).getTime();
+                const testTime = test - now;
+                if (testTime <= 0) {
+                    router.back()
                 }
-                const interval = setInterval(timeInterval, 1000)
-                return () => clearInterval(interval)
-            }
-        }, [router, time, type]);
+                const hours = Math.floor((testTime / (1000 * 60 * 60)) % 24);
+                const minutes = Math.floor((testTime / (1000 * 60)) % 60);
+                const seconds = Math.floor((testTime / 1000) % 60);
+                setTimeLeft(`${hours}h ${minutes}m ${seconds}s`);
+                animationFrame = requestAnimationFrame(calculateTimeLeft);
+            };
+            calculateTimeLeft(); // Start the loop
+            return () => cancelAnimationFrame(animationFrame); // Clean up on unmount
+        }
+    }, [router, time, type, timeLeft]);
     
     const isProfile = () => {
         return authenticate ?
