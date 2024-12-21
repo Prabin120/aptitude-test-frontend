@@ -92,6 +92,7 @@ export default function CodingPlatformPage(parameters: Readonly<{ slug: string, 
         try {
             const response = await runTest(code ? code[language] : "", language, question._id)
             if (response instanceof Response) {
+                await checkAuthorization(response, dispatch)
                 if (response.status == 401) {
                     alert("Please login first")
                     await checkAuthorization(response, dispatch)
@@ -121,6 +122,7 @@ export default function CodingPlatformPage(parameters: Readonly<{ slug: string, 
             }
             const response = await submitCodeAPI(code ? code[language] : "", language, question._id)
             if (response instanceof Response) {
+                await checkAuthorization(response, dispatch)
                 const res = await response.json()
                 let status;
                 if (res.status) {

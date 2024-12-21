@@ -1,3 +1,8 @@
+export interface ErrorResponse {
+  message: string;
+  status: number;
+}
+
 export const calculateTimeLeft = (time: string) => {
     const now = new Date();
     const testTime = new Date(time);

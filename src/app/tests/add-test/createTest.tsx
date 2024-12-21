@@ -21,6 +21,8 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { cn } from "@/lib/utils"
 import { Calendar } from "@/components/ui/calendar"
 import { createTest, validateQuestion } from "../apiCalls"
+import { checkAuthorization } from "@/utils/authorization"
+import { useAppDispatch } from "@/redux/store"
 
 const formSchema = z.object({
     title: z.string().min(5, "title must be more than 5 words"),
@@ -43,6 +45,7 @@ export default function TestsPage() {
     })
     const [invalidAptiQuestions, setInvalidAptiQuestions] = useState<string[]>([]);
     const [invalidCodingQuestions, setInvalidCodingQuestions] = useState<string[]>([]);
+    const dispath = useAppDispatch()
     
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         setLoading(true)
@@ -69,6 +72,7 @@ export default function TestsPage() {
             const dateTime = new Date(dateTimeStr);
             const response = await createTest({...values, apti_list, code_list, dateTime: dateTime.toISOString()});
             if (response instanceof Response) {
+                await checkAuthorization(response, dispath);
                 const res = await response.json();
                 if (response.status === 200 || response.status === 201) {
                     alert("Test set successfully");

@@ -11,14 +11,21 @@ import { setAuthState } from '@/redux/auth/authSlice'
 import { useAppDispatch, useAppSelector } from '@/redux/store'
 import Loading from '@/app/loading'
 import { setUserState, userInitialState } from '@/redux/user/userSlice'
-import { handleGetMethod } from '@/utils/apiCall'
+import { checkRefresh, handleGetMethod } from '@/utils/apiCall'
 import { checkTokenValidation, codeCompileApiEntryPoint, logoutEndpoint } from '@/consts'
+import { checkAuthorization } from '@/utils/authorization'
 
 const getAutheticationDetail = async () => {
     const response = await fetch(codeCompileApiEntryPoint + checkTokenValidation, {
         method: "GET",
         credentials: "include",
     });
+    if (response.status === 401 || response.status === 403) {        
+        const refreshValid = await checkRefresh();
+        if (refreshValid.status === 200) {
+            return refreshValid;
+        }
+    } 
     return response;
 }
 
@@ -50,6 +57,7 @@ const Header = () => {
     useEffect(() => {
         authenticate && (async()=>{
             const response = await getAutheticationDetail()
+            await checkAuthorization(response, dispatch);
             if(response.status !== 200){
                 dispatch(setUserState(userInitialState));
                 dispatch(setAuthState(false));

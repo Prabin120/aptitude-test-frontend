@@ -1,6 +1,6 @@
 
-export const apiEntryPoint = process.env.NEXT_PUBLIC_API_ENDPOINT
-export const codeCompileApiEntryPoint = process.env.NEXT_PUBLIC_CODE_COMPILER_ENDPOINT
+export const apiEntryPoint = process.env.NEXT_PUBLIC_API_ENDPOINT ?? "http://localhost:8000"
+export const codeCompileApiEntryPoint = process.env.NEXT_PUBLIC_CODE_COMPILER_ENDPOINT ?? "http://localhost:8080"
 
 // auth
 export const loginEndpoint = '/api/v1/auth/login'   // post

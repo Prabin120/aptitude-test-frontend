@@ -93,6 +93,7 @@ export default function QuestionCreationPage() {
         try {
             const response = await handlePostMethod(addAptiQuestionEndpoint, values)
             if (response instanceof Response) {
+                await checkAuthorization(response, dispatch, router, true);
                 const res = await response.json()
                 if (response.status === 200 || response.status === 201) {
                     alert("Question added successfully")

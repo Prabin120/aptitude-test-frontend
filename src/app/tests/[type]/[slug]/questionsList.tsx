@@ -70,6 +70,7 @@ function QuestionsList({ slug }: Readonly<{ type: string, slug: string }>) {
         try {
             const response = await handlePostMethod(submitTestEndpoint, {aptitudeAnswers: aptitudeAnswers, codingAnswers: codingAnswers, testId: testId });
             if(response instanceof Response){
+                await checkAuthorization(response, dispatch, router, true);
                 const responseData = await response.json();
                 if (response.status === 200 || response.status === 201) {
                     dispatch(clearAptiTestState());
@@ -104,12 +105,10 @@ function QuestionsList({ slug }: Readonly<{ type: string, slug: string }>) {
             const hours = Math.floor((time / (1000 * 60 * 60)) % 24)
             const minutes = Math.floor((time / (1000 * 60)) % 60)
             const seconds = Math.floor((time / 1000) % 60)
-
             setTimer(`${hours}h ${minutes}m ${seconds}s`)
         }
         calculateTimeLeft()
         const interval = setInterval(calculateTimeLeft, 1000)
-
         return () => clearInterval(interval)
     }, [timeLeft])
 

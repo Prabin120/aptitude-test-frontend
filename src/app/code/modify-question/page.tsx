@@ -30,6 +30,8 @@ import CircleLoading from "@/components/ui/circleLoading"
 import "react-quill/dist/quill.snow.css"
 import { getQuestionById, updateQuestion } from "../apiCalls"
 import dynamic from "next/dynamic";
+import { checkAuthorization } from "@/utils/authorization"
+import { useAppDispatch } from "@/redux/store"
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 const languageOptions = ["py", "js", "java", "c", "cpp", "go"]
@@ -63,6 +65,7 @@ export default function ModifyQuestionForm() {
     const [questionId, setQuestionId] = useState("")
     const [loading, setLoading] = useState(false)
     const [searching, setSearching] = useState(false)
+    const dispatch = useAppDispatch()
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -88,6 +91,7 @@ export default function ModifyQuestionForm() {
         setLoading(true)
         try {
             const response = await updateQuestion(questionId, values)
+            await checkAuthorization(response, dispatch);
             alert(response)
         } catch (error) {
             console.error('Error updating question:', error)

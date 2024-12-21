@@ -12,6 +12,8 @@ import { CheckCircle2, XCircle, ChevronLeft, ChevronRight } from 'lucide-react'
 import { getAptiQuestionBySlug } from "../../apicalls"
 import { Problem } from "../../commonInterface"
 import Link from "next/link"
+import { checkAuthorization } from "@/utils/authorization"
+import { useAppDispatch } from "@/redux/store"
 
 interface IQuestionData extends Problem {
     description: string
@@ -32,18 +34,20 @@ export default function AptitudeQuestionPage({ slug }: Readonly<{ slug: string }
     const [nextQuestionSlug, setNextQuestionSlug] = useState<string>('')
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState("")
+    const dispatch = useAppDispatch();
     useEffect(() => {
         setLoading(true);
         setError("");
         (async () => {
             const response = await getAptiQuestionBySlug(slug)
+            await checkAuthorization(response, dispatch);
             setQuestion(response.question)
             setPreviousQuestionSlug(response.prevQuestionSlug)
             setNextQuestionSlug(response.nextQuestionSlug)
         })()
             .catch(e => setError("Failed to load question. Please try again." + e))
             .finally(() => setLoading(false))
-    }, [slug])
+    }, [slug, dispatch])
 
     const handleAnswerChange = (answerIndexString: string) => {
         const answerIndex = Number(answerIndexString) + 1

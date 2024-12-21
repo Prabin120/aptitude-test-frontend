@@ -6,13 +6,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import {
     Table,
     TableBody,
-    TableCell,
     TableHead,
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Mail, Phone, School, Trophy, User, Edit, Lock } from "lucide-react"
+import { Mail, Phone, School, Edit, Lock } from "lucide-react"
 import {
     Dialog,
     DialogContent,
@@ -38,19 +37,19 @@ import { changePasswordEndpoint, editProfile } from "@/consts"
 import { setAuthState } from "@/redux/auth/authSlice"
 import Link from "next/link"
 
-const testAttempts = [
-    {
-        id: 1,
-        rank: 45,
-        score: 80,
-        date: '2022-01-01',
-    },
-    {
-        id: 2,
-        rank: 10,
-        score: 90,
-        date: '2022-01-02',
-    },
+const testAttempts = [{}
+    // {
+    //     id: 1,
+    //     rank: 45,
+    //     score: 80,
+    //     date: '2022-01-01',
+    // },
+    // {
+    //     id: 2,
+    //     rank: 10,
+    //     score: 90,
+    //     date: '2022-01-02',
+    // },
 ]
 
 type ModalContent = "edit" | "password"
@@ -245,7 +244,7 @@ export default function UserProfile() {
                                                                 <FormItem>
                                                                     <FormLabel>Old Password</FormLabel>
                                                                     <FormControl>
-                                                                        <Input placeholder="isfuh8762e1@" {...field} required />
+                                                                        <Input type="password" placeholder="isfuh8762e1@" {...field} required />
                                                                     </FormControl>
                                                                     <FormMessage />
                                                                 </FormItem>
@@ -340,14 +339,14 @@ export default function UserProfile() {
                                             </TableRow>
                                         </TableHeader>
                                         <TableBody>
-                                            {testAttempts.map((attempt) => (
+                                            {/* {testAttempts?.map((attempt) => (
                                                 <TableRow key={attempt.id}>
                                                     <TableCell>{attempt.id}</TableCell>
                                                     <TableCell>{attempt.score}</TableCell>
                                                     <TableCell>{attempt.rank}</TableCell>
                                                     <TableCell>{attempt.date}</TableCell>
                                                 </TableRow>
-                                            ))}
+                                            ))} */}
                                         </TableBody>
                                     </Table>
                                 ) : (
@@ -363,7 +362,7 @@ export default function UserProfile() {
                             </CardHeader>
                             <CardContent>
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                    <Card>
+                                    {/* <Card>
                                         <CardContent className="flex flex-col items-center p-6">
                                             <Trophy className="w-8 h-8 text-primary mb-2" />
                                             <p className="text-2xl font-bold">{Math.max(...testAttempts.map(a => a.score))}</p>
@@ -383,7 +382,7 @@ export default function UserProfile() {
                                             <p className="text-2xl font-bold">{testAttempts.length}</p>
                                             <p className="text-sm text-muted-foreground">Total Attempts</p>
                                         </CardContent>
-                                    </Card>
+                                    </Card> */}
                                 </div>
                             </CardContent>
                         </Card>
@@ -391,7 +390,7 @@ export default function UserProfile() {
                 </Tabs>
 
                 <div className="mt-8 text-center">
-                    <Link href={'/'}>
+                    <Link href={'/tests'}>
                         <Button size="lg">
                             Take New Test
                         </Button>

@@ -1,4 +1,5 @@
 import { codeCompileApiEntryPoint, codeQuestion, codeQuestions, codeRunCode, codeSubmitCode, testCases } from "@/consts";
+import { checkRefresh } from "@/utils/apiCall";
 
 interface ErrorResponse {
 	message: string;
@@ -18,6 +19,12 @@ const handlePostMethod = async (
 		credentials: "include",
 		body: JSON.stringify(data), // Send form data as JSON
 		});
+		if (response.status === 401 || response.status === 403) {        
+			const refreshValid = await checkRefresh();
+			if (refreshValid.status === 200) {
+				return handlePostMethod(endpoint, data);
+			}
+		} 
 		return response;
 	} catch (err) {
 		console.error("Error during login:", err);
@@ -33,6 +40,12 @@ const handleGetMethod = async (
 		method: "GET",
 		credentials: "include",
 		});
+		if (response.status === 401 || response.status === 403) {        
+			const refreshValid = await checkRefresh();
+			if (refreshValid.status === 200) {
+				return handleGetMethod(endpoint);
+			}
+		} 
 		return response;
 	} catch (err) {
 		console.error("Error during login:", err);
@@ -53,6 +66,12 @@ const handlePutMethod = async (
 		credentials: "include",
 		body: JSON.stringify(data), // Send form data as JSON
 		});
+		if (response.status === 401 || response.status === 403) {        
+			const refreshValid = await checkRefresh();
+			if (refreshValid.status === 200) {
+				return handlePutMethod(endpoint, data);
+			}
+		} 
 		return response;
 	} catch (err) {
 		console.error("Error during login:", err);
