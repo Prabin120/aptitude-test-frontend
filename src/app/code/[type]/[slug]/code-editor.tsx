@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import MonacoEditor from "@monaco-editor/react";
 import {
     Select,
@@ -11,6 +11,7 @@ import { Expand, RotateCcw } from 'lucide-react';
 import { DefaultCode, UserCode } from '../../commonInterface';
 import { useDispatch } from 'react-redux';
 import { setUserCodeState } from '@/redux/userCode/userCode';
+import { debounce } from "lodash";
 
 const languageHighlighter = (val: string) => {
     return {
@@ -43,6 +44,13 @@ const CodeEditor = ({ code, setCode, language, setLanguage, defaultCode, questio
         }
     };
 
+    const debouncedDispatch = useCallback(
+        debounce((val: string) => {
+            dispatch(setUserCodeState({ questionNo, code: val, language }));
+        }, 300),
+        []
+    );
+
     const changeLanguage = (lang: string) => {
         setLanguage(lang);
     };
@@ -51,7 +59,7 @@ const CodeEditor = ({ code, setCode, language, setLanguage, defaultCode, questio
             ...code,
             [language]: val || ""
         })
-        dispatch(setUserCodeState({ questionNo, code: val || "", language }));        
+        debouncedDispatch(val || "");
     }
     return (
         <div className='h-full'>
