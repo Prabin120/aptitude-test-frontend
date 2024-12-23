@@ -69,7 +69,6 @@ export default function ContactPage() {
                 setIsFeedbackSubmitted(false)
                 setError(response.message)
             }
-            console.log(values)
             toast({
                 title: "Feedback sent!",
                 description: "Thank you for your feedback. We'll get back to you soon.",

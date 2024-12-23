@@ -130,7 +130,6 @@ const addQuestion = async (data: object) => {
 };
 
 const getAllQuestions = async (search: string) => {
-	console.log(codeQuestion+search);
 	const response = await handleGetMethod(codeQuestions + search);
 	if (response instanceof Response) {
 		const res = await response.json();

@@ -100,7 +100,6 @@ export default function TestSetupAndPayment() {
                 dateTime: dateTime
             }
             const response = await handlePostMethod(paymentCreateOrderEndpoint, data);
-            console.log(response);
             if (response instanceof Response) {
                 if (response.status === 401 || response.status === 403) {
                     dispatch(setAuthState(false));
