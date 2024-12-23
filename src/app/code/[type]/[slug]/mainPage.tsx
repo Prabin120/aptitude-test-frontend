@@ -61,11 +61,12 @@ export default function CodingPlatformPage(parameters: Readonly<{ slug: string, 
                 js: savedCodes?.find(d => d.questionNo === question._id && d.language === "js")?.code ?? response.codeTemplates.js.template,
                 py: savedCodes?.find(d => d.questionNo === question._id && d.language === "py")?.code ?? response.codeTemplates.py.template
             }
+            setLanguage(savedCodes?.find(d => d.questionNo === question._id)?.language ?? "py")
             setCode(userCodeTemp)
             setTestCases(response.sampleTestCases)
             setTestCaseVariableNames(response.testCaseVariableNames)
         })()
-    }, [slug, savedCodes])
+    }, [slug])
     useEffect(() => {
         if(activeTabQuestion === "submissions" && submissions?.length === 0) {
             const data = async () => {
@@ -120,7 +121,7 @@ export default function CodingPlatformPage(parameters: Readonly<{ slug: string, 
             if (!code || !language || !question) {
                 return
             }
-            const response = await submitCodeAPI(code ? code[language] : "", language, question._id)
+            const response = await submitCodeAPI(code ? code[language] : "", language, question._id, question.userStatus)
             if (response instanceof Response) {
                 await checkAuthorization(response, dispatch)
                 const res = await response.json()

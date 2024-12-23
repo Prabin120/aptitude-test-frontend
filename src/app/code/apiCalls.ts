@@ -103,12 +103,14 @@ const runTest = async (
 const submitCodeAPI = async (
 	code: string,
 	langauge: string,
-	questionId: string
+	questionId: string,
+	userStatus: string
 ): Promise<Response | ErrorResponse> => {
 	const data = {
 		code: code,
 		language: langauge,
 		questionId: questionId,
+		userStatus: userStatus,
 	};
 	const response = await handlePostMethod(codeSubmitCode, data);
 	return response;
