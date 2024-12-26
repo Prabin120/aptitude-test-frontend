@@ -24,7 +24,7 @@ import { getCodeSubmissions } from "@/consts"
 
 export default function CodingPlatformPage(parameters: Readonly<{ slug: string, type: string, time: string }>) {
     const [code, setCode] = useState<UserCode>()
-    const [language, setLanguage] = useState("py")
+    const [language, setLanguage] = useState("")
     const [question, setQustion] = useState<QuestionPage>()
     const [defaultCode, setDefaultCode] = useState<DefaultCode>()
     const [testCases, setTestCases] = useState<TestCase[]>()

@@ -2,11 +2,14 @@
 
 import ReduxProvider from "@/redux/redux-provider";
 import EditQuestionPage from "./editQuestionPage";
+import { withAdminAuth } from "@/components/withAdminAuth";
 
-export default function Page() {
+function Page() {
   return (
-  <ReduxProvider>
+    <ReduxProvider>
       <EditQuestionPage />
-  </ReduxProvider>
+    </ReduxProvider>
   )
 }
+
+export default withAdminAuth(Page);

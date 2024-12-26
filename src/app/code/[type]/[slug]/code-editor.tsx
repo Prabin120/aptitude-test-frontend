@@ -45,7 +45,8 @@ const CodeEditor = ({ code, setCode, language, setLanguage, defaultCode, questio
     };
 
     const debouncedDispatch = useCallback(
-        debounce((val: string) => {
+        debounce((val: string, language: string) => {
+            console.log(language)
             dispatch(setUserCodeState({ questionNo, code: val, language }));
         }, 300),
         []
@@ -59,7 +60,7 @@ const CodeEditor = ({ code, setCode, language, setLanguage, defaultCode, questio
             ...code,
             [language]: val || ""
         })
-        debouncedDispatch(val || "");
+        debouncedDispatch(val || "", language);
     }
     return (
         <div className='h-full'>
@@ -72,7 +73,7 @@ const CodeEditor = ({ code, setCode, language, setLanguage, defaultCode, questio
                         <SelectContent>
                             <SelectItem value="cpp">C++</SelectItem>
                             <SelectItem value="py">Python</SelectItem>
-                            <SelectItem value="js">JavaScript</SelectItem>
+                            {/* <SelectItem value="js">JavaScript</SelectItem> */}
                             <SelectItem value="java">Java</SelectItem>
                             <SelectItem value="c">C</SelectItem>
                             <SelectItem value="go">Go</SelectItem>

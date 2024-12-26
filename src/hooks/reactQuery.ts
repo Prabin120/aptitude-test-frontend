@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { getTestsEndpoint } from '@/consts'
+import { getTestsEndpoint, validAdminAccess } from '@/consts'
 import { handleGetMethod } from '@/utils/apiCall'
 import { IAptiQuestion, ICodingQuestion } from '@/app/tests/[type]/[slug]/questionsList'
 
@@ -33,5 +33,21 @@ export const useExamQuestions = (slug: string) => {
         enabled: !!slug,
     })
 }
+const checkAdminAccess = async () => {
+    const response = await handleGetMethod(validAdminAccess)
+    if (response.status === 200){
+        return true
+    }
+    return false
+}
 
-
+export const useCheckAdminAccess = () => {
+    return useQuery({
+        queryKey: ['checkAdminAccess'],
+        queryFn: () => checkAdminAccess(),
+        staleTime: 3600000,
+        gcTime: 3600000,
+        retry: 2,
+        enabled: true,
+    })
+}

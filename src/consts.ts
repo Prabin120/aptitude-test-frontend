@@ -11,6 +11,7 @@ export const forgotPassword = '/api/v1/auth/forgot-password'   // post
 export const resetPassword = '/api/v1/auth/reset-password'   // post
 export const checkTokenValidation = "/is-authenticated"     // go server call
 export const refreshToken = "/api/v1/auth/refresh-token"   // post
+export const validAdminAccess = "/api/v1/auth/valid-admin-access"
 
 // profile
 export const editProfile = '/api/v1/user/profile'   // put

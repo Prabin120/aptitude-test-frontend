@@ -2,6 +2,7 @@
 import ReduxProvider from '@/redux/redux-provider'
 import React from 'react'
 import ModifyQuestionForm from './modifyQuestion'
+import { withAdminAuth } from '@/components/withAdminAuth'
 
 function ModifyQuestion() {
   return (
@@ -11,4 +12,4 @@ function ModifyQuestion() {
   )
 }
 
-export default ModifyQuestion
+export default withAdminAuth(ModifyQuestion)

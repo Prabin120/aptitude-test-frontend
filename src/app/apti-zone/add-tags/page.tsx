@@ -1,8 +1,9 @@
 'use client'
 import ReduxProvider from '@/redux/redux-provider'
 import QuestionTagCreationPage from './addTags'
+import { withAdminAuth } from '@/components/withAdminAuth'
 
-export default function AddTags(){
+function AddTags(){
     return (
         <ReduxProvider>
             <main className='dark'>
@@ -11,3 +12,5 @@ export default function AddTags(){
         </ReduxProvider>
     )
 }
+
+export default withAdminAuth(AddTags)

@@ -1,8 +1,9 @@
 'use client'
 import ReduxProvider from '@/redux/redux-provider'
 import QuestionSubmissionForm from './addQuestion'
+import { withAdminAuth } from '@/components/withAdminAuth'
 
-export default function AboutUs(){
+function AddQuestion(){
     return (
         <ReduxProvider>
             <main className='dark'>
@@ -11,3 +12,5 @@ export default function AboutUs(){
         </ReduxProvider>
     )
 }
+
+export default withAdminAuth(AddQuestion);

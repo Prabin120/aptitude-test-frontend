@@ -1,8 +1,9 @@
 'use client'
 import ReduxProvider from '@/redux/redux-provider'
 import QuestionCreationPage from './addQuestion'
+import { withAdminAuth } from '@/components/withAdminAuth'
 
-export default function AddAptiQuestion(){
+function AddAptiQuestion(){
     return (
         <ReduxProvider>
             <main className='dark'>
@@ -11,3 +12,5 @@ export default function AddAptiQuestion(){
         </ReduxProvider>
     )
 }
+
+export default withAdminAuth(AddAptiQuestion)

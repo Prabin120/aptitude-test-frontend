@@ -1,14 +1,17 @@
 "use client"
 
+import { withAdminAuth } from '@/components/withAdminAuth'
 import ReduxProvider from '@/redux/redux-provider'
 import dynamic from 'next/dynamic'
 
 const TestCaseSubmissionPage = dynamic(() => import('./addTestcase'), { ssr: false })
 
-export default function Page() {
+function AddTestCase() {
   return (
     <ReduxProvider>
         <TestCaseSubmissionPage />
     </ReduxProvider>
   )
 }
+
+export default withAdminAuth(AddTestCase);
