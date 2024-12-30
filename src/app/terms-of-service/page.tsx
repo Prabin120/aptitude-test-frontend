@@ -1,5 +1,4 @@
 import Footer from '@/components/ui/footer'
-import Link from 'next/link'
 
 export default function TermsOfService() {
   return (

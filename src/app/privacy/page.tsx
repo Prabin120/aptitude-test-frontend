@@ -11,14 +11,14 @@ export default function PrivacyPolicy() {
         <section className="mb-8">
           <h2 className="text-2xl font-semibold mb-4">1. Introduction</h2>
           <p className="mb-4">
-            Your privacy is important to us. It is Your Company Name's policy to respect your privacy regarding any information we may collect from you across our website, apticode.in, and other sites we own and operate.
+            Your privacy is important to us. It is Your Company Name&apos;s policy to respect your privacy regarding any information we may collect from you across our website, apticode.in, and other sites we own and operate.
           </p>
         </section>
 
         <section className="mb-8">
           <h2 className="text-2xl font-semibold mb-4">2. Information We Collect</h2>
           <p className="mb-4">
-            We only ask for personal information when we truly need it to provide a service to you. We collect it by fair and lawful means, with your knowledge and consent. We also let you know why we're collecting it and how it will be used.
+            We only ask for personal information when we truly need it to provide a service to you. We collect it by fair and lawful means, with your knowledge and consent. We also let you know why we&apos;re collecting it and how it will be used.
           </p>
         </section>
 
@@ -46,7 +46,7 @@ export default function PrivacyPolicy() {
         <section className="mb-8">
           <h2 className="text-2xl font-semibold mb-4">5. Cookies</h2>
           <p className="mb-4">
-            We use "cookies" to collect information and improve our services. You can instruct your browser to refuse all cookies or to indicate when a cookie is being sent. However, if you do not accept cookies, you may not be able to use some portions of our service.
+            We use &quot;cookies&quot; to collect information and improve our services. You can instruct your browser to refuse all cookies or to indicate when a cookie is being sent. However, if you do not accept cookies, you may not be able to use some portions of our service.
           </p>
         </section>
 
