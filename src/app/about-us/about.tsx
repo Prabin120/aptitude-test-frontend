@@ -48,7 +48,7 @@ export default function AboutUsPage() {
         <h2 className="text-3xl font-bold mb-6 text-center">Our Team</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {teamMembers.map((member, index) => (
-            <Card key={index}>
+            <Card key={index+1} className="hover:cursor-pointer" onClick={() => window.open("https://prabin.apticode.in", "_blank")}>
               <CardHeader>
                 <Avatar className="w-24 h-24 mx-auto mb-4">
                   <AvatarImage src={member.image} alt={member.name} />
