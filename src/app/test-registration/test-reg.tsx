@@ -115,7 +115,7 @@ export default function TestSetupAndPayment() {
                     key: order.key_id,
                     amount: order.amount,
                     currency: "INR",
-                    name: "AptiTest",
+                    name: "AptiCode",
                     description: "Test Registration",
                     order_id: order.id,
                     handler: async function (response: RazorpayOptions) {

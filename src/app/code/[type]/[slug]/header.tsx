@@ -124,7 +124,7 @@ function CodeHeader({ runCode, submitCode, loading, type, time }: Readonly<Heade
                     <div className="text-lg font-semibold">Time Left: {timeLeft}</div>
                     :
                     <Link className="flex items-center justify-center" href="/">
-                        <span className="font-bold text-lg">AptiTest</span>
+                        <span className="font-bold text-lg"><span className='font-serif font-thin'>&lt;AptiCode/&gt;</span>.</span>
                     </Link>
                 }
             </div>
