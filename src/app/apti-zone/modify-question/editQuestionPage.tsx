@@ -143,7 +143,6 @@ export default function EditQuestionPage() {
                 const res = await response.json()
                 if (response.status === 200 || response.status === 201) {
                     alert("Question updated successfully")
-                    console.log(res);
                 }
                 else {
                     alert(res.message)

@@ -4,7 +4,7 @@ export interface IUserState {
   id: string;
   name: string;
   email: string;
-  avatarUrl: string;
+  image: string;
   mobile: string;
   institute?: string;
 }
@@ -13,7 +13,7 @@ export const userInitialState = {
   id: "",
   name: "",
   email: "",
-  avatarUrl: "",
+  image: "",
   mobile: "",
   institute: "",
 }

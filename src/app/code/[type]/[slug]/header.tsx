@@ -69,7 +69,7 @@ function CodeHeader({ runCode, submitCode, loading, type, time }: Readonly<Heade
                         variant="ghost"
                     >
                         <Avatar className="dark">
-                            <AvatarImage src={userDetail.avatarUrl} alt={userDetail.name} />
+                            <AvatarImage src={userDetail.image} alt={userDetail.name} />
                             <AvatarFallback>{userDetail.name.charAt(0).toUpperCase()}</AvatarFallback>
                         </Avatar>
                         <span className="sr-only">Open profile</span>
@@ -82,7 +82,7 @@ function CodeHeader({ runCode, submitCode, loading, type, time }: Readonly<Heade
                     <div className="py-4">
                         <div className="flex items-center space-x-4 mb-4">
                             <Avatar className="dark w-14 h-14">
-                                <AvatarImage src={userDetail.avatarUrl} alt={userDetail.name} />
+                                <AvatarImage src={userDetail.image} alt={userDetail.name} />
                                 <AvatarFallback>{userDetail.name.charAt(0).toUpperCase()}</AvatarFallback>
                             </Avatar>
                             <div>

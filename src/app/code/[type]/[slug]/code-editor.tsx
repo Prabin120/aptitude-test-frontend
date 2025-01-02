@@ -46,7 +46,6 @@ const CodeEditor = ({ code, setCode, language, setLanguage, defaultCode, questio
 
     const debouncedDispatch = useCallback(
         debounce((val: string, language: string) => {
-            console.log(language)
             dispatch(setUserCodeState({ questionNo, code: val, language }));
         }, 300),
         []

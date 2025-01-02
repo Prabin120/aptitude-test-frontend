@@ -15,6 +15,7 @@ export const validAdminAccess = "/p/api/v1/auth/valid-admin-access"
 
 // profile
 export const editProfile = '/p/api/v1/user/profile'   // put
+export const getProfile = '/p/api/v1/user/profile'   // get
 
 // code
 export const codeRunCode = "/s/run-code"
@@ -54,3 +55,8 @@ export const feedbackEndpoint = '/p/api/v1/feedback'   // post
 // payment
 export const paymentCreateOrderEndpoint = '/p/api/v1/payment/create-order'   // post
 export const verifyPaymentEndpoint = '/p/api/v1/payment/verify-payment'   // post
+
+// OAuth2
+export const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID ?? '';
+export const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET ?? '';
+export const GET_VERIFY_GOOGLE_USER = '/p/api/v1/auth/google-login'
