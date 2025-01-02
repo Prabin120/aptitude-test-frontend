@@ -1,6 +1,6 @@
 
-export const apiEntryPoint = process.env.NEXT_PUBLIC_API_ENDPOINT ?? "http://apti-test-load-balancer-1130942424.eu-north-1.elb.amazonaws.com:8000"
-export const codeCompileApiEntryPoint = process.env.NEXT_PUBLIC_CODE_COMPILER_ENDPOINT ?? "http://apti-test-load-balancer-1130942424.eu-north-1.elb.amazonaws.com:8080"
+export const apiEntryPoint = process.env.NEXT_PUBLIC_API_ENDPOINT ?? "https://apticode.in"
+export const codeCompileApiEntryPoint = process.env.NEXT_PUBLIC_CODE_COMPILER_ENDPOINT ?? "https://apticode.in"
 
 // auth
 export const loginEndpoint = '/p/api/v1/auth/login'   // post

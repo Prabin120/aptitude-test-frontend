@@ -15,7 +15,7 @@ import { useRouter } from "next/navigation"
 import { useAppDispatch } from "@/redux/store"
 import { setAuthState } from "@/redux/auth/authSlice"
 import { setUserState } from "@/redux/user/userSlice"
-import { apiEntryPoint, getProfile, loginEndpoint, signupEndpoint } from "@/consts"
+import { apiEntryPoint, GET_VERIFY_GOOGLE_USER, getProfile, loginEndpoint, signupEndpoint } from "@/consts"
 import Link from "next/link"
 import { handleGetMethod } from "@/utils/apiCall"
 
@@ -82,9 +82,8 @@ export function LoginComponent() {
             const height = 600;
             const left = (window.innerWidth - width) / 2;
             const top = (window.innerHeight - height) / 2;
-            const googleAuthUrl = "http://localhost:8000/p/api/v1/auth/google-login";
             const popup = window.open(
-                googleAuthUrl,
+                apiEntryPoint+GET_VERIFY_GOOGLE_USER,
                 "GoogleAuthPopup",
                 `width=${width},height=${height},top=${top},left=${left}`
             );
@@ -93,7 +92,7 @@ export function LoginComponent() {
                 return;
             }
             const handleMessage = async (event: MessageEvent) => {
-                if (event.origin !== "http://localhost:8000") {
+                if (event.origin !== apiEntryPoint) {
                     console.warn("Received message from unknown origin:", event.origin);
                     return;
                 }
