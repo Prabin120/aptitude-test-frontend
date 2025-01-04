@@ -134,7 +134,7 @@ export function LoginComponent() {
     }
 
     return (
-        <div className="mx-auto max-w-[600px] space-y-6 py-12 md:py-24">
+        <div className="mx-auto px-2 max-w-[600px] space-y-6 py-12 md:py-24">
             <Tabs defaultValue="login" className="w-full">
                 <TabsList className="grid w-full grid-cols-2 rounded-lg bg-muted p-1">
                     <TabsTrigger value="login">Login</TabsTrigger>

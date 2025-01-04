@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 import Link from 'next/link'
-import { LogOut, Settings, User } from 'lucide-react'
+import { AlignLeft, LogOut, Settings, User } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import { usePathname, useRouter } from 'next/navigation'
 import { setAuthState } from '@/redux/auth/authSlice'
@@ -20,12 +20,12 @@ const getAutheticationDetail = async () => {
         method: "GET",
         credentials: "include",
     });
-    if (response.status === 401 || response.status === 403) {        
+    if (response.status === 401 || response.status === 403) {
         const refreshValid = await checkRefresh();
         if (refreshValid.status === 200) {
             return refreshValid;
         }
-    } 
+    }
     return response;
 }
 
@@ -55,21 +55,21 @@ const Header = () => {
     const [isSheetOpen, setIsSheetOpen] = useState(false)
     const [isClient, setIsClient] = useState(false)
     useEffect(() => {
-        authenticate && (async()=>{
+        authenticate && (async () => {
             const response = await getAutheticationDetail()
             await checkAuthorization(response, dispatch);
-            if(response.status !== 200){
+            if (response.status !== 200) {
                 dispatch(setUserState(userInitialState));
                 dispatch(setAuthState(false));
             }
         })()
         setIsClient(true)
     }, [authenticate, dispatch]);
-    
+
     if (isExcludedPath(pathname)) {
         return null; // Render nothing if the pathname matches the excluded URLs
     }
-    
+
     if (!isClient) {
         return <Loading />
     }
@@ -86,20 +86,20 @@ const Header = () => {
             <Link className="flex items-center justify-center" href="/">
                 <span className="font-bold text-lg"><span className='font-serif font-thin'>&lt;AptiCode/&gt;</span>.</span>
             </Link>
-            <nav className="ml-auto flex gap-4 sm:gap-6 items-center">
-                <Link className="text-md font-medium hover:underline underline-offset-4 animate-pulse text-orange-400" href="/tests">
+            <nav className="hidden md:flex ml-auto gap-4 sm:gap-6 items-center">
+                <Link className="text-md font-medium hover:underline underline-offset-4 animate-pulse text-orange-400" href="/tests" onClick={() => setIsSheetOpen(false)}>
                     Test the Gain 💪
                 </Link>
-                <Link className="text-sm font-medium hover:underline underline-offset-4" href="/code/problems">
+                <Link className="text-sm font-medium hover:underline underline-offset-4" href="/code/problems" onClick={() => setIsSheetOpen(false)}>
                     CodeZone
                 </Link>
-                <Link className="text-sm font-medium hover:underline underline-offset-4" href="/apti-zone">
+                <Link className="text-sm font-medium hover:underline underline-offset-4" href="/apti-zone" onClick={() => setIsSheetOpen(false)}>
                     AptiZone
                 </Link>
-                <Link className="text-sm font-medium hover:underline underline-offset-4" href="/about-us">
+                <Link className="text-sm font-medium hover:underline underline-offset-4" href="/about-us" onClick={() => setIsSheetOpen(false)}>
                     About
                 </Link>
-                <Link className="text-sm font-medium hover:underline underline-offset-4" href="/contact-us">
+                <Link className="text-sm font-medium hover:underline underline-offset-4" href="/contact-us" onClick={() => setIsSheetOpen(false)}>
                     Contact
                 </Link>
 
@@ -134,7 +134,7 @@ const Header = () => {
                                     </div>
                                 </div>
                                 <nav className="space-y-2">
-                                    <Link href={"/profile"}>
+                                    <Link href={"/profile"} onClick={() => setIsSheetOpen(false)}>
                                         <Button className="w-full justify-start" variant="ghost">
                                             <User className="mr-2 h-4 w-4" />
                                             View Profile
@@ -144,7 +144,7 @@ const Header = () => {
                                         <Settings className="mr-2 h-4 w-4" />
                                         Settings
                                     </Button>
-                                    <Button className="w-full justify-start" onClick={handleLogout} variant="ghost">
+                                    <Button className="w-full justify-start" onClick={()=>{setIsSheetOpen(false); handleLogout();}} variant="ghost">
                                         <LogOut className="mr-2 h-4 w-4" />
                                         Log out
                                     </Button>
@@ -154,11 +154,87 @@ const Header = () => {
                     </Sheet>)
                     :
                     (
-                        <Link href={"/login"}>
+                        <Link href={"/login"} onClick={() => setIsSheetOpen(false)}>
                             <Button variant="secondary" size="default" className='px-7'>Login</Button>
                         </Link>
                     )
                 }
+            </nav>
+            <nav className="md:hidden ml-auto flex gap-4 sm:gap-6 items-center">
+                <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+                    <SheetTrigger asChild>
+                        <Button
+                            className="rounded-full"
+                            size="icon"
+                            variant="ghost"
+                        >
+                            <AlignLeft />
+                            <span className="sr-only">Open profile</span>
+                        </Button>
+                    </SheetTrigger>
+                    <SheetContent>
+                        {authenticate ?
+                            <div className="flex items-center space-x-4 mb-4">
+                                <Avatar className="dark w-14 h-14">
+                                    <AvatarImage src={userDetail.image} alt={userDetail.name} />
+                                    <AvatarFallback>{userDetail.name.charAt(0).toUpperCase()}</AvatarFallback>
+                                </Avatar>
+                                <div>
+                                    <h2 className="text-xl font-bold">{userDetail.name}</h2>
+                                    <p className="text-sm text-gray-500">{userDetail.email}</p>
+                                </div>
+                            </div>
+                            :
+                            <Link href="/login" onClick={() => setIsSheetOpen(false)}>
+                                <Button variant={"secondary"} className="w-full mt-3">
+                                    Login / SignUp
+                                </Button>
+                            </Link>
+                        }
+                        <div className='p-4 flex flex-col'>
+                            <Link className="text-md font-medium hover:underline underline-offset-4 animate-pulse text-orange-400" href="/tests" onClick={() => setIsSheetOpen(false)}>
+                                <Button className="w-full justify-start" variant="ghost">
+                                    Test the Gain 💪
+                                </Button>
+                            </Link>
+                            <Link className="text-sm font-medium hover:underline underline-offset-4" href="/code/problems" onClick={() => setIsSheetOpen(false)}>
+                                <Button className="w-full justify-start" variant="ghost">
+                                    CodeZone
+                                </Button>
+                            </Link>
+                            <Link className="text-sm font-medium hover:underline underline-offset-4" href="/apti-zone" onClick={() => setIsSheetOpen(false)}>
+                                <Button className="w-full justify-start" variant="ghost">
+                                    AptiZone
+                                </Button>
+                            </Link>
+                            <Link className="text-sm font-medium hover:underline underline-offset-4" href="/about-us" onClick={() => setIsSheetOpen(false)}>
+                                <Button className="w-full justify-start" variant="ghost">
+                                    About
+                                </Button>
+                            </Link>
+                            <Link className="text-sm font-medium hover:underline underline-offset-4" href="/contact-us" onClick={() => setIsSheetOpen(false)}>
+                                <Button className="w-full justify-start" variant="ghost">
+                                    Contact
+                                </Button>
+                            </Link>
+                            {authenticate && (
+                                <>
+                                    <Link href={"/profile"} onClick={() => setIsSheetOpen(false)}>
+                                        <Button className="w-full justify-start" variant="ghost">
+                                            View Profile
+                                        </Button>
+                                    </Link>
+                                    <Button className="w-full justify-start" variant="ghost">
+                                        Settings
+                                    </Button>
+                                    <Button className="w-full justify-start" onClick={()=>{setIsSheetOpen(false); handleLogout();}} variant="ghost">
+                                        Log out
+                                    </Button>
+                                </>
+                            )}
+                        </div>
+                    </SheetContent>
+                </Sheet>
             </nav>
         </header>
     )

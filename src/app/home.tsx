@@ -1,106 +1,42 @@
 'use client'
-import { ArrowRight } from "lucide-react"
+import { ArrowRight, Brain, Clock, Code, FileSpreadsheet, Trophy, Users } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-// import { useEffect, useState } from "react"
-// import { handleGetMethod } from "@/utils/apiCall"
-// import { upComingTestEndpoint } from "@/consts"
-// import { useAppDispatch, useAppSelector } from "@/redux/store"
-// import { setAuthState } from "@/redux/auth/authSlice"
-// import { setUserState, userInitialState } from "@/redux/user/userSlice"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { Progress } from "@/components/ui/progress"
 
-// interface Countdown {
-//     days: number;
-//     hours: number;
-//     minutes: number;
-//     seconds: number;
-// }
-// const initialCountdown: Countdown = {
-//     days: 0,
-//     hours: 0,
-//     minutes: 0,
-//     seconds: 0,
-// }
+const features = [
+    {
+        title: "Coding Practice",
+        icon: Code,
+        description: "Sharpen your programming skills with our diverse set of coding challenges",
+        href: "/coding-practice",
+        color: "bg-gradient-to-r from-neutral-500 to-neutral-900",
+        stats: { challenges: 500, languages: 10 },
+        popularTopics: ["Data Structures", "Algorithms", "Web Development"],
+    },
+    {
+        title: "Aptitude Questions",
+        icon: Brain,
+        description: "Boost your logical and analytical thinking with our aptitude question bank",
+        href: "/aptitude-questions",
+        color: "bg-gradient-to-r from-neutral-900 to-neutral-500",
+        stats: { questions: 1000, categories: 15 },
+        popularTopics: ["Numerical Reasoning", "Verbal Ability", "Logical Reasoning"],
+    },
+    {
+        title: "Exam Mode",
+        icon: FileSpreadsheet,
+        description: "Test your knowledge under timed conditions to simulate real exam scenarios",
+        href: "/exam-mode",
+        color: "bg-gradient-to-r from-neutral-500 to-neutral-900",
+        stats: { exams: 50, duration: "1-3 hours" },
+        popularTopics: ["Mock Tests", "Sectional Practice", "Performance Analysis"],
+    },
+]
 
 export default function HomePage() {
-    // const dispatch = useAppDispatch();
-    // const [testStarted, setTestStarted] = useState(false);
-    // const [registered, setRegistered] = useState(false);
-    // const [countDown, setCountDown] = useState<Countdown>(initialCountdown);
-    // const [attempted, setAttempted] = useState(false);
-    // const [testId, setTestId] = useState("");
-    // const [authenticated, setAuthenticated] = useState(false);
-    // const authenticate = useAppSelector((state) => state.auth.authState)
-
-    // useEffect(() => {
-    //     setAuthenticated(authenticate);
-    //     (async () => {
-    //         const response = await handleGetMethod(upComingTestEndpoint);
-    //         // Check if the response is an ErrorResponse
-    //         if (response.status === 401 || response.status === 403) {
-    //             dispatch(setAuthState(false));
-    //             dispatch(setUserState(userInitialState));
-    //             setAuthenticated(false);
-    //             return;
-    //         } else if (response.status === 500) {
-    //             console.error("Server Error");
-    //             return;
-    //         }
-
-    //         if (response instanceof Response) {
-    //             if (response.status === 401 || response.status === 403) {
-    //                 dispatch(setAuthState(false));
-    //                 dispatch(setUserState(userInitialState));
-    //                 setAuthenticated(false);
-    //                 return;
-    //             }
-    //             const responseData = await response.json();
-
-    //             if (responseData.registered) {
-    //                 setRegistered(true);
-    //                 setTestId(responseData.data.test);
-    //                 if (responseData.attemptedTest) {
-    //                     setAttempted(true);
-    //                     return;
-    //                 }
-    //                 const bookedTime = new Date(responseData.data.bookedTime);
-    //                 if (responseData.data.paid && bookedTime < new Date()) {
-    //                     setTestStarted(true);
-    //                 }
-    //                 else {
-    //                     const calculateCountdown = () => {
-    //                         const now = new Date().getTime();
-    //                         const timeDifference = bookedTime.getTime() - now;
-    //                         if (timeDifference <= 0) {
-    //                             clearInterval(interval);
-    //                             setCountDown(initialCountdown); // Time has passed, stop the countdown
-    //                             setTestStarted(true);
-    //                             return;
-    //                         }
-
-    //                         const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-    //                         const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    //                         const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
-    //                         const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
-
-    //                         setCountDown({
-    //                             days,
-    //                             hours,
-    //                             minutes,
-    //                             seconds,
-    //                         });
-    //                     };
-
-    //                     calculateCountdown(); // Initial call to set the countdown immediately
-    //                     const interval = setInterval(calculateCountdown, 1000); // Update countdown every second
-    //                     return () => clearInterval(interval); // Clear interval on unmount
-    //                 }
-    //             }
-    //         }
-    //     }
-    //     )();
-    // }, [authenticate, dispatch]);
-
     return (
         <div className="flex flex-col min-h-screen bg-background text-foreground">
             <main className="flex-1">
@@ -117,43 +53,6 @@ export default function HomePage() {
                                 </p>
                             </div>
                             <div className="space-x-4">
-                                {/* {authenticated ?
-                                    (attempted ?
-                                        (<Link href={`/score?testId=${testId}`}>
-                                            <Button variant="secondary" className="h-11 px-8 animate-pulse" size="lg">
-                                                View Score
-                                                <ArrowRight className="ml-2 h-5 w-5" />
-                                            </Button>
-                                        </Link>)
-                                        :
-                                        (registered ?
-                                            (testStarted ?
-                                                (<Link href={`/test?testId=${testId}`}>
-                                                    <Button variant="secondary" className="h-11 px-8 animate-pulse" size="lg">
-                                                        Start Test
-                                                        <ArrowRight className="ml-2 h-5 w-5" />
-                                                    </Button>
-                                                </Link>)
-                                                :
-                                                (<Button variant="secondary" className="h-11 px-8 animate-pulse" size="lg" disabled>
-                                                    {countDown.days}d {countDown.hours}h {countDown.minutes}m {countDown.seconds}s left to start
-                                                </Button>))
-                                            :
-                                            (<Link href={`/test-registration?testId=${testId}`}>
-                                                <Button variant="secondary" className="h-11 px-8 animate-pulse" size="lg">
-                                                    Register for a Test
-                                                    <ArrowRight className="ml-2 h-5 w-5" />
-                                                </Button>
-                                            </Link>))
-                                    )
-                                    :
-                                    (<Link href={`/login`}>
-                                        <Button variant="secondary" className="h-11 px-8 animate-pulse" size="lg">
-                                            Let&apos;s Enter
-                                            <ArrowRight className="ml-2 h-5 w-5" />
-                                        </Button>
-                                    </Link>)
-                                } */}
                                 <Link href={`/tests`}>
                                     <Button variant="secondary" className="h-11 px-8 animate-pulse" size="lg">
                                         Register for a Test
@@ -164,6 +63,51 @@ export default function HomePage() {
                         </div>
                     </div>
                 </section>
+                <div className="px-2 py-4 my-4 grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {features.map((feature, index) => (
+                        <Card key={index + 1} className="overflow-hidden transition-all duration-300 hover:shadow-lg">
+                            <CardHeader className={`${feature.color} text-white p-6`}>
+                                <div className="flex items-center justify-between">
+                                    <feature.icon className="w-12 h-12" />
+                                    <Badge variant="secondary" className="text-sm font-medium">
+                                        {Object.values(feature.stats)[0]}+ {Object.keys(feature.stats)[0]}
+                                    </Badge>
+                                </div>
+                                <CardTitle className="text-2xl mt-4">{feature.title}</CardTitle>
+                            </CardHeader>
+                            <CardContent className="p-6">
+                                <CardDescription className="text-base mb-4">{feature.description}</CardDescription>
+                                <div className="space-y-2">
+                                    <div className="flex items-center text-sm">
+                                        <Trophy className="w-4 h-4 mr-2 text-yellow-500" />
+                                        <span>Popular Topics:</span>
+                                    </div>
+                                    <div className="flex flex-wrap gap-2">
+                                        {feature.popularTopics.map((topic, i) => (
+                                            <Badge key={i} variant="outline">{topic}</Badge>
+                                        ))}
+                                    </div>
+                                </div>
+                            </CardContent>
+                            <CardFooter className="bg-muted/50 p-6 flex flex-col space-y-4">
+                                <div className="flex items-center justify-between text-sm w-full">
+                                    <div className="flex items-center">
+                                        <Clock className="w-4 h-4 mr-1" />
+                                        <span>Updated daily</span>
+                                    </div>
+                                    <div className="flex items-center">
+                                        <Users className="w-4 h-4 mr-1" />
+                                        <span>10k+ users</span>
+                                    </div>
+                                </div>
+                                <Progress value={33} className="w-full" />
+                                {/* <Button asChild className="w-full">
+                                    <Link href={feature.href}>Get Started</Link>
+                                </Button> */}
+                            </CardFooter>
+                        </Card>
+                    ))}
+                </div>
                 <section className="w-full py-12 md:py-24 lg:py-32 bg-neutral-900">
                     <div className="container px-4 md:px-6">
                         <div className="grid gap-10 sm:grid-cols-2 md:grid-cols-3">

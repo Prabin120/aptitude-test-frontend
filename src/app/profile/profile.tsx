@@ -297,7 +297,6 @@ export default function UserProfile() {
                                         </DialogContent>
                                     </Dialog>
                                 </div>
-                                <p className="text-lg text-muted-foreground mb-4">{userDetail?.institute}</p>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div className="flex items-center gap-2">
                                         <Mail className="w-5 h-5 text-muted-foreground" />

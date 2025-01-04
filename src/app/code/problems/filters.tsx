@@ -59,7 +59,7 @@ const QuestionsFilters = ({ searchQuery, setSearchQuery, filteredProblems }: { s
                 <Input
                     type="search"
                     placeholder="Search questions"
-                    className="w-64"
+                    className="md:w-full lg:w-64"
                     value={searchQuery.title}
                     onChange={(e) => setSearchQuery({...searchQuery, title :e.target.value})}
                 />
