@@ -3,15 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { BrainCircuit, CircleCheck } from 'lucide-react';
 import React from 'react'
-
-interface QuestionPage {
-    _id: string;
-    title: string;
-    description: string;
-    difficulty: string;
-    tags: string[];
-    userStatus: string
-}
+import { QuestionPage } from '../../commonInterface';
 
 interface QuestionPageProps {
     data: QuestionPage | undefined;
@@ -45,6 +37,7 @@ const CodeQuestion: React.FC<QuestionPageProps> = ({ data }) => {
                             <small className='pr-2'></small>
                         </React.Fragment>
                     )) : ""}
+                    <p className='mt-4 text-sm text-right px-4'>Donated By: {data?.donatedBy.name}</p>
                 </ScrollArea>
             </CardContent>
         </Card>

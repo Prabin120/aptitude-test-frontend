@@ -92,7 +92,7 @@ export default function QuestionSubmissionForm() {
         try {
             const response = await addQuestion(values);
             await checkAuthorization(response, dispatch, router, true);
-            alert(response);
+            alert(response+" It will be updated after admin approval");
         } catch (error) {
             console.error('Error submitting question:', error);
             alert('Failed to submit question. Please try again.'); // User-friendly error message

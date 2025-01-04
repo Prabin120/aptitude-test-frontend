@@ -42,7 +42,7 @@ export default function CodingPlatformPage(parameters: Readonly<{ slug: string, 
     useEffect(() => {
         (async () => {
             const response = await getQuestionBySlug(slug)
-            const question = { _id: response._id, title: response.title, description: response.description, difficulty: response.difficulty, tags: response.tags, userStatus: response.userStatus }
+            const question = { _id: response._id, title: response.title, description: response.description, difficulty: response.difficulty, tags: response.tags, userStatus: response.userStatus, donatedBy: response.donatedBy }
             setQustion(question)
             const defaultCodeTemp: DefaultCode = {
                 c: savedCodes?.find(d => d.questionNo === question._id && d.language === "c")?.code ?? response.codeTemplates.c,

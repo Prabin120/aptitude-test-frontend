@@ -5,6 +5,10 @@ interface QuestionPage {
     description: string
     userStatus: string
     tags: []
+    donatedBy: {
+        userId: string,
+        name: string
+    }
 }
 
 interface Problem {
