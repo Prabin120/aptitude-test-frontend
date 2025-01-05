@@ -9,7 +9,7 @@ import {
 import CodeQuestion from "./question"
 import CodeEditor from "./code-editor"
 import TestCases from "./test-cases"
-import { getQuestionBySlug, runTest, submitCodeAPI, handleGetMethod, getAihint } from "../../apiCalls"
+import { runTest, submitCodeAPI, handleGetMethod, getAihint } from "../../apiCalls"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import SubmissionResult from "./result"
 import { DefaultCode, QuestionPage, SubmissionResultProps, TestCase, UserCode } from "../../commonInterface"

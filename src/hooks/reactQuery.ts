@@ -1,8 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
-import { codeQuestions, getTestsEndpoint, validAdminAccess } from '@/consts'
+import { getTestsEndpoint, validAdminAccess } from '@/consts'
 import { handleGetMethod } from '@/utils/apiCall'
 import { IAptiQuestion, ICodingQuestion } from '@/app/tests/[type]/[slug]/questionsList'
-import { get } from 'lodash'
 import { getAllQuestions, getQuestionBySlug } from '@/app/code/apiCalls'
 
 interface ExamQuestionsResponse {

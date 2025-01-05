@@ -4,11 +4,9 @@ import QuestionTable from "./table"
 import { useEffect, useState } from "react"
 import QuestionsFilters from "./filters"
 import ReduxProvider from "@/redux/redux-provider"
-import { getAllQuestions } from "../apiCalls"
 import { Problem } from "../commonInterface"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useGetAllQuestions } from "@/hooks/reactQuery"
-import { set } from "lodash"
 export interface ICodingFilters {
     title: string
     difficulty: string
