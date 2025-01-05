@@ -25,6 +25,7 @@ export const codeQuestion = "/s/question"
 export const codeQuestions = "/s/questions"
 export const codeValidateQuestionIds = "/s/test/validate-questions"
 export const codeAihint = "/s/ai-hint"
+export const codeAiFeedback = "/s/ai-feedback"
 
 // test cases
 export const testCases = "/s/test-cases"

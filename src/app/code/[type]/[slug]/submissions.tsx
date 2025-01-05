@@ -7,9 +7,10 @@ import SubmissionResult from './result'
 interface ISubmissionResultProps {
     submissions: SubmissionResultProps[]
     testCaseVariableNames: string
+    aiFeedback: () => void
 }
 
-function Submissions({ submissions, testCaseVariableNames }: Readonly<ISubmissionResultProps>) {
+function Submissions({ submissions, testCaseVariableNames, aiFeedback }: Readonly<ISubmissionResultProps>) {
     const [selectedSubmission, setSelectedSubmission] = useState<number>(0)
     const [isResultModalOpen, setIsResultModalOpen] = useState<boolean>(false)
     function checkStatus(){
@@ -67,6 +68,8 @@ function Submissions({ submissions, testCaseVariableNames }: Readonly<ISubmissio
                             message={submissions[selectedSubmission]?.message}
                             failedCase={submissions[selectedSubmission]?.failedCase}
                             testCaseVariableNames = {testCaseVariableNames}
+                            aiFeedback={aiFeedback}
+                            type="code"
                         />
                     )}
                 </DialogContent>

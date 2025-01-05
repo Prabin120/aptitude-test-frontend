@@ -24,7 +24,7 @@ const AiHelp: React.FC<AiHelpProps> = ({ aihelpText }) => {
         )
     return (
         <div className='p-4 h-full'>
-            <h1 className="text-2xl font-bold mb-4">AI Help</h1>
+            <h1 className="text-2xl font-bold mb-4">Smart AC</h1>
             <ScrollArea className="h-[calc(100vh-200px)]">
                 <MarkdownPreview source={value} />
             </ScrollArea>

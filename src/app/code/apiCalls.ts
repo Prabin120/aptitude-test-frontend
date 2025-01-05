@@ -1,4 +1,5 @@
 import {
+	codeAiFeedback,
 	codeAihint,
 	codeCompileApiEntryPoint,
 	codeQuestion,
@@ -217,6 +218,26 @@ const getAihint = async (code: string, langauge: string, question: string) => {
 	return response;
 };
 
+const getAiFeedback = async (code: string, langauge: string, question: string, passedTestCases: number, totalTestCases: number) => {
+	const data = {
+		code: code,
+		language: langauge,
+		question: question,
+		passedTestCases: passedTestCases,
+		totalTestCases: totalTestCases,
+	}
+	const response = await handlePostMethod(codeAiFeedback, data);
+	if (response instanceof Response) {
+		if (!response.status) {
+			return "Smart feedback is not available right now";
+		} else {
+			const res = await response.json();
+			return res.data;
+		}
+	}
+	return response;
+};
+
 export {
 	runTest,
 	submitCodeAPI,
@@ -229,4 +250,5 @@ export {
 	modifyTestCase,
 	handleGetMethod,
 	getAihint,
+	getAiFeedback,
 };

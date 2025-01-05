@@ -54,6 +54,8 @@ interface SubmissionResultProps {
         testCaseNumber: number
         timeTaken: number
     }
+    aiFeedback: () => void
+    type: string
 }
 
 export type { QuestionPage, Problem, DefaultCode, UserCode, TestCase, SubmissionStatus, SubmissionResultProps }

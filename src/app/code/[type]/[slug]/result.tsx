@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Check, AlertTriangle, XCircle, Copy } from 'lucide-react'
+import { Check, AlertTriangle, XCircle, Copy, Lightbulb } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -17,6 +17,8 @@ export default function SubmissionResult({
     message,
     failedCase,
     testCaseVariableNames,
+    aiFeedback,
+    type,
 }: Readonly<SubmissionResultProps>) {
     const [activeTab, setActiveTab] = useState("result")
     const getStatusColor = (status: SubmissionStatus) => {
@@ -70,18 +72,7 @@ export default function SubmissionResult({
                                 </Badge>
                             )}
                         </div>
-                        {/* <div className="flex gap-2">
-                            <Button variant="outline" size="sm">
-                                <ExternalLink className="h-4 w-4 mr-2" />
-                                Editorial
-                            </Button>
-                            {status === "accepted" && (
-                                <Button variant="outline" size="sm" className="bg-green-500/10 text-green-500 hover:bg-green-500/20">
-                                    <Check className="h-4 w-4 mr-2" />
-                                    Solution
-                                </Button>
-                            )}
-                        </div> */}
+                        {type != "exam" && <Button onClick={aiFeedback} variant={"outline"}>Get Smart FeedBack <Lightbulb size={20} color="yellow"/></Button>}
                     </div>
                 </CardHeader>
                 <CardContent className="p-0">
