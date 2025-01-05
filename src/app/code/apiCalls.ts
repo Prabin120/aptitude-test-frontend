@@ -1,4 +1,5 @@
 import {
+	codeAihint,
 	codeCompileApiEntryPoint,
 	codeQuestion,
 	codeQuestions,
@@ -198,6 +199,24 @@ const modifyTestCase = async (id: string, data: object) => {
 	return "Server error, please try again later.";
 };
 
+const getAihint = async (code: string, langauge: string, question: string) => {
+	const data = {
+		code: code,
+		language: langauge,
+		question: question,
+	}
+	const response = await handlePostMethod(codeAihint, data);
+	if (response instanceof Response) {
+		if (!response.status) {
+			return "AI help is not available for this question";
+		} else {
+			const res = await response.json();
+			return res.data;
+		}
+	}
+	return response;
+};
+
 export {
 	runTest,
 	submitCodeAPI,
@@ -209,4 +228,5 @@ export {
 	addTestCases,
 	modifyTestCase,
 	handleGetMethod,
+	getAihint,
 };

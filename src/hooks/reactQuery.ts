@@ -1,7 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
-import { getTestsEndpoint, validAdminAccess } from '@/consts'
+import { codeQuestions, getTestsEndpoint, validAdminAccess } from '@/consts'
 import { handleGetMethod } from '@/utils/apiCall'
 import { IAptiQuestion, ICodingQuestion } from '@/app/tests/[type]/[slug]/questionsList'
+import { get } from 'lodash'
+import { getAllQuestions, getQuestionBySlug } from '@/app/code/apiCalls'
 
 interface ExamQuestionsResponse {
     test: {
@@ -45,6 +47,28 @@ export const useCheckAdminAccess = () => {
     return useQuery({
         queryKey: ['checkAdminAccess'],
         queryFn: () => checkAdminAccess(),
+        staleTime: 3600000,
+        gcTime: 3600000,
+        retry: 2,
+        enabled: true,
+    })
+}
+
+export const useGetAllQuestions = (search: string) => {
+    return useQuery({
+        queryKey: ['codeQuestions', search],
+        queryFn: () => getAllQuestions(search),
+        staleTime: 3600000,
+        gcTime: 3600000,
+        retry: 2,
+        enabled: true,
+    })
+}
+
+export const useGetQuestionBySlug = (slug: string) => {
+    return useQuery({
+        queryKey: ['singleCodeQuestions', slug],
+        queryFn: () => getQuestionBySlug(slug),
         staleTime: 3600000,
         gcTime: 3600000,
         retry: 2,

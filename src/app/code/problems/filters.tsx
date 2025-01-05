@@ -22,9 +22,11 @@ const statusMap = {
 }
 
 const QuestionsFilters = ({ searchQuery, setSearchQuery, filteredProblems }: { searchQuery: IFilters, setSearchQuery: (val: IFilters) => void, filteredProblems: ()=>void }) => {
-
     useEffect(() => {
-        filteredProblems();
+        const debounceTimeout =setTimeout(() => {
+            filteredProblems();
+        }, 500);
+        return () => clearTimeout(debounceTimeout);
     }, [searchQuery, filteredProblems]);
     return (
         <div className="flex justify-between items-center mb-6">
@@ -63,9 +65,6 @@ const QuestionsFilters = ({ searchQuery, setSearchQuery, filteredProblems }: { s
                     value={searchQuery.title}
                     onChange={(e) => setSearchQuery({...searchQuery, title :e.target.value})}
                 />
-                {/* <Button variant={"secondary"} className="">
-                    <Search className="mr-2 h-4 w-4" /> Search
-                </Button> */}
             </div>
         </div>
     )

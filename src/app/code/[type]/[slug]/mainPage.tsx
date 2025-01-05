@@ -9,7 +9,7 @@ import {
 import CodeQuestion from "./question"
 import CodeEditor from "./code-editor"
 import TestCases from "./test-cases"
-import { getQuestionBySlug, runTest, submitCodeAPI, handleGetMethod } from "../../apiCalls"
+import { getQuestionBySlug, runTest, submitCodeAPI, handleGetMethod, getAihint } from "../../apiCalls"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import SubmissionResult from "./result"
 import { DefaultCode, QuestionPage, SubmissionResultProps, TestCase, UserCode } from "../../commonInterface"
@@ -21,11 +21,15 @@ import { useRouter } from "next/navigation"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import Submissions from "./submissions"
 import { getCodeSubmissions } from "@/consts"
+import { Lightbulb } from "lucide-react"
+import AiHelp from "./aiHelp"
+import { useGetQuestionBySlug } from "@/hooks/reactQuery"
+import Loading from "./loading"
 
 export default function CodingPlatformPage(parameters: Readonly<{ slug: string, type: string, time: string }>) {
     const [code, setCode] = useState<UserCode>()
     const [language, setLanguage] = useState("")
-    const [question, setQustion] = useState<QuestionPage>()
+    const [question, setQuestion] = useState<QuestionPage>()
     const [defaultCode, setDefaultCode] = useState<DefaultCode>()
     const [testCases, setTestCases] = useState<TestCase[]>()
     const [testCaseVariableNames, setTestCaseVariableNames] = useState<string>("")
@@ -36,41 +40,59 @@ export default function CodingPlatformPage(parameters: Readonly<{ slug: string, 
     const [activeTabQuestion, setActiveTabQuestion] = useState("question");
     const [submissions, setSubmissions] = useState<SubmissionResultProps[]>([])
     const [submissionResult, setSubmissionResult] = useState<SubmissionResultProps>()
+    const [aihelp, setAihelp] = useState(false);
+    const [aihelpText, setAihelpText] = useState("Please try once by yourself. Then I will help you.");
     const dispatch = useAppDispatch();
     const router = useRouter();
     const savedCodes = useAppSelector((state) => state.userCode.codes)
+
+    const { data: response, isLoading, isError } = useGetQuestionBySlug(slug);
+
     useEffect(() => {
-        (async () => {
-            const response = await getQuestionBySlug(slug)
-            const question = { _id: response._id, title: response.title, description: response.description, difficulty: response.difficulty, tags: response.tags, userStatus: response.userStatus, donatedBy: response.donatedBy }
-            setQustion(question)
+        if (response) {
+            const questionRes = {
+                _id: response._id,
+                title: response.title,
+                description: response.description,
+                difficulty: response.difficulty,
+                tags: response.tags,
+                userStatus: response.userStatus,
+                donatedBy: response.donatedBy,
+            };
+
+            setQuestion(questionRes);
+
             const defaultCodeTemp: DefaultCode = {
-                c: savedCodes?.find(d => d.questionNo === question._id && d.language === "c")?.code ?? response.codeTemplates.c,
-                cpp: savedCodes?.find(d => d.questionNo === question._id && d.language === "cpp")?.code ?? response.codeTemplates.cpp,
-                go: savedCodes?.find(d => d.questionNo === question._id && d.language === "go")?.code ?? response.codeTemplates.go,
-                java: savedCodes?.find(d => d.questionNo === question._id && d.language === "java")?.code ?? response.codeTemplates.java,
-                js: savedCodes?.find(d => d.questionNo === question._id && d.language === "js")?.code ?? response.codeTemplates.js,
-                py: savedCodes?.find(d => d.questionNo === question._id && d.language === "py")?.code ?? response.codeTemplates.py
-            }
-            setDefaultCode(defaultCodeTemp)
+                c: savedCodes?.find((d) => d.questionNo === questionRes._id && d.language === "c")?.code ?? response.codeTemplates.c,
+                cpp: savedCodes?.find((d) => d.questionNo === questionRes._id && d.language === "cpp")?.code ?? response.codeTemplates.cpp,
+                go: savedCodes?.find((d) => d.questionNo === questionRes._id && d.language === "go")?.code ?? response.codeTemplates.go,
+                java: savedCodes?.find((d) => d.questionNo === questionRes._id && d.language === "java")?.code ?? response.codeTemplates.java,
+                js: savedCodes?.find((d) => d.questionNo === questionRes._id && d.language === "js")?.code ?? response.codeTemplates.js,
+                py: savedCodes?.find((d) => d.questionNo === questionRes._id && d.language === "py")?.code ?? response.codeTemplates.py,
+            };
+
+            setDefaultCode(defaultCodeTemp);
+
             const userCodeTemp: UserCode = {
-                c: savedCodes?.find(d => d.questionNo === question._id && d.language === "c")?.code ?? response.codeTemplates.c.template,
-                cpp: savedCodes?.find(d => d.questionNo === question._id && d.language === "cpp")?.code ?? response.codeTemplates.cpp.template,
-                go: savedCodes?.find(d => d.questionNo === question._id && d.language === "go")?.code ?? response.codeTemplates.go.template,
-                java: savedCodes?.find(d => d.questionNo === question._id && d.language === "java")?.code ?? response.codeTemplates.java.template,
-                js: savedCodes?.find(d => d.questionNo === question._id && d.language === "js")?.code ?? response.codeTemplates.js.template,
-                py: savedCodes?.find(d => d.questionNo === question._id && d.language === "py")?.code ?? response.codeTemplates.py.template
-            }
-            setLanguage(savedCodes?.find(d => d.questionNo === question._id)?.language ?? "py")
-            setCode(userCodeTemp)
-            setTestCases(response.sampleTestCases)
-            setTestCaseVariableNames(response.testCaseVariableNames)
-        })()
-    }, [slug])
+                c: savedCodes?.find((d) => d.questionNo === questionRes._id && d.language === "c")?.code ?? response.codeTemplates.c.template,
+                cpp: savedCodes?.find((d) => d.questionNo === questionRes._id && d.language === "cpp")?.code ?? response.codeTemplates.cpp.template,
+                go: savedCodes?.find((d) => d.questionNo === questionRes._id && d.language === "go")?.code ?? response.codeTemplates.go.template,
+                java: savedCodes?.find((d) => d.questionNo === questionRes._id && d.language === "java")?.code ?? response.codeTemplates.java.template,
+                js: savedCodes?.find((d) => d.questionNo === questionRes._id && d.language === "js")?.code ?? response.codeTemplates.js.template,
+                py: savedCodes?.find((d) => d.questionNo === questionRes._id && d.language === "py")?.code ?? response.codeTemplates.py.template,
+            };
+
+            setLanguage(savedCodes?.find((d) => d.questionNo === questionRes._id)?.language ?? "py");
+            setCode(userCodeTemp);
+            setTestCases(response.sampleTestCases);
+            setTestCaseVariableNames(response.testCaseVariableNames);
+        }
+    }, [response, savedCodes]);
+
     useEffect(() => {
-        if(activeTabQuestion === "submissions" && submissions?.length === 0) {
+        if (activeTabQuestion === "submissions" && submissions?.length === 0) {
             const data = async () => {
-                const response = await handleGetMethod(getCodeSubmissions+`?question=${question?._id}`);
+                const response = await handleGetMethod(getCodeSubmissions + `?question=${question?._id}`);
                 if (response instanceof Response) {
                     const res = await response.json()
                     if (response.status === 200 || response.status === 201) {
@@ -111,6 +133,7 @@ export default function CodingPlatformPage(parameters: Readonly<{ slug: string, 
         } catch (error) {
             setError(error as string)
         } finally {
+            setAihelp(true)
             setLoading(false)
         }
     }
@@ -139,17 +162,17 @@ export default function CodingPlatformPage(parameters: Readonly<{ slug: string, 
                 }
                 res.data.status = status
                 setSubmissionResult(res.data)
-                setSubmissions(prev => [...prev, {...res.data, code: code[language], language: language}])
+                setSubmissions(prev => [...prev, { ...res.data, code: code[language], language: language }])
                 setIsResultModalOpen(true)
                 if (type === "exam") {
                     dispatch(
                         setCodingTestState({
-                            questionNo: question?._id??"",
+                            questionNo: question?._id ?? "",
                             code: code ? code[language] : "",
                             questionKind: "aptitude",
                             language: language,
-                            passedTestCases: res.data.passedTestCases??0,
-                            totalTestCases: res.data.totalTestCases??0
+                            passedTestCases: res.data.passedTestCases ?? 0,
+                            totalTestCases: res.data.totalTestCases ?? 0
                         })
                     );
                 }
@@ -163,9 +186,26 @@ export default function CodingPlatformPage(parameters: Readonly<{ slug: string, 
         }
     }
 
-    if (!question || !code || !language) {
+    const aiHintFunction = async () => {
+        setLoading(true)
+        setAihelpText("")
+        setActiveTabQuestion("aihelp")
+        try {
+            const res = await getAihint(code ? code[language] : "", language, question?.title + "\n" + question?.description)
+            setAihelpText(res)
+        } catch (error) {
+            setError(error as string)
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    if (!question || !code || !language || isError) {
         <div className="flex justify-center items-center">Error loading page</div>
         return
+    }
+    if(isLoading){
+        return <Loading />
     }
     return (
         <div className="flex flex-col h-screen">
@@ -178,18 +218,25 @@ export default function CodingPlatformPage(parameters: Readonly<{ slug: string, 
                 className="rounded-lg border">
                 {/* Question column */}
                 <ResizablePanel defaultSize={50}>
-                    <Tabs value={activeTabQuestion} onValueChange={setActiveTabQuestion} 
+                    <Tabs value={activeTabQuestion} onValueChange={setActiveTabQuestion}
                         defaultValue={activeTabQuestion} className='w-full items-center bg-neutral-800 h-7'>
                         <TabsList className="h-6">
                             <TabsTrigger value={"question"}>Description</TabsTrigger>
-                            { type !== "exam" && 
-                                <TabsTrigger value="submissions">Submissions</TabsTrigger>}
+                            {type !== "exam" &&
+                                <>
+                                    <TabsTrigger value="submissions">Submissions</TabsTrigger>
+                                    <TabsTrigger value="aihelp"><Lightbulb color="yellow" size={15}/> AI Help</TabsTrigger>
+                                </>
+                            }
                         </TabsList>
                         <TabsContent value="question">
                             <CodeQuestion key={"question"} data={question} />
                         </TabsContent>
                         <TabsContent value="submissions">
-                            <Submissions submissions={submissions} testCaseVariableNames={testCaseVariableNames}/>
+                            <Submissions submissions={submissions} testCaseVariableNames={testCaseVariableNames} />
+                        </TabsContent>
+                        <TabsContent value="aihelp">
+                            <AiHelp aihelpText={aihelpText} />
                         </TabsContent>
                     </Tabs>
                 </ResizablePanel>
@@ -200,18 +247,18 @@ export default function CodingPlatformPage(parameters: Readonly<{ slug: string, 
                     <ResizablePanelGroup direction="vertical">
                         <ResizablePanel defaultSize={60}>
                             {/* Code editor */}
-                            <CodeEditor key={"code-editor"} code={code} setCode={setCode} language={language} setLanguage={setLanguage} defaultCode={defaultCode} questionNo={question._id}/>
+                            <CodeEditor key={"code-editor"} code={code} setCode={setCode} language={language} setLanguage={setLanguage} defaultCode={defaultCode} questionNo={question._id} />
                         </ResizablePanel>
                         <ResizableHandle />
                         <ResizablePanel defaultSize={40}>
                             {/* Test cases and results */}
-                            <TestCases key={"test-cases"} testCases={testCases} testCaseVariableNames={testCaseVariableNames} loading={loading} error={error} />
+                            <TestCases key={"test-cases"} testCases={testCases} testCaseVariableNames={testCaseVariableNames} loading={loading} error={error} aihelp={aihelp} aiHintFunction={aiHintFunction} />
                         </ResizablePanel>
                     </ResizablePanelGroup>
                 </ResizablePanel>
             </ResizablePanelGroup>
             {/* Submission Result Modal */}
-            <Dialog open={isResultModalOpen} onOpenChange={(open) => {setIsResultModalOpen(open); type === "exam" && router.back()}}>
+            <Dialog open={isResultModalOpen} onOpenChange={(open) => { setIsResultModalOpen(open); type === "exam" && router.back() }}>
                 <DialogContent className="sm:max-w-[800px]">
                     <DialogHeader>
                         <DialogTitle>Submission Result</DialogTitle>
@@ -228,7 +275,7 @@ export default function CodingPlatformPage(parameters: Readonly<{ slug: string, 
                             code={code ? code[language] : ""}
                             message={submissionResult.message}
                             failedCase={submissionResult.failedCase}
-                            testCaseVariableNames = {testCaseVariableNames}
+                            testCaseVariableNames={testCaseVariableNames}
                         />
                     )}
                 </DialogContent>
