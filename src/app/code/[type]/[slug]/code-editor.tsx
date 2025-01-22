@@ -36,6 +36,7 @@ interface CodeEditorProps {
 const CodeEditor = ({ code, setCode, language, setLanguage, defaultCode, questionNo }: CodeEditorProps) => {
     const dispatch = useDispatch();
     const resetCode = () => {
+        console.log(language, defaultCode);
         if (confirm("Do you want to reset your code?")) {
             setCode({
                 ...code,

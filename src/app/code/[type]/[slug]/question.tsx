@@ -15,12 +15,12 @@ const CodeQuestion: React.FC<QuestionPageProps> = ({ data }) => {
             <CardHeader>
                 <div className="flex justify-between items-center">
                     <CardTitle>{data?._id}. {data?.title}</CardTitle>
-                    <div className='flex space-x-4'>
+                    <div className='flex space-x-4 items-center'>
                         {data?.userStatus === "solved"?
-                            <span className='flex space-x-2 text-green-600'><CircleCheck /> Solved</span>
+                            <span className='flex space-x-2 text-green-600 text-sm'><CircleCheck size={16}/> Solved</span>
                         :
                         data?.userStatus === "attempted" &&
-                            <span className='flex space-x-2 text-yellow-600'><BrainCircuit /> Attempted</span>
+                            <span className='flex space-x-2 text-yellow-600 text-sm'><BrainCircuit size={16}/> Attempted</span>
                         }
                         <Badge>{data?.difficulty}</Badge>
                     </div>

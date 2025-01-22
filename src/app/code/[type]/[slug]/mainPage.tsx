@@ -12,7 +12,7 @@ import TestCases from "./test-cases"
 import { runTest, submitCodeAPI, handleGetMethod, getAihint, getAiFeedback } from "../../apiCalls"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import SubmissionResult from "./result"
-import { DefaultCode, QuestionPage, SubmissionResultProps, TestCase, UserCode } from "../../commonInterface"
+import { DefaultCode, Problem, QuestionPage, SubmissionResultProps, TestCase, UserCode } from "../../commonInterface"
 import { checkAuthorization } from "@/utils/authorization"
 import CodeHeader from "./header"
 import { useAppDispatch, useAppSelector } from "@/redux/store"
@@ -162,7 +162,11 @@ export default function CodingPlatformPage(parameters: Readonly<{ slug: string, 
                 }
                 res.data.status = status
                 setSubmissionResult(res.data)
-                setSubmissions(prev => [...prev, { ...res.data, code: code[language], language: language }])
+                if(!submissions || submissions.length === 0){
+                    setSubmissions([{ ...res.data, code: code[language], language: language }])
+                } else{
+                    setSubmissions(prev => [...prev, { ...res.data, code: code[language], language: language }])
+                }
                 setIsResultModalOpen(true)
                 if (type === "exam") {
                     dispatch(
@@ -206,9 +210,9 @@ export default function CodingPlatformPage(parameters: Readonly<{ slug: string, 
         setIsResultModalOpen(false)
         setActiveTabQuestion("aihelp")
         try {
-            const res = await getAiFeedback(code ? code[language] : "", language, 
-                question?.title + "\n" + question?.description, 
-                submissionResult?.passedTestCases??0, submissionResult?.totalTestCases??0 )
+            const res = await getAiFeedback(code ? code[language] : "", language,
+                question?.title + "\n" + question?.description,
+                submissionResult?.passedTestCases ?? 0, submissionResult?.totalTestCases ?? 0)
             setAihelpText(res)
         } catch (error) {
             setError(error as string)
@@ -221,7 +225,7 @@ export default function CodingPlatformPage(parameters: Readonly<{ slug: string, 
         <div className="flex justify-center items-center">Error loading page</div>
         return
     }
-    if(isLoading){
+    if (isLoading) {
         return <Loading />
     }
     return (
@@ -242,7 +246,7 @@ export default function CodingPlatformPage(parameters: Readonly<{ slug: string, 
                             {type !== "exam" &&
                                 <>
                                     <TabsTrigger value="submissions">Submissions</TabsTrigger>
-                                    <TabsTrigger value="aihelp"><Lightbulb color="yellow" size={15}/> Smart AC</TabsTrigger>
+                                    <TabsTrigger value="aihelp"><Lightbulb color="yellow" size={15} /> Smart AC</TabsTrigger>
                                 </>
                             }
                         </TabsList>
@@ -250,7 +254,7 @@ export default function CodingPlatformPage(parameters: Readonly<{ slug: string, 
                             <CodeQuestion key={"question"} data={question} />
                         </TabsContent>
                         <TabsContent value="submissions">
-                            <Submissions submissions={submissions} testCaseVariableNames={testCaseVariableNames} aiFeedback={aiFeedbackFunction}/>
+                            <Submissions submissions={submissions} testCaseVariableNames={testCaseVariableNames} aiFeedback={aiFeedbackFunction} />
                         </TabsContent>
                         <TabsContent value="aihelp">
                             <AiHelp aihelpText={aihelpText} />

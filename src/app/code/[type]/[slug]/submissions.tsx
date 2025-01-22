@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { SubmissionResultProps, SubmissionStatus } from '../../commonInterface'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import SubmissionResult from './result'
+import { ScrollArea } from '@/components/ui/scroll-area'
 
 interface ISubmissionResultProps {
     submissions: SubmissionResultProps[]
@@ -25,7 +26,7 @@ function Submissions({ submissions, testCaseVariableNames, aiFeedback }: Readonl
         return status
     }
     return (
-        <>
+        <ScrollArea className="h-[calc(100vh-120px)]">
             <Table className='px-4'>
                 <TableHeader>
                     <TableRow className='h-10'>
@@ -74,7 +75,7 @@ function Submissions({ submissions, testCaseVariableNames, aiFeedback }: Readonl
                     )}
                 </DialogContent>
             </Dialog>
-        </>
+        </ScrollArea>
     )
 }
 
