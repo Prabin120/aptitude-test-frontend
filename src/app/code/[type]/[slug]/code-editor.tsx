@@ -31,26 +31,28 @@ interface CodeEditorProps {
     setLanguage: (val: string) => void;
     defaultCode: DefaultCode | undefined;
     questionNo: string
+    type: string
 }
 
-const CodeEditor = ({ code, setCode, language, setLanguage, defaultCode, questionNo }: CodeEditorProps) => {
+const CodeEditor = ({ code, setCode, language, setLanguage, defaultCode, questionNo, type }: CodeEditorProps) => {
     const dispatch = useDispatch();
     const resetCode = () => {
-        console.log(language, defaultCode);
         if (confirm("Do you want to reset your code?")) {
+            const newCode = defaultCode ? defaultCode[language].template : ""
             setCode({
                 ...code,
-                [language]: defaultCode ? defaultCode[language].template : ""
-            });
+                [language]: newCode,
+            })
+            debouncedDispatch(newCode, language)
         }
-    };
+    }
 
     const debouncedDispatch = useCallback(
-        debounce((val: string, language: string) => {
-            dispatch(setUserCodeState({ questionNo, code: val, language }));
+        debounce((val: string, lang: string) => {
+            dispatch(setUserCodeState({ type, questionNo, language: lang, code: val }))
         }, 300),
-        []
-    );
+        [],
+    )
 
     const changeLanguage = (lang: string) => {
         setLanguage(lang);
@@ -93,7 +95,7 @@ const CodeEditor = ({ code, setCode, language, setLanguage, defaultCode, questio
                 language={languageHighlighter(language)}
                 theme='vs-dark'
                 value={code[language]}
-                onChange={(value)=>onChangeCode(value ?? "")}
+                onChange={(value) => onChangeCode(value ?? "")}
             />
         </div>
     );

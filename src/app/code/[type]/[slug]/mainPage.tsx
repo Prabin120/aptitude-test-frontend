@@ -25,6 +25,7 @@ import { Lightbulb } from "lucide-react"
 import AiHelp from "./aiHelp"
 import { useGetQuestionBySlug } from "@/hooks/reactQuery"
 import Loading from "./loading"
+import { setUserCodeState } from "@/redux/userCode/userCode"
 
 export default function CodingPlatformPage(parameters: Readonly<{ slug: string, type: string, time: string }>) {
     const [code, setCode] = useState<UserCode>()
@@ -50,44 +51,45 @@ export default function CodingPlatformPage(parameters: Readonly<{ slug: string, 
 
     useEffect(() => {
         if (response) {
-            const questionRes = {
-                _id: response._id,
-                title: response.title,
-                description: response.description,
-                difficulty: response.difficulty,
-                tags: response.tags,
-                userStatus: response.userStatus,
-                donatedBy: response.donatedBy,
-            };
+          const questionRes = {
+            _id: response._id,
+            title: response.title,
+            description: response.description,
+            difficulty: response.difficulty,
+            tags: response.tags,
+            userStatus: response.userStatus,
+            donatedBy: response.donatedBy,
+          }
+          setQuestion(questionRes)
+          const languages = ["c", "cpp", "go", "java", "js", "py"]
+          const defaultCodeTemp: DefaultCode = {}
+          const userCodeTemp: UserCode = {}
+    
+          languages.forEach((lang) => {
+            const savedCode = savedCodes[type]?.[questionRes._id]?.[lang]
+            defaultCodeTemp[lang] = response.codeTemplates[lang]
+            userCodeTemp[lang] = savedCode || response.codeTemplates[lang].template
 
-            setQuestion(questionRes);
-
-            const defaultCodeTemp: DefaultCode = {
-                c: savedCodes?.find((d) => d.questionNo === questionRes._id && d.language === "c")?.code ?? response.codeTemplates.c,
-                cpp: savedCodes?.find((d) => d.questionNo === questionRes._id && d.language === "cpp")?.code ?? response.codeTemplates.cpp,
-                go: savedCodes?.find((d) => d.questionNo === questionRes._id && d.language === "go")?.code ?? response.codeTemplates.go,
-                java: savedCodes?.find((d) => d.questionNo === questionRes._id && d.language === "java")?.code ?? response.codeTemplates.java,
-                js: savedCodes?.find((d) => d.questionNo === questionRes._id && d.language === "js")?.code ?? response.codeTemplates.js,
-                py: savedCodes?.find((d) => d.questionNo === questionRes._id && d.language === "py")?.code ?? response.codeTemplates.py,
-            };
-
-            setDefaultCode(defaultCodeTemp);
-
-            const userCodeTemp: UserCode = {
-                c: savedCodes?.find((d) => d.questionNo === questionRes._id && d.language === "c")?.code ?? response.codeTemplates.c.template,
-                cpp: savedCodes?.find((d) => d.questionNo === questionRes._id && d.language === "cpp")?.code ?? response.codeTemplates.cpp.template,
-                go: savedCodes?.find((d) => d.questionNo === questionRes._id && d.language === "go")?.code ?? response.codeTemplates.go.template,
-                java: savedCodes?.find((d) => d.questionNo === questionRes._id && d.language === "java")?.code ?? response.codeTemplates.java.template,
-                js: savedCodes?.find((d) => d.questionNo === questionRes._id && d.language === "js")?.code ?? response.codeTemplates.js.template,
-                py: savedCodes?.find((d) => d.questionNo === questionRes._id && d.language === "py")?.code ?? response.codeTemplates.py.template,
-            };
-
-            setLanguage(savedCodes?.find((d) => d.questionNo === questionRes._id)?.language ?? "py");
-            setCode(userCodeTemp);
-            setTestCases(response.sampleTestCases);
-            setTestCaseVariableNames(response.testCaseVariableNames);
+            if (!savedCode) {
+              dispatch(
+                setUserCodeState({
+                  type: type,
+                  questionNo: questionRes._id,
+                  language: lang,
+                  code: response.codeTemplates[lang].template,
+                }),
+              )
+            }
+          })
+    
+          setDefaultCode(defaultCodeTemp)
+          setCode(userCodeTemp)
+          const savedLanguage = Object.keys(savedCodes[type]?.[questionRes._id] || {})[0]
+          setLanguage(savedLanguage || "py")
+          setTestCases(response.sampleTestCases)
+          setTestCaseVariableNames(response.testCaseVariableNames)
         }
-    }, [response, savedCodes]);
+      }, [response])
 
     useEffect(() => {
         if (activeTabQuestion === "submissions" && submissions?.length === 0) {
@@ -268,7 +270,7 @@ export default function CodingPlatformPage(parameters: Readonly<{ slug: string, 
                     <ResizablePanelGroup direction="vertical">
                         <ResizablePanel defaultSize={60}>
                             {/* Code editor */}
-                            <CodeEditor key={"code-editor"} code={code} setCode={setCode} language={language} setLanguage={setLanguage} defaultCode={defaultCode} questionNo={question._id} />
+                            <CodeEditor key={"code-editor"} code={code} setCode={setCode} language={language} setLanguage={setLanguage} defaultCode={defaultCode} questionNo={question._id} type={type} />
                         </ResizablePanel>
                         <ResizableHandle />
                         <ResizablePanel defaultSize={40}>
