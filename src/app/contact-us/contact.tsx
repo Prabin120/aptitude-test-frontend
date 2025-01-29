@@ -104,7 +104,7 @@ export default function ContactPage() {
                             </div>
                             <div className="flex items-center space-x-2">
                                 <MapPin className="h-5 w-5 text-muted-foreground" />
-                                <span>Bangalore, India</span>
+                                <span>21, 9th cross road, Tavarekere Main Rd, BTM 1st Stage, Bengaluru, Karnataka 560029</span>
                             </div>
                         </div>
                     </CardContent>
