@@ -1,13 +1,7 @@
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import Footer from "@/components/ui/footer"
-import { useAppSelector } from "@/redux/store"
-import { useRouter } from "next/router"
 
 export default function CancelationAndRefunds() {
-    const user = useAppSelector((state) => state.user)
-    const router = useRouter()
-
     return (
         <div className="container py-12">
             <Card>
@@ -17,7 +11,7 @@ export default function CancelationAndRefunds() {
                 <CardContent>
                     <p>
                         If you want to cancel your test or get a refund, please contact us at{" "}
-                        <a href="mailto:support@aptitudezone.com">
+                        <a href="mailto:prabinsharma120@gmail.com">
                             support@aptitudezone.com
                         </a>
                         .
@@ -34,15 +28,12 @@ export default function CancelationAndRefunds() {
                     <p>
                         If you have any questions about our cancelation and refund policy, please
                         contact us at{" "}
-                        <a href="mailto:support@aptitudezone.com">
-                            support@aptitudezone.com
+                        <a href="mailto:prabinsharma120@gmail.com">
+                            prabinsharma120@gmail.com
                         </a>
                         .
                     </p>
                 </CardContent>
-                <CardFooter className="flex justify-end">
-                    <Button onClick={() => router.push("/tests")}>Go Back</Button>
-                </CardFooter>
             </Card>
             <br className="my-12" />
             <Card>
@@ -52,8 +43,8 @@ export default function CancelationAndRefunds() {
                 <CardContent>
                     <p>
                         If you have any questions or need help, please contact us at{" "}
-                        <a href="mailto:support@aptitudezone.com">
-                            support@aptitudezone.com
+                        <a href="mailto:prabinsharma120@gmail.com">
+                        prabinsharma120@gmail.com
                         </a>
                         .
                     </p>
