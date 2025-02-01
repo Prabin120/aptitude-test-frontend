@@ -7,23 +7,26 @@ import { QuestionPage } from '../../commonInterface';
 
 interface QuestionPageProps {
     data: QuestionPage | undefined;
+    type: string
 }
 
-const CodeQuestion: React.FC<QuestionPageProps> = ({ data }) => {
+const CodeQuestion: React.FC<QuestionPageProps> = ({ data, type }) => {
     return (
         <Card>
             <CardHeader>
                 <div className="flex justify-between items-center">
                     <CardTitle>{data?._id}. {data?.title}</CardTitle>
-                    <div className='flex space-x-4 items-center'>
-                        {data?.userStatus === "solved"?
-                            <span className='flex space-x-2 text-green-600 text-sm'><CircleCheck size={16}/> Solved</span>
-                        :
-                        data?.userStatus === "attempted" &&
-                            <span className='flex space-x-2 text-yellow-600 text-sm'><BrainCircuit size={16}/> Attempted</span>
-                        }
-                        <Badge>{data?.difficulty}</Badge>
-                    </div>
+                    { type !== "exam" &&
+                        <div className='flex space-x-4 items-center'>
+                            {data?.userStatus === "solved"?
+                                <span className='flex space-x-2 text-green-600 text-sm'><CircleCheck size={16}/> Solved</span>
+                            :
+                            data?.userStatus === "attempted" &&
+                                <span className='flex space-x-2 text-yellow-600 text-sm'><BrainCircuit size={16}/> Attempted</span>
+                            }
+                            <Badge>{data?.difficulty}</Badge>
+                        </div>
+                    }
                 </div>
             </CardHeader>
             <CardContent>

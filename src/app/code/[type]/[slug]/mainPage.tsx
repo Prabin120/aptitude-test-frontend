@@ -253,7 +253,7 @@ export default function CodingPlatformPage(parameters: Readonly<{ slug: string, 
                             }
                         </TabsList>
                         <TabsContent value="question">
-                            <CodeQuestion key={"question"} data={question} />
+                            <CodeQuestion key={"question"} data={question} type={type} />
                         </TabsContent>
                         <TabsContent value="submissions">
                             <Submissions submissions={submissions} testCaseVariableNames={testCaseVariableNames} aiFeedback={aiFeedbackFunction} />
@@ -275,7 +275,7 @@ export default function CodingPlatformPage(parameters: Readonly<{ slug: string, 
                         <ResizableHandle />
                         <ResizablePanel defaultSize={40}>
                             {/* Test cases and results */}
-                            <TestCases key={"test-cases"} testCases={testCases} testCaseVariableNames={testCaseVariableNames} loading={loading} error={error} aihelp={aihelp} aiHintFunction={aiHintFunction} />
+                            <TestCases key={"test-cases"} testCases={testCases} testCaseVariableNames={testCaseVariableNames} loading={loading} error={error} aihelp={aihelp} aiHintFunction={aiHintFunction} type={type} />
                         </ResizablePanel>
                     </ResizablePanelGroup>
                 </ResizablePanel>

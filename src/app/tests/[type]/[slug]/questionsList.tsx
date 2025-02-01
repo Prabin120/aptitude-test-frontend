@@ -39,9 +39,13 @@ function QuestionsList({ slug }: Readonly<{ type: string, slug: string }>) {
     const router = useRouter();
     const aptitudeAnswers = useAppSelector((state) => state.aptitude.questions)
     const codingAnswers = useAppSelector((state) => state.coding.questions)
+    const user = useAppSelector((state) => state.user)
 
     useEffect(() => {
         let animationFrame: number;
+        if (!user?.id) {
+            router.push("/login");
+        }
         const calculateTimeLeft = () => {
             const now = new Date().getTime();
             const testTime = new Date(timeLeft).getTime();
@@ -98,6 +102,7 @@ function QuestionsList({ slug }: Readonly<{ type: string, slug: string }>) {
                 if (response.status === 200 || response.status === 201) {
                     dispatch(clearAptiTestState());
                     dispatch(clearCodingTestState());
+                    alert(responseData.message);
                     router.replace("/thank-you");
                     return;
                 }

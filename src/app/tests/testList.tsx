@@ -94,6 +94,7 @@ function OngoingTestCardComponent({ data, pastTests, setOngoingTests, setPastTes
 function UpcomingTestCardComponent({ data, upcomingTests, setOngoingTests, setUpcomingTests, ongoingTests }: Readonly<{ data: TestCard, upcomingTests: TestCard[]|undefined, setOngoingTests: (tests: TestCard[])=>void, setUpcomingTests: (tests: TestCard[])=>void, ongoingTests: TestCard[]|undefined }>) {
     const [timer, setTimer] = useState<string>("")
     const [showInstructions, setShowInstructions] = useState<boolean>(false)
+    // const [showRegistration, setShowRegistration] = useState<boolean>(false)
     useEffect(() => {
         const calculateTimeLeft = () => {
             const now = new Date()
@@ -137,6 +138,7 @@ function UpcomingTestCardComponent({ data, upcomingTests, setOngoingTests, setUp
                 </Button>
                 <Button variant={"outline"} onClick={() => setShowInstructions(true)} >Info</Button>
                 <DialogMessage showInstructions={showInstructions} setShowInstructions={setShowInstructions} />
+                {/* <TestRegistration showRegistration={showRegistration} setShowRegistration={setShowRegistration} /> */}
             </CardFooter>
         </Card>
     )
@@ -146,8 +148,10 @@ export default function AptitudeListingPage() {
     const [upcomingTests, setUpcomingTests] = useState<TestCard[]>([])
     const [pastTests, setPastTests] = useState<TestCard[]>([])
     const [ongoingTests, setOngoingTests] = useState<TestCard[]>([])
+    const [loading, setLoading] = useState(false)
     useEffect(() => {
         (async () => {
+            setLoading(true)
             const response = await handleGetMethod(getTestsEndpoint)
             if (response instanceof Response) {
                 const res = await response.json()
@@ -162,12 +166,23 @@ export default function AptitudeListingPage() {
             } else {
                 alert("Error fetching question tags")
             }
+            setLoading(false)
         })()
     }, [])
+    
+    if(loading) {
+        return <Loading />
+    }
 
     if(upcomingTests.length === 0 && ongoingTests?.length === 0 && pastTests?.length === 0)
-        return <Loading />
-
+        return (
+            <div className="container mx-auto py-8">
+                <div className="flex justify-between items-center mb-8">
+                    <h1 className="text-3xl font-bold">Tests</h1>
+                </div>
+                <h2 className="text-lg mb-2">No tests found</h2>
+            </div>
+        )
     return (
         <div className="container mx-auto py-8">
             <div className="flex justify-between items-center mb-8">

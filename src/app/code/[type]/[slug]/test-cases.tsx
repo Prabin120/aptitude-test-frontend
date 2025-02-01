@@ -15,9 +15,10 @@ interface TestCaseProps {
     error: string;
     aihelp: boolean
     aiHintFunction: () => void
+    type: string
 }
 
-const TestCases: React.FC<TestCaseProps> = ({ testCases, testCaseVariableNames, loading, error, aihelp, aiHintFunction }) => {
+const TestCases: React.FC<TestCaseProps> = ({ testCases, testCaseVariableNames, loading, error, aihelp, aiHintFunction, type }) => {
     const [activeTestCase, setActiveTestCase] = useState("0")
     // const [newTestcase, setNewTestcase] = useState<boolean>(false)
     const [activeTab, setActiveTab] = useState("testcases");
@@ -53,7 +54,7 @@ const TestCases: React.FC<TestCaseProps> = ({ testCases, testCaseVariableNames, 
                         }  Test Results
                         </TabsTrigger>
                     </TabsList>
-                    {aihelp && <Button onClick={aiHintFunction} variant='outline' className='rounded-full me-5'>Get Hint <Lightbulb color='#f59e0b'/></Button>}
+                    {aihelp && type !== "exam" && <Button onClick={aiHintFunction} variant='outline' className='rounded-full me-5'>Get Hint <Lightbulb color='#f59e0b'/></Button>}
                 </div>
                 <TabsContent value="testcases">
                     <Tabs value={activeTestCase} onValueChange={setActiveTestCase} className="h-full flex flex-col">
