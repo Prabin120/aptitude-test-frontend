@@ -171,7 +171,7 @@ export default function AptitudeListingPage() {
             }
             setLoading(false)
         })()
-        setLoading(false)
+        setLoading(false) 
     }, [])
     
     if(loading) {
