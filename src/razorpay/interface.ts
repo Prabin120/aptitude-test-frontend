@@ -1,22 +1,30 @@
-export interface RazorpayResponse {
-  razorpay_order_id: string;
-  razorpay_payment_id: string;
-  razorpay_signature: string;
+export interface RazorpaySuccessResponse {
+  razorpay_order_id: string
+  razorpay_payment_id: string
+  razorpay_signature: string
 }
-export interface RazorpayOptions {
-    key_id: string;
-    amount: number;
-    currency: string;
-    name: string;
-    description?: string;
-    order_id: string;
-    handler: (response: RazorpayResponse) => void;
-    prefill?: {
-      name?: string;
-      email?: string;
-      contact?: string;
-    };
-    theme?: {
-      color?: string;
-    };
+
+export interface RazorpayError {
+  error: {
+    description: string
+    code: string
+    source: string
+    step: string
+    reason: string
+    metadata: Record<string, unknown>
   }
+}
+
+export interface RazorpayOptions {
+  key: string
+  order_id: string
+  handler: (response: RazorpaySuccessResponse) => void
+  prefill: {
+    name: string
+    email: string
+    contact: string
+  }
+  theme: {
+    color: string
+  }
+}

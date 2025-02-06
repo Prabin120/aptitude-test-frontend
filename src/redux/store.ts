@@ -18,7 +18,7 @@ const authPersistConfig = {
 const userPersistConfig = {
     key: "user",
     storage: storage,
-    whitelist: ["name", "email", "image", "mobile", "institute"],
+    whitelist: ["_id", "name", "email", "image", "mobile", "institute"],
 };
 
 const aptitudePersistConfig = {

@@ -43,7 +43,7 @@ function QuestionsList({ slug }: Readonly<{ type: string, slug: string }>) {
 
     useEffect(() => {
         let animationFrame: number;
-        if (!user?.id) {
+        if (!user?._id) {
             router.push("/login");
         }
         const calculateTimeLeft = () => {

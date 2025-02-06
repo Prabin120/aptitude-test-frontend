@@ -44,6 +44,7 @@ export const getAptiQuestionTagEndpoint = '/p/api/v1/aptitude/question-tag'   //
 // test
 export const getTestsEndpoint = '/p/api/v1/test'   // get
 export const postTestEndpoint = '/p/api/v1/test'   // post
+export const getMyTestsEndpoint = '/p/api/v1/test/my-tests'   // get
 export const submitTestEndpoint = '/p/api/v1/test/submit-test'   // post
 export const upComingTestEndpoint = '/p/api/v1/test/upcoming-test'   // get
 export const testRegistrationEndpoint = '/p/api/v1/test/test-registration'   // post
