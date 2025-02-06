@@ -101,7 +101,7 @@ export function LoginComponent() {
                     if (response instanceof Response && response.status === 200) {
                         const responseData = await response.json();
                         dispatch(setAuthState(true));
-                        dispatch(setUserState({id: responseData.data._id, ...responseData.data}));
+                        dispatch(setUserState(responseData.data));
                         router.push('/');
                     } else {
                         alert("Some error occurs")
