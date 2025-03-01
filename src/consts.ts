@@ -40,6 +40,7 @@ export const getAptiQuestionByTopicEndpoint = '/p/api/v1/aptitude/questions/topi
 export const getAptiQuestionByCompanyEndpoint = '/p/api/v1/aptitude/questions/company'   // post
 export const addAptiQuestionTagEndpoint = '/p/api/v1/aptitude/question-tag'   // post
 export const getAptiQuestionTagEndpoint = '/p/api/v1/aptitude/question-tag'   // get
+export const getAptiQuestionsLikeEndpoint = '/p/api/v1/aptitude/questions/like'   // get
 
 // test
 export const getTestsEndpoint = '/p/api/v1/test'   // get
@@ -51,15 +52,30 @@ export const testRegistrationEndpoint = '/p/api/v1/test/test-registration'   // 
 export const scoreCardEndpoint = '/p/api/v1/test/score-card'   // get
 export const aptiValidateQuestionIds = "/p/api/v1/test/validate-questions"
 export const getExamReport = "/p/api/v1/test/exam-report"
+export const paymentCreateOrderEndpoint = '/p/api/v1/test/create-order'   // post
+export const verifyPaymentEndpoint = '/p/api/v1/test/verify-payment'   // post
+export const getGroupTestEndpointTest = '/p/api/v1/test/group-test'   // get
 
 // feedback
 export const feedbackEndpoint = '/p/api/v1/feedback'   // post
 
 // payment
-export const paymentCreateOrderEndpoint = '/p/api/v1/payment/create-order'   // post
-export const verifyPaymentEndpoint = '/p/api/v1/payment/verify-payment'   // post
+
 
 // OAuth2
 export const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID ?? '';
 export const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET ?? '';
 export const GET_VERIFY_GOOGLE_USER = '/p/api/v1/auth/google-login'
+
+//Group Test
+export const groupTestCreateOrderEndpoint = '/p/api/v1/group-test/'   // post
+export const groupTestVerifyPaymentEndpoint = '/p/api/v1/group-test/verify-payment'   // post
+export const getGroupTestEndpoint = '/p/api/v1/group-test'   // get
+export const groupTestMailStatusEndpoint = '/p/api/v1/group-test/mail-status'   // post
+export const groupTestaddPaticipantsEndpoint = '/p/api/v1/group-test/add-me'   // get
+export const getOwnedGroupTestsEndpoint = '/p/api/v1/group-test/owned-tests'   // get
+export const groupTestResendMails = '/p/api/v1/group-test/resend-mails'   // get
+export const groupTestEditMail = '/p/api/v1/group-test/edit-mail'   // post
+export const groupTestSingle = '/p/api/v1/group-test/single'   // get
+export const groupTestSubmitTest = '/p/api/v1/group-test/submit-test'   // post
+export const groupTestExamReport = '/p/api/v1/group-test/exam-report'   // get

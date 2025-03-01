@@ -11,9 +11,16 @@ import DialogMessage from '../dialogMessage'
 import TestRegistration from '../registration'
 import { TestCard } from '../interfaces'
 import ReduxProvider from '@/redux/redux-provider'
+import { useAppSelector } from '@/redux/store'
 
-function BrowseTestButton(){
-    return(
+interface ButtonLinkProps {
+    userId: string | undefined;
+    setShowRegistration: (showInstructions: boolean) => void;
+    registered: boolean | undefined;
+  }
+
+function BrowseTestButton() {
+    return (
         <div className="flex justify-between pb-6">
             <h1 className="text-2xl font-bold">All Upcoming Tests</h1>
             <Link href="/tests">
@@ -23,10 +30,33 @@ function BrowseTestButton(){
     )
 }
 
-function TestCardComponent({ data}: Readonly<{ data: TestCard }>) {
+const ButtonLink: React.FC<ButtonLinkProps> = ({ userId, setShowRegistration, registered }) => {
+    if (!userId) {
+        return (
+            <Button variant={"default"} className="w-full">
+                <Link href={"/login"}>Login to Register</Link>
+            </Button>
+        )
+    } else if (registered) {
+        return (
+            <Button variant={"secondary"} disabled className="w-full">
+                Registered
+            </Button>
+        )
+    } else {
+        return (
+            <Button variant={"default"} onClick={() => setShowRegistration(true)} className="w-full">
+                Register
+            </Button>
+        )
+    }
+}
+
+function TestCardComponent({ data }: Readonly<{ data: TestCard }>) {
     const [timer, setTimer] = useState<string>("")
     const [showInstructions, setShowInstructions] = useState<boolean>(false)
     const [showRegistration, setShowRegistration] = useState<boolean>(false)
+    const user = useAppSelector((state) => state.user)
     useEffect(() => {
         const calculateTimeLeft = () => {
             const now = new Date()
@@ -41,7 +71,7 @@ function TestCardComponent({ data}: Readonly<{ data: TestCard }>) {
             const minutes = Math.floor((timeLeft / (1000 * 60)) % 60)
             const seconds = Math.floor((timeLeft / 1000) % 60)
 
-            setTimer(`${days ? days + "d" : ""} ${hours ? hours + "h" : ""} ${minutes? minutes + "m" : ""} ${seconds}s`)
+            setTimer(`${days ? days + "d" : ""} ${hours ? hours + "h" : ""} ${minutes ? minutes + "m" : ""} ${seconds}s`)
         }
 
         calculateTimeLeft()
@@ -63,7 +93,8 @@ function TestCardComponent({ data}: Readonly<{ data: TestCard }>) {
                 </p>
             </CardHeader>
             <CardFooter className="mt-auto gap-2">
-                {data.registered?
+                <ButtonLink userId={user._id} setShowRegistration={setShowRegistration} registered={data.registered} />
+                {/* {data.registered ?
                     <Button variant={"secondary"} disabled className="w-full">
                         Registered
                     </Button>
@@ -71,10 +102,10 @@ function TestCardComponent({ data}: Readonly<{ data: TestCard }>) {
                     <Button variant={"default"} onClick={() => setShowRegistration(true)} className="w-full">
                         Register
                     </Button>
-                }
+                } */}
                 <Button variant={"outline"} onClick={() => setShowInstructions(true)} >Info</Button>
                 <DialogMessage showInstructions={showInstructions} setShowInstructions={setShowInstructions} />
-                <TestRegistration showRegistration={showRegistration} setShowRegistration={setShowRegistration} id={data._id} amount={data.amount} type={data.type}/>
+                <TestRegistration showRegistration={showRegistration} setShowRegistration={setShowRegistration} id={data._id} amount={data.amount} type={data.type} />
             </CardFooter>
         </Card>
     )
@@ -100,27 +131,27 @@ function TestBrowse() {
                 }
             } catch (error) {
                 alert(error)
-            } finally{
+            } finally {
                 setLoading(false)
             }
         })()
     }, [])
-    
-    if(loading) {
+
+    if (loading) {
         return <Loading />
     }
 
-    if(test.length === 0)
+    if (test.length === 0)
         return (
             <div className="container mx-auto py-8">
-                <BrowseTestButton/>
+                <BrowseTestButton />
                 <h2 className="text-lg mb-2">No tests found</h2>
             </div>
         )
     return (
         <ReduxProvider>
             <div className="container mx-auto py-8">
-                <BrowseTestButton/>
+                <BrowseTestButton />
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                     {test.map((data: TestCard) => (
                         <TestCardComponent key={data._id} data={data} />

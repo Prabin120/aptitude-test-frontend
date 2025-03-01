@@ -15,11 +15,11 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { useToast } from "@/hooks/use-toast"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Loader2, Mail, Phone, MapPin } from "lucide-react"
 import { handlePostMethod } from "@/utils/apiCall"
 import { feedbackEndpoint } from "@/consts"
+import { toast } from "sonner"
 
 const formSchema = z.object({
     name: z.string().min(2, {
@@ -40,7 +40,6 @@ export default function ContactPage() {
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [isFeedbackSubmitted, setIsFeedbackSubmitted] = useState(false)
     const [error, setError] = useState("")
-    const { toast } = useToast()
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -69,10 +68,7 @@ export default function ContactPage() {
                 setIsFeedbackSubmitted(false)
                 setError(response.message)
             }
-            toast({
-                title: "Feedback sent!",
-                description: "Thank you for your feedback. We'll get back to you soon.",
-            })
+            toast("Feedback sent!")
             form.reset()
         } catch (error) {
             console.log(error);

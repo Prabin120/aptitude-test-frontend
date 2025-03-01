@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils"
 import { Progress } from "@/components/ui/progress"
 import { useRouter } from "next/navigation"
 import Loading from "@/app/loading"
-import { getAptiQuestionByTag } from "@/app/apti-zone/apicalls"
+import { getAptiQuestionByTag, getGroupTest } from "@/app/apti-zone/apicalls"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { CheckCircle2, XCircle } from "lucide-react"
 import { useAppDispatch, useAppSelector } from "@/redux/store"
@@ -37,10 +37,14 @@ export default function TestPage({ type, tag, time }: Readonly<{ type: string, t
     const [mockQuestions, setMockQuestions] = useState<Question[]>([]);
     const answersRef = useRef(answers);
     const [timeLeft, setTimeLeft] = useState("")
+    const [examType, setExamType] = useState(false)
     const dispatch = useAppDispatch();
     const aptitudeQuestions = useAppSelector(state => state.aptitude.questions);
 
     useEffect(() => {
+        if(type === "exam" || type === "group-test"){
+            setExamType(true)
+        }
         if (aptitudeQuestions && aptitudeQuestions.length > 0) {
             const newAnswers = aptitudeQuestions.reduce<Record<string, number | number[]>>((acc, item) => {
                 acc[item.questionNo] = item.answer; // Map questionNo to answer
@@ -57,7 +61,7 @@ export default function TestPage({ type, tag, time }: Readonly<{ type: string, t
     }, [answers]);
 
     useEffect(() => {
-        if (type === "exam") {
+        if (examType) {
             let animationFrame: number;
             const calculateTimeLeft = () => {
                 const now = new Date().getTime();
@@ -75,7 +79,7 @@ export default function TestPage({ type, tag, time }: Readonly<{ type: string, t
             calculateTimeLeft(); // Start the loop
             return () => cancelAnimationFrame(animationFrame); // Clean up on unmount
         }
-    }, [type, router, time]);
+    }, [type, router, time, examType]);
     const handleEndTest = async () => {
         if (remainingQuestions < mockQuestions.length) {
             const confirmation = confirm(`You have ${mockQuestions.length - remainingQuestions} questions remaining. Are you sure you want to end the test? Remember, once the time runs out, your answers will automatically be submitted.`);
@@ -87,11 +91,16 @@ export default function TestPage({ type, tag, time }: Readonly<{ type: string, t
     useEffect(() => {
         (async () => {
             try {
-                const response = await getAptiQuestionByTag(type, tag, 1, 30);
-                if (type === "exam") {
-                    setMockQuestions(response.aptiQuestions);
-                } else {
-                    setMockQuestions(response.data);
+                if(type === "group-test"){
+                    const response = await getGroupTest(tag)
+                    setMockQuestions(response??[]);
+                } else{
+                    const response = await getAptiQuestionByTag(type, tag, 1, 30);
+                    if (type === "exam") {
+                        setMockQuestions(response.aptiQuestions??[]);
+                    } else {
+                        setMockQuestions(response.data??[]);
+                    }
                 }
                 setRemainingQuestions(0);  // Updated to use response data
             } catch (error) {
@@ -119,7 +128,7 @@ export default function TestPage({ type, tag, time }: Readonly<{ type: string, t
             newAnswers[questionId] = answer;
             return newAnswers;
         });
-        if (type === "exam") {
+        if (examType) {
             dispatch(
                 setAptiTestState({
                     questionNo: questionId,
@@ -143,16 +152,16 @@ export default function TestPage({ type, tag, time }: Readonly<{ type: string, t
         <div className="min-h-screen flex flex-col">
             <header className="sticky top-0 bg-background z-10 p-4 border-b">
                 <div className="container mx-auto flex justify-between items-center">
-                    {type === "exam" &&
+                    {examType &&
                         <div className="text-lg font-semibold">Time Left: {timeLeft}</div>
                     }
                     <div className="text-lg font-semibold">
                         Questions: {remainingQuestions}/{mockQuestions.length}
                     </div>
-                    {!isTestEnded && type !== "exam" ? (
+                    {!isTestEnded && !examType ? (
                         <Button variant="destructive" onClick={handleEndTest}>End Test</Button>
                     ) : (
-                        <Button className="px-6" onClick={() => type === "exam" ? router.back() : router.replace("/thank-you")}>Back</Button>
+                        <Button className="px-6" onClick={() => examType ? router.back() : router.replace("/thank-you")}>Back</Button>
                     )
                     }
                 </div>

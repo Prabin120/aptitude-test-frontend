@@ -1,13 +1,18 @@
 'use client'
+
 import ReduxProvider from '@/redux/redux-provider'
+import React from 'react'
 import ExamScore from './scorePage'
 
-export default function ScorePage({ params }: { params: { type: string, slug: string } }) {
+function GroupTestScore({params}: { params: { testId: string } }) {
+    console.log("slug: ", params);
     return (
         <ReduxProvider>
             <main className='dark'>
-                <ExamScore slug={params.slug} />
+                <ExamScore testId={params.testId} />
             </main>
         </ReduxProvider>
     )
 }
+
+export default GroupTestScore

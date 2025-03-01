@@ -1,15 +1,14 @@
 'use client'
-import UserProfile from '@/app/profile/profile'
 import ReduxProvider from '@/redux/redux-provider'
+import React from 'react'
+import GroupTests from './registeredTests'
 
-const page = () => {
+export default function TestList() {
     return (
         <ReduxProvider>
             <main className='dark'>
-                <UserProfile />
+                <GroupTests />
             </main>
         </ReduxProvider>
     )
 }
-
-export default page;

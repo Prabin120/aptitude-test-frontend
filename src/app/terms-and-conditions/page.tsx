@@ -1,13 +1,7 @@
-import Footer from '@/components/ui/footer'
 
 export default function TermsOfService() {
   return (
     <div className="min-h-screen flex flex-col px-6">
-      {/* <header className="bg-gray-800 text-white p-4">
-        <div className="container mx-auto">
-          <h1 className="text-2xl font-bold">AptiCode</h1>
-        </div>
-      </header> */}
 
       <main className="flex-grow container mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold mb-6 mx-auto text-center">Terms of Service</h1>
@@ -48,8 +42,6 @@ export default function TermsOfService() {
           </p>
         </section>
       </main>
-
-      <Footer/>
     </div>
   )
 }

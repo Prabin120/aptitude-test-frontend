@@ -1,5 +1,4 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import Footer from "@/components/ui/footer"
 
 export default function CancelationAndRefunds() {
     return (
@@ -50,7 +49,6 @@ export default function CancelationAndRefunds() {
                     </p>
                 </CardContent>
             </Card>
-            <Footer/>
         </div>
     )
 }

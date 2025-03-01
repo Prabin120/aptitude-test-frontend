@@ -1,6 +1,5 @@
 'use client'
 import HomePage from "@/app/home";
-import Footer from "@/components/ui/footer";
 import ReduxProvider from "@/redux/redux-provider";
 
 export default function Home() {
@@ -10,7 +9,6 @@ export default function Home() {
         <main className="flex justify-center">
           <HomePage/>
         </main>
-        <Footer/>
       </main>
     </ReduxProvider>
   );

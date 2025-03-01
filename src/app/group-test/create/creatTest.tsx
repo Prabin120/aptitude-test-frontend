@@ -5,71 +5,72 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 import { Button } from "@/components/ui/button"
-import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from "@/components/ui/form"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Search} from 'lucide-react'
-import { createTest } from "../apiCalls"
+import { Search} from "lucide-react"
+import { useAppDispatch, useAppSelector } from "@/redux/store"
 import { checkAuthorization } from "@/utils/authorization"
-import { useAppDispatch } from "@/redux/store"
+import { handlePostMethod } from "@/utils/apiCall"
+import { groupTestCreateOrderEndpoint, groupTestVerifyPaymentEndpoint } from "@/consts"
+import { handleRazorpayPayment } from "@/utils/razorpayPaymentModal"
+import { useRouter } from "next/navigation"
+import { Textarea } from "@/components/ui/textarea"
 import { SearchableQuestions } from "@/components/searchQuestion"
 import DateAndTime from "@/components/dateAndTime"
-import { Textarea } from "@/components/ui/textarea"
 
 const formSchema = z.object({
     title: z.string().min(5, "title must be more than 5 words"),
-    description: z.string().min(10, "desctiption of the test must be more than 10 words"),
-    apti_list: z.array(z.object({ _id: z.string(), slug: z.string(), title: z.string(), marks: z.number() })).optional(),
-    code_list: z.array(z.object({ _id: z.string(), slug: z.string(), title: z.string(), marks: z.number() })).optional(),
+    description: z.string().min(10, "description of the test must be more than 10 words"),
+    apti_list: z.array(z.object({ _id: z.string(), slug: z.string(), title: z.string(), marks: z.number() })),
+    code_list: z.array(z.object({ _id: z.string(), slug: z.string(), title: z.string(), marks: z.number() })),
     type: z.enum(["exam", "practice"]),
-    startDateTime: z.date().default(new Date()),
+    startDateTime: z.date(),
     duration: z.string().min(1, "duration has be there"),
-    amount: z.string().optional(),
+    totalParticipants: z.string().min(1, "At least one participant is required"),
+    participants: z.string().min(1, "Add at least one participant"),
 })
 
-export default function TestsPage() {
+export default function CreateTestsPage() {
     const [loading, setLoading] = useState(false)
+    const userDetail = useAppSelector((state) => state.user);
+    const dispatch = useAppDispatch()
+    const router = useRouter();
+
     const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema)
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            apti_list: [],
+            code_list: [],
+            type: "exam",
+        },
     })
-    const dispath = useAppDispatch()
-    
+
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         setLoading(true)
         try {
-            const response = await createTest(values);
+            const participants = values.participants.split(",").map((id: string) => id.trim());
+            const response = await handlePostMethod(groupTestCreateOrderEndpoint, { ...values, participants:participants})
+            const redirectUrl = "/group-test/owned-tests";
             if (response instanceof Response) {
-                await checkAuthorization(response, dispath);
-                const res = await response.json();
+                await checkAuthorization(response, dispatch)
+                const res = await response.json()
                 if (response.status === 200 || response.status === 201) {
-                    alert("Test set successfully");
+                    handleRazorpayPayment(res.amount, res.order_id, groupTestVerifyPaymentEndpoint, userDetail.name, userDetail.email, 
+                        userDetail.mobile, redirectUrl, router, {orderId: res.order_id})
                 } else {
-                    alert(res.message);
+                    alert(res.message)
                 }
-            } else{
+            } else {
                 alert("Server error")
             }
         } catch (error) {
-            console.error("Error submitting test cases:", error);
-            alert("An error occurred while submitting test cases. Please try again.");
+            console.error("Error submitting test cases:", error)
+            alert("An error occurred while submitting test cases. Please try again.")
         } finally {
             setLoading(false)
         }
     }
-
-    // const convertToAMPM = (time: string) => {
-    //     const [hours, minutes] = time.split(':');
-    //     const ampm = parseInt(hours) >= 12 ? 'PM' : 'AM';
-    //     const convertedHours = (parseInt(hours) % 12) || 12;
-    //     return `${convertedHours}:${minutes} ${ampm}`;
-    // }
 
     return (
         <div className="container mx-auto py-10">
@@ -101,20 +102,7 @@ export default function TestsPage() {
                                         <FormItem className="flex-1">
                                             <FormLabel>Description</FormLabel>
                                             <FormControl>
-                                                <Textarea {...field} placeholder="Enter description of the Test" />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                                <FormField
-                                    control={form.control}
-                                    name="type"
-                                    render={({ field }) => (
-                                        <FormItem className="flex-1">
-                                            <FormLabel>Test Type</FormLabel>
-                                            <FormControl>
-                                                <Input {...field} placeholder="exam or practice" />
+                                                <Textarea {...field} placeholder="Enter description of the Test" ></Textarea>
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -126,7 +114,7 @@ export default function TestsPage() {
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormLabel>Start Date and Time</FormLabel>
-                                                <DateAndTime field={field} disablePastDate />
+                                                <DateAndTime field={field} />
                                             <FormMessage />
                                         </FormItem>
                                     )}
@@ -152,7 +140,7 @@ export default function TestsPage() {
                                             <FormLabel>Aptitude Questions</FormLabel>
                                             <FormControl>
                                                 <SearchableQuestions
-                                                    selectedQuestions={field.value??[]}
+                                                    selectedQuestions={field.value}
                                                     onQuestionsChange={field.onChange}
                                                     questionType="aptitude"
                                                 />
@@ -168,7 +156,7 @@ export default function TestsPage() {
                                             <FormLabel>Coding Questions</FormLabel>
                                             <FormControl>
                                                 <SearchableQuestions
-                                                    selectedQuestions={field.value??[]}
+                                                    selectedQuestions={field.value}
                                                     onQuestionsChange={field.onChange}
                                                     questionType="coding"
                                                 />
@@ -178,25 +166,42 @@ export default function TestsPage() {
                                 />
                                 <FormField
                                     control={form.control}
-                                    name="amount"
+                                    name="totalParticipants"
                                     render={({ field }) => (
                                         <FormItem className="flex-1">
-                                            <FormLabel>Amount (For exam type amount is required)</FormLabel>
+                                            <FormLabel>Number of Participants:</FormLabel>
                                             <FormControl>
-                                                <Input {...field} placeholder="18" />
+                                                <Input type="number" {...field} placeholder="5" />
                                             </FormControl>
+                                            <FormMessage />
                                         </FormItem>
                                     )}
                                 />
-                                <Button type="submit">
-                                    <>
-                                    {loading?
-                                        <Search className="mr-2 h-4 w-4 animate-spin" />
-                                        :
-                                        <Search className="mr-2 h-4 w-4" />
-                                    }
-                                    Submit
-                                </>
+                                <FormField
+                                    control={form.control}
+                                    name="participants"
+                                    render={({ field }) => (
+                                        <FormItem className="flex-1">
+                                            <FormLabel>Add Participants (Comma Separated)</FormLabel>
+                                            <FormControl>
+                                                <Input {...field} placeholder="Example: user@example.com, user2@example.com" />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <Button type="submit" disabled={loading}>
+                                    {loading ? (
+                                        <>
+                                            <Search className="mr-2 h-4 w-4 animate-spin" />
+                                            Submitting...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Search className="mr-2 h-4 w-4" />
+                                            Submit
+                                        </>
+                                    )}
                                 </Button>
                             </div>
                         </form>
@@ -206,3 +211,4 @@ export default function TestsPage() {
         </div>
     )
 }
+

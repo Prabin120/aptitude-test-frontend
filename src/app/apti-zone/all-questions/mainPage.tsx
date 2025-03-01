@@ -31,7 +31,7 @@ export default function ProblemListPage({search}: Readonly<{ type: string, tag: 
 
     const fetchQuestions = async (page: number) => {
         setLoading(true);
-        setError(""); // Reset error state before fetching
+        setError("");
         try {
             const response = await getAllAptiQuestions(page, search);
             await checkAuthorization(response, dispatch);
@@ -65,8 +65,7 @@ export default function ProblemListPage({search}: Readonly<{ type: string, tag: 
                 {loading ?
                     <div>Loading questions...</div> : 
                     errorDetect(error)
-                } 
-                
+                }
             </div>
         </ReduxProvider>
     )

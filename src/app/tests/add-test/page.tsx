@@ -2,7 +2,6 @@
 import ReduxProvider from '@/redux/redux-provider'
 import React from 'react'
 import TestsPage from './createTest'
-import Footer from '@/components/ui/footer'
 
 function CreateTests() {
     return (
@@ -10,7 +9,6 @@ function CreateTests() {
             <main className='dark'>
                 <TestsPage />
             </main>
-            <Footer />
         </ReduxProvider>
     )
 }

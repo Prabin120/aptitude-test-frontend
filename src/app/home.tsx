@@ -11,7 +11,7 @@ const features = [
         title: "Coding Practice",
         icon: Code,
         description: "Sharpen your programming skills with our diverse set of coding challenges",
-        href: "/coding-practice",
+        href: "/code/problems",
         color: "bg-gradient-to-r from-neutral-500 to-neutral-900",
         stats: { challenges: 500, languages: 10 },
         popularTopics: ["Data Structures", "Algorithms", "Web Development"],
@@ -20,7 +20,7 @@ const features = [
         title: "Aptitude Questions",
         icon: Brain,
         description: "Boost your logical and analytical thinking with our aptitude question bank",
-        href: "/aptitude-questions",
+        href: "/apti-zone",
         color: "bg-gradient-to-r from-neutral-900 to-neutral-500",
         stats: { questions: 1000, categories: 15 },
         popularTopics: ["Numerical Reasoning", "Verbal Ability", "Logical Reasoning"],
@@ -29,7 +29,7 @@ const features = [
         title: "Exam Mode",
         icon: FileSpreadsheet,
         description: "Test your knowledge under timed conditions to simulate real exam scenarios",
-        href: "/exam-mode",
+        href: "/tests",
         color: "bg-gradient-to-r from-neutral-500 to-neutral-900",
         stats: { exams: 50, duration: "1-3 hours" },
         popularTopics: ["Mock Tests", "Sectional Practice", "Performance Analysis"],
@@ -65,47 +65,46 @@ export default function HomePage() {
                 </section>
                 <div className="px-2 py-4 my-4 grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {features.map((feature, index) => (
-                        <Card key={index + 1} className="overflow-hidden transition-all duration-300 hover:shadow-lg">
-                            <CardHeader className={`${feature.color} text-white p-6`}>
-                                <div className="flex items-center justify-between">
-                                    <feature.icon className="w-12 h-12" />
-                                    <Badge variant="secondary" className="text-sm font-medium">
-                                        {Object.values(feature.stats)[0]}+ {Object.keys(feature.stats)[0]}
-                                    </Badge>
-                                </div>
-                                <CardTitle className="text-2xl mt-4">{feature.title}</CardTitle>
-                            </CardHeader>
-                            <CardContent className="p-6">
-                                <CardDescription className="text-base mb-4">{feature.description}</CardDescription>
-                                <div className="space-y-2">
-                                    <div className="flex items-center text-sm">
-                                        <Trophy className="w-4 h-4 mr-2 text-yellow-500" />
-                                        <span>Popular Topics:</span>
+                        <Link href={feature.href} key={index}>
+                            <Card key={index + 1} className="overflow-hidden transition-all duration-300 hover:shadow-lg">
+                                <CardHeader className={`${feature.color} text-white p-6`}>
+                                    <div className="flex items-center justify-between">
+                                        <feature.icon className="w-12 h-12" />
+                                        <Badge variant="secondary" className="text-sm font-medium">
+                                            {Object.values(feature.stats)[0]}+ {Object.keys(feature.stats)[0]}
+                                        </Badge>
                                     </div>
-                                    <div className="flex flex-wrap gap-2">
-                                        {feature.popularTopics.map((topic, i) => (
-                                            <Badge key={i} variant="outline">{topic}</Badge>
-                                        ))}
+                                    <CardTitle className="text-2xl mt-4">{feature.title}</CardTitle>
+                                </CardHeader>
+                                <CardContent className="p-6">
+                                    <CardDescription className="text-base mb-4">{feature.description}</CardDescription>
+                                    <div className="space-y-2">
+                                        <div className="flex items-center text-sm">
+                                            <Trophy className="w-4 h-4 mr-2 text-yellow-500" />
+                                            <span>Popular Topics:</span>
+                                        </div>
+                                        <div className="flex flex-wrap gap-2">
+                                            {feature.popularTopics.map((topic, i) => (
+                                                <Badge key={i} variant="outline">{topic}</Badge>
+                                            ))}
+                                        </div>
                                     </div>
-                                </div>
-                            </CardContent>
-                            <CardFooter className="bg-muted/50 p-6 flex flex-col space-y-4">
-                                <div className="flex items-center justify-between text-sm w-full">
-                                    <div className="flex items-center">
-                                        <Clock className="w-4 h-4 mr-1" />
-                                        <span>Updated daily</span>
+                                </CardContent>
+                                <CardFooter className="bg-muted/50 p-6 flex flex-col space-y-4">
+                                    <div className="flex items-center justify-between text-sm w-full">
+                                        <div className="flex items-center">
+                                            <Clock className="w-4 h-4 mr-1" />
+                                            <span>Updated daily</span>
+                                        </div>
+                                        <div className="flex items-center">
+                                            <Users className="w-4 h-4 mr-1" />
+                                            <span>10k+ users</span>
+                                        </div>
                                     </div>
-                                    <div className="flex items-center">
-                                        <Users className="w-4 h-4 mr-1" />
-                                        <span>10k+ users</span>
-                                    </div>
-                                </div>
-                                <Progress value={33} className="w-full" />
-                                {/* <Button asChild className="w-full">
-                                    <Link href={feature.href}>Get Started</Link>
-                                </Button> */}
-                            </CardFooter>
-                        </Card>
+                                    <Progress value={33} className="w-full" />
+                                </CardFooter>
+                            </Card>
+                        </Link>
                     ))}
                 </div>
                 <section className="w-full py-12 md:py-24 lg:py-32 bg-neutral-900">

@@ -20,9 +20,9 @@ import { useRouter } from "next/navigation"
 import { useAppDispatch } from "@/redux/store"
 import { setAuthState } from "@/redux/auth/authSlice"
 import { setUserState, userInitialState } from "@/redux/user/userSlice"
-import { useToast } from "@/hooks/use-toast"
 import { useAppSelector } from "@/redux/store"
 import CircleLoading from "../../components/ui/circleLoading"
+import { toast } from "sonner"
 
 interface RazorpayOptions {
     razorpay_order_id: string,
@@ -37,7 +37,6 @@ export default function TestSetupAndPayment() {
     const [error, setError] = useState("")
     const [loading, setLoading] = useState(false)
     const [razorpayScriptLoaded, setRazorpayScriptLoaded] = useState<boolean>(false);
-    const { toast } = useToast()
     const router = useRouter();
     const dispatch = useAppDispatch();
     const user = useAppSelector((state) => state.user);
@@ -127,17 +126,10 @@ export default function TestSetupAndPayment() {
                         const result = await handlePostMethod(verifyPaymentEndpoint, data)
                         if (result instanceof Response) {
                             if (result.ok) {
-                                toast({
-                                    title: "Payment Successful",
-                                    description: `Payment ID: ${response.razorpay_payment_id}`,
-                                })
+                                toast("Payment Successful")
                                 router.replace('/')
                             } else {
-                                toast({
-                                    title: "Payment Failed",
-                                    description: "An error occurred while processing your payment.",
-                                    variant: "destructive",
-                                })
+                                toast("Payment Failed")
                             }
                         } else {
                             throw new Error('Payment verification failed')
@@ -157,11 +149,7 @@ export default function TestSetupAndPayment() {
             }
         } catch (error) {
             console.error('Payment error:', error)
-            toast({
-                title: "Payment Error",
-                description: "An error occurred while processing your payment.",
-                variant: "destructive",
-            })
+            toast("Payment Error")
         } finally {
             setLoading(false);
         }

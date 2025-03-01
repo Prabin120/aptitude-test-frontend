@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button'
-import { submitTestEndpoint } from '@/consts'
+import { groupTestSubmitTest } from '@/consts'
 import { useAppDispatch, useAppSelector } from '@/redux/store'
 import { handlePostMethod } from '@/utils/apiCall'
 import { checkAuthorization } from '@/utils/authorization'
@@ -10,7 +10,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { clearAptiTestState } from '@/redux/testAnswers/aptiAnswers'
 import { clearCodingTestState } from '@/redux/testAnswers/codingAnswers'
 import Loading from '@/app/loading'
-import { useExamQuestions } from '@/hooks/reactQuery'
+import { useGroupTestQuestions } from '@/hooks/reactQuery'
 
 export interface IAptiQuestion {
     _id: string
@@ -28,7 +28,7 @@ export interface ICodingQuestion {
     marks: number;
 }
 
-function QuestionsList({ slug }: Readonly<{ type: string, slug: string }>) {
+function QuestionsList({ testIdn }: Readonly<{ testIdn: string }>) {
     const [aptitudeQuestions, setAptiQuestions] = useState<IAptiQuestion[]>([]);
     const [codeQuestions, setCodingQuestions] = useState<ICodingQuestion[]>([]);
     const [remainingQuestions, setRemainingQuestions] = useState(0)
@@ -63,9 +63,8 @@ function QuestionsList({ slug }: Readonly<{ type: string, slug: string }>) {
         calculateTimeLeft(); // Start the loop
         return () => cancelAnimationFrame(animationFrame); // Clean up on unmount
     }, [timeLeft]);
-    
 
-    const { data, isLoading, isError, error } = useExamQuestions(slug)
+    const { data, isLoading, isError, error } = useGroupTestQuestions(testIdn)
 
     useEffect(() => {
         setRemainingQuestions(aptitudeAnswers.length + codingAnswers.length)
@@ -73,7 +72,7 @@ function QuestionsList({ slug }: Readonly<{ type: string, slug: string }>) {
 
     useEffect(() => {
         if (data) {
-            setTestId(data.data._id)
+            setTestId(data?.data._id)
             setAptiQuestions(data?.data.apti_list);
             setCodingQuestions(data?.data.code_list)
             setTimeLeft(data?.data.endDateTime)
@@ -90,25 +89,23 @@ function QuestionsList({ slug }: Readonly<{ type: string, slug: string }>) {
                 return;
         }
         try {
-            const response = await handlePostMethod(submitTestEndpoint, { aptitudeAnswers: aptitudeAnswers, codingAnswers: codingAnswers, testId: testId });
+            const response = await handlePostMethod(groupTestSubmitTest, { aptitudeAnswers: aptitudeAnswers, codingAnswers: codingAnswers, testId: testId });
             if (response instanceof Response) {
                 await checkAuthorization(response, dispatch, router, true);
                 const responseData = await response.json();
                 if (response.status === 200 || response.status === 201) {
                     dispatch(clearAptiTestState());
                     dispatch(clearCodingTestState());
-                    alert(responseData.message);
                     router.replace("/thank-you");
                     return;
                 }
                 else {
                     alert(responseData.message);
-                    router.replace("/tests")
+                    router.replace("/")
                     return
                 }
             } else {
                 alert(response.message);
-                router.replace("/tests")
                 return
             }
         } catch (error) {
@@ -121,7 +118,7 @@ function QuestionsList({ slug }: Readonly<{ type: string, slug: string }>) {
                 <div className="container mx-auto flex justify-between items-center">
                     <div className="text-lg font-semibold">Time Left: {timer}</div>
                     <div className="text-lg font-semibold">
-                        Questions: {remainingQuestions}/{codeQuestions.length + aptitudeQuestions.length}
+                        Questions: {remainingQuestions}/{codeQuestions?.length + aptitudeQuestions?.length}
                     </div>
                     <Button variant="destructive" onClick={() => handleEndTest(true)}>Submit</Button>
                 </div>
@@ -141,7 +138,7 @@ function QuestionsList({ slug }: Readonly<{ type: string, slug: string }>) {
                         {aptitudeQuestions?.map((problem, index) => (
                             <TableRow key={index + 1} >
                                 <TableCell>
-                                    {aptitudeAnswers.findIndex((ans) => ans.questionNo === problem._id) !== -1
+                                    {aptitudeAnswers?.findIndex((ans) => ans.questionNo === problem._id) !== -1
                                         ? <Button variant={"secondary"} disabled className='bg-green-600'>Done</Button>
                                         : <Button variant={"secondary"} disabled className='bg-red-600'>Not Done</Button>
                                     }
@@ -150,7 +147,7 @@ function QuestionsList({ slug }: Readonly<{ type: string, slug: string }>) {
                                     {index + 1}.
                                 </TableCell>
                                 <TableCell>
-                                    <Link href={`/apti-zone/exam/${slug}/test/` + "?time=" + timeLeft}>
+                                    <Link href={`/apti-zone/group-test/${testId}/test/` + "?time=" + timeLeft}>
                                         {problem.title}
                                     </Link>
                                 </TableCell>
@@ -176,7 +173,7 @@ function QuestionsList({ slug }: Readonly<{ type: string, slug: string }>) {
                         {codeQuestions?.map((problem, index) => (
                             <TableRow key={index + 1} >
                                 <TableCell>
-                                    {codingAnswers.findIndex((ans) => ans.questionNo === problem._id) !== -1
+                                    {codingAnswers?.findIndex((ans) => ans.questionNo === problem._id) !== -1
                                         ? <Button variant={"secondary"} disabled className='bg-green-600'>Done</Button>
                                         : <Button variant={"secondary"} disabled className='bg-red-600'>Not Done</Button>
                                     }

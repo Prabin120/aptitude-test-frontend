@@ -1,0 +1,27 @@
+/* For screens wider than 640px (sm breakpoint) */
+@media (min-width: 640px) {
+    .desktopNav {
+        display: flex;
+        margin-left: auto;
+        gap: 1rem;
+        align-items: center;
+    }
+
+    .mobileNav {
+        display: none;
+    }
+}
+
+/* For screens smaller than 640px */
+@media (max-width: 639px) {
+    .desktopNav {
+        display: none;
+    }
+
+    .mobileNav {
+        display: flex;
+        margin-left: auto;
+        gap: 1rem;
+        align-items: center;
+    }
+}

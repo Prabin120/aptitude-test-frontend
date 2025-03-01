@@ -1,17 +1,17 @@
 "use client"
-
-import React, { useEffect, useState } from "react"
-import Link from "next/link"
-import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
+import Loading from '@/app/loading'
+import { Button } from '@/components/ui/button'
+import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { getGroupTestEndpoint } from '@/consts'
+import { handleGetMethod } from '@/utils/apiCall'
+import Link from 'next/link'
+import React, { useEffect, useState } from 'react'
 import { ListIcon as Category } from 'lucide-react'
-import { handleGetMethod } from "@/utils/apiCall"
+import ReduxProvider from '@/redux/redux-provider'
+import { TestCard } from './interfaces'
+import DialogMessage from './dialogMessage'
 import { usePathname } from 'next/navigation'
-import { getMyTestsEndpoint } from "@/consts"
-import DialogMessage from "./dialogMessage"
-import Loading from "../loading"
-import { useAppSelector } from "@/redux/store"
-import { TestCard } from "./interfaces"
+import { useAppSelector } from '@/redux/store'
 
 function PastTestCardComponent({ data }: Readonly<{ data: TestCard }>) {
     const pathname = usePathname()
@@ -27,7 +27,7 @@ function PastTestCardComponent({ data }: Readonly<{ data: TestCard }>) {
             </CardHeader>
             <CardFooter className="mt-auto gap-2">
                 <Button asChild className="w-full">
-                    <Link href={pathname + "/" + data.type + "/" + data.slug + "/score"}>View Score</Link>
+                    <Link href={pathname + "/"  + data._id + "/score"}>View Score</Link>
                 </Button>
                 <Button variant={"outline"} onClick={() => setShowInstructions(true)} >Info</Button>
                 <DialogMessage showInstructions={showInstructions} setShowInstructions={setShowInstructions} />
@@ -36,7 +36,9 @@ function PastTestCardComponent({ data }: Readonly<{ data: TestCard }>) {
     )
 }
 
-function OngoingTestCardComponent({ data, pastTests, setOngoingTests, setPastTests }: Readonly<{ data: TestCard, pastTests: TestCard[]|undefined, setOngoingTests: (tests: TestCard[]) => void, setPastTests: (tests: TestCard[]) => void }>) {
+function OngoingTestCardComponent({ data, pastTests, setOngoingTests, setPastTests }: 
+        Readonly<{ data: TestCard, pastTests: TestCard[] | undefined, setOngoingTests: (tests: TestCard[]) => void, 
+        setPastTests: (tests: TestCard[]) => void }>) {
     const [timer, setTimer] = useState<string>("")
     const pathname = usePathname()
     const [showInstructions, setShowInstructions] = useState<boolean>(false)
@@ -77,11 +79,11 @@ function OngoingTestCardComponent({ data, pastTests, setOngoingTests, setPastTes
             <CardFooter className="mt-auto gap-2">
                 {data.attempted?
                     <Button disabled className="w-full">
-                        Already Attempted
+                        Test Already Attempted
                     </Button>
                     :
                     <Button asChild className="w-full">
-                        <Link href={pathname + "/" + data.type + "/" + data.slug + "?time="+data.endDateTime}>Start Test</Link>
+                        <Link href={pathname + "/" + data._id}>Start Test</Link>
                     </Button>
                 }
                 <Button variant={"outline"} onClick={() => setShowInstructions(true)} >Info</Button>
@@ -91,7 +93,7 @@ function OngoingTestCardComponent({ data, pastTests, setOngoingTests, setPastTes
     )
 }
 
-function UpcomingTestCardComponent({ data, upcomingTests, setOngoingTests, setUpcomingTests, ongoingTests }: Readonly<{ data: TestCard, upcomingTests: TestCard[]|undefined, setOngoingTests: (tests: TestCard[])=>void, setUpcomingTests: (tests: TestCard[])=>void, ongoingTests: TestCard[]|undefined }>) {
+function UpcomingTestCardComponent({ data, upcomingTests, setOngoingTests, setUpcomingTests, ongoingTests }: Readonly<{ data: TestCard, upcomingTests: TestCard[] | undefined, setOngoingTests: (tests: TestCard[]) => void, setUpcomingTests: (tests: TestCard[]) => void, ongoingTests: TestCard[] | undefined }>) {
     const [timer, setTimer] = useState<string>("")
     const [showInstructions, setShowInstructions] = useState<boolean>(false)
     useEffect(() => {
@@ -110,7 +112,7 @@ function UpcomingTestCardComponent({ data, upcomingTests, setOngoingTests, setUp
             const minutes = Math.floor((timeLeft / (1000 * 60)) % 60)
             const seconds = Math.floor((timeLeft / 1000) % 60)
 
-            setTimer(`${days ? days + "d" : ""} ${hours ? hours + "h" : ""} ${minutes? minutes + "m" : ""} ${seconds}s`)
+            setTimer(`${days ? days + "d" : ""} ${hours ? hours + "h" : ""} ${minutes ? minutes + "m" : ""} ${seconds}s`)
         }
 
         calculateTimeLeft()
@@ -141,18 +143,24 @@ function UpcomingTestCardComponent({ data, upcomingTests, setOngoingTests, setUp
         </Card>
     )
 }
-function BrowseTestButton(){
-    return(
+
+function BrowseTestButton() {
+    return (
         <div className="flex justify-between pb-6">
-            <h1 className="text-2xl font-bold">My Tests</h1>
-            <Link href="/tests/browse">
-                <Button variant={"outline"}>Browse All Tests</Button>
-            </Link>
+            <h1 className="text-2xl font-bold">All Upcoming Tests</h1>
+            <div className='flex gap-2'>
+                <Link href={"/group-test/owned-tests"}>
+                    <Button variant={"outline"}>Owned Tests</Button>
+                </Link>
+                <Link href="/group-test/create">
+                    <Button variant={"default"}>Create A Group Test</Button>
+                </Link>
+            </div>
         </div>
     )
 }
 
-export default function AptitudeListingPage() {
+function GroupTests() {
     const [upcomingTests, setUpcomingTests] = useState<TestCard[]>([])
     const [pastTests, setPastTests] = useState<TestCard[]>([])
     const [ongoingTests, setOngoingTests] = useState<TestCard[]>([])
@@ -161,7 +169,7 @@ export default function AptitudeListingPage() {
     useEffect(() => {
         user._id && (async () => {
             setLoading(true)
-            const response = await handleGetMethod(getMyTestsEndpoint)
+            const response = await handleGetMethod(getGroupTestEndpoint)
             if (response instanceof Response) {
                 const res = await response.json()
                 if (response.status === 200 || response.status === 201) {
@@ -177,56 +185,61 @@ export default function AptitudeListingPage() {
             }
             setLoading(false)
         })()
-        setLoading(false) 
+        setLoading(false)
     }, [])
-    
-    if(loading) {
+
+    if (loading) {
         return <Loading />
     }
 
-    if(!user._id) {
+    if (!user._id) {
         return (
             <div className="container mx-auto py-8">
-                <BrowseTestButton/>
+                {/* <BrowseTestButton /> */}
                 <h2 className="text-lg mb-2">You are not logged in</h2>
+                <p className="text-lg mb-2">Please login to see your group tests or to create a group test</p>
             </div>
         )
     }
 
-    if(upcomingTests.length === 0 && ongoingTests?.length === 0 && pastTests?.length === 0)
+    if (upcomingTests.length === 0 && ongoingTests?.length === 0 && pastTests?.length === 0)
         return (
             <div className="container mx-auto py-8">
-                <BrowseTestButton/>
+                <BrowseTestButton />
                 <h2 className="text-lg mb-2">No tests found</h2>
             </div>
         )
     return (
-        <div className="container mx-auto py-8">
-            <BrowseTestButton/>
-            { ongoingTests?.length > 0 &&
-                <h2 className="text-lg mb-2">Ongoing Tests</h2>
-            }
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                {ongoingTests?.map((test) => (
-                    <OngoingTestCardComponent key={test.slug} data={test} pastTests={pastTests} setPastTests={setPastTests} setOngoingTests={setOngoingTests} />
-                ))}
+        <ReduxProvider>
+            <div className="container mx-auto py-8 min-h-[80vh]">
+                <BrowseTestButton />
+                {ongoingTests?.length > 0 &&
+                    <h2 className="text-lg mb-2">Ongoing Tests</h2>
+                }
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                    {ongoingTests?.map((test) => (
+                        <OngoingTestCardComponent key={test.slug} data={test} pastTests={pastTests} setPastTests={setPastTests} setOngoingTests={setOngoingTests} />
+                    ))}
+                </div>
+                {upcomingTests?.length > 0 &&
+                    <h2 className="text-lg mb-2">Upcoming Tests</h2>
+                }
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                    {upcomingTests?.map((test) => (
+                        <UpcomingTestCardComponent key={test.slug} data={test} upcomingTests={upcomingTests} ongoingTests={ongoingTests} setUpcomingTests={setUpcomingTests} setOngoingTests={setOngoingTests} />
+                    ))}
+                </div>
+                {pastTests?.length > 0 &&
+                    <h2 className="text-lg mb-2">Past Tests</h2>
+                }
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                    {pastTests?.map((test) => (
+                        <PastTestCardComponent key={test.slug} data={test} />
+                    ))}
+                </div>
             </div>
-            { upcomingTests?.length > 0 &&
-                <h2 className="text-lg mb-2">Upcoming Tests</h2>
-            }
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                {upcomingTests?.map((test) => (
-                    <UpcomingTestCardComponent key={test.slug} data={test} upcomingTests={upcomingTests} ongoingTests={ongoingTests} setUpcomingTests={setUpcomingTests} setOngoingTests={setOngoingTests} />
-                ))}
-            </div>
-            { pastTests?.length > 0 &&
-                <h2 className="text-lg mb-2">Past Tests</h2>
-            }
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                {pastTests?.map((test) => (
-                    <PastTestCardComponent key={test.slug} data={test} />
-                ))}
-            </div>
-        </div>
+        </ReduxProvider>
     )
 }
+
+export default GroupTests

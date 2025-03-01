@@ -1,4 +1,3 @@
-import Footer from '@/components/ui/footer'
 import Link from 'next/link'
 
 export default function PrivacyPolicy() {
@@ -64,7 +63,6 @@ export default function PrivacyPolicy() {
           </p>
         </section>
       </main>
-        <Footer/>
     </div>
   )
 }
