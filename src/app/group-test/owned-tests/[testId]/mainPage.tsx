@@ -26,7 +26,7 @@ import DateAndTime from "@/components/dateAndTime"
 const formSchema = z.object({
     title: z.string().min(1, "Title is required"),
     description: z.string().min(1, "Description is required"),
-    addParticipants: z.array(z.string().email("Invalid email")).nullish(),
+    addParticipants: z.string(),
     apti_list: z.array(z.object({ 
         _id: z.string(),
         slug: z.string(),
@@ -108,7 +108,6 @@ export default function GroupTestDetailPage() {
     }
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
-        console.log("values", values);
         try {
             const data: Partial<typeof values> = { 
                 ...values,
@@ -149,6 +148,7 @@ export default function GroupTestDetailPage() {
             console.error("Error updating test data:", error)
         } finally {
             setIsEditing(false)
+            values.addParticipants = ""
         }
     }
 
@@ -249,13 +249,7 @@ export default function GroupTestDetailPage() {
                                         <FormItem>
                                             <FormLabel>Add more Participants (Type comma separated Email ID)</FormLabel>
                                             <FormControl>
-                                                <Textarea
-                                                    {...field}
-                                                    disabled={!isEditing}
-                                                    placeholder="Example: v1R9a@example.com, 9V7YB@example.com"
-                                                    value={field.value?.join(", ")}
-                                                    onChange={(e) => field.onChange(e.target.value.split(",").map((email) => email.trim()))}
-                                                />
+                                                <Textarea disabled={!isEditing} {...field} placeholder="Example: user@example.com, user2@example.com" />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>

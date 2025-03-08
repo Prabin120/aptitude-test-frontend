@@ -184,7 +184,7 @@ export default function CreateTestsPage() {
                                         <FormItem className="flex-1">
                                             <FormLabel>Add Participants (Comma Separated)</FormLabel>
                                             <FormControl>
-                                                <Input {...field} placeholder="Example: user@example.com, user2@example.com" />
+                                                <Textarea {...field} placeholder="Example: user@example.com, user2@example.com" />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
