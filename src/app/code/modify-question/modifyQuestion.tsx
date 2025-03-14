@@ -29,10 +29,9 @@ import { Plus, Minus, Search } from "lucide-react"
 import CircleLoading from "@/components/ui/circleLoading"
 import "react-quill/dist/quill.snow.css"
 import { getQuestionById, updateQuestion } from "../apiCalls"
-import dynamic from "next/dynamic";
 import { checkAuthorization } from "@/utils/authorization"
 import { useAppDispatch } from "@/redux/store"
-const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+import RichTextEditorField from "@/components/richTextEditorField"
 
 const languageOptions = ["py", "js", "java", "c", "cpp", "go"]
 
@@ -105,9 +104,17 @@ export default function ModifyQuestionForm() {
         try {
             const questionData = await getQuestionById(questionId)
             if (questionData) {
+                // Fetch the description content from the Cloudinary URL
+                const response = await fetch(questionData.description)
+                if (!response.ok) {
+                    throw new Error("Failed to fetch description content")
+                }
+                const descriptionContent = await response.text()
+                console.log({ __html: descriptionContent });
+                
                 form.reset({
                     title: questionData.title,
-                    description: questionData.description,
+                    description: descriptionContent,
                     difficulty: questionData.difficulty,
                     tags: questionData.tags.join(", "),
                     sampleTestCases: questionData.sampleTestCases,
@@ -174,13 +181,11 @@ export default function ModifyQuestionForm() {
                                 control={form.control}
                                 name="description"
                                 render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Description</FormLabel>
-                                        <FormControl>
-                                            <ReactQuill value={field.value} onChange={field.onChange} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
+                                    <RichTextEditorField
+                                        field={field}
+                                        label="Description"
+                                        placeholder="Write your description here..."
+                                    />
                                 )}
                             />
 

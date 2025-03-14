@@ -158,7 +158,7 @@ const getQuestionById = async (id: string) => {
 };
 
 const getQuestionBySlug = async (slug: string) => {
-	const response = await handleGetMethod(`${codeQuestion}/slug?slug=${slug}`);
+	const response = await handleGetMethod(codeQuestion + `?slug=${slug}`);
 	if (response instanceof Response) {
 		const res = await response.json();
 		if (response.status === 200 || response.status === 201) {

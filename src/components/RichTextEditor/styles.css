@@ -1,0 +1,291 @@
+.rich-text-editor {
+  display: flex;
+  flex-direction: column;
+  min-height: 200px;
+}
+
+.editor-content h1 {
+  font-size: 1.875rem;
+  font-weight: 700;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.editor-content h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.editor-content h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.editor-content p {
+  margin-bottom: 0.75rem;
+}
+
+.editor-content ul,
+.editor-content ol {
+  margin-left: 1.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.editor-content ul {
+  list-style-type: disc;
+}
+
+.editor-content ol {
+  list-style-type: decimal;
+}
+
+.editor-content a {
+  color: hsl(var(--primary));
+  text-decoration: underline;
+}
+
+.editor-content .editor-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.375rem;
+  margin: 1rem 0;
+  /* Add styles for resizable images */
+  display: inline-block;
+  position: relative;
+}
+
+/* Add resize handles for the image */
+.editor-image-resizer {
+  display: inline-flex;
+  position: relative;
+}
+
+.editor-image-resizer img {
+  display: block;
+}
+
+.editor-image-resizer__handle {
+  position: absolute;
+  background-color: hsl(var(--primary));
+  border: 1px solid white;
+  border-radius: 50%;
+  width: 12px;
+  height: 12px;
+}
+
+.editor-image-resizer__handle-tl {
+  top: -6px;
+  left: -6px;
+  cursor: nwse-resize;
+}
+
+.editor-image-resizer__handle-tr {
+  top: -6px;
+  right: -6px;
+  cursor: nesw-resize;
+}
+
+.editor-image-resizer__handle-bl {
+  bottom: -6px;
+  left: -6px;
+  cursor: nesw-resize;
+}
+
+.editor-image-resizer__handle-br {
+  bottom: -6px;
+  right: -6px;
+  cursor: nwse-resize;
+}
+
+.editor-content blockquote {
+  border-left: 3px solid hsl(var(--primary));
+  padding-left: 1rem;
+  margin-left: 0;
+  margin-right: 0;
+  color: hsl(var(--muted-foreground));
+}
+
+.editor-content code {
+  background-color: hsl(var(--muted));
+  padding: 0.2em 0.4em;
+  border-radius: 0.25rem;
+  font-family: monospace;
+  font-size: 0.9em;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.editor-content pre {
+  background-color: hsl(var(--muted));
+  padding: 1rem;
+  border-radius: 0.375rem;
+  overflow-x: auto;
+  margin: 1rem 0;
+  white-space: pre-wrap;
+}
+
+.editor-content pre code {
+  background-color: transparent;
+  padding: 0;
+  white-space: pre;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  line-height: 1.5;
+}
+
+.editor-content mark {
+  background-color: rgba(255, 255, 0, 0.3);
+  color: inherit;
+  padding: 0.1em;
+}
+
+.editor-table {
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: 100%;
+  margin: 1rem 0;
+  overflow: hidden;
+  border: 2px solid hsl(var(--border));
+}
+
+.editor-table td,
+.editor-table th {
+  border: 2px solid hsl(var(--border));
+  padding: 0.5rem;
+  position: relative;
+}
+
+.editor-table th {
+  background-color: hsl(var(--muted));
+  font-weight: bold;
+}
+
+.ProseMirror {
+  outline: none;
+}
+
+.ProseMirror p.is-editor-empty:first-child::before {
+  color: hsl(var(--muted-foreground));
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+/* Code block styles */
+.editor-code-block {
+  margin: 1em 0;
+  position: relative;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+}
+
+.editor-code-block pre {
+  margin: 0;
+  padding: 1rem;
+  background: #1e1e1e !important;
+  color: #d4d4d4;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 0.9em;
+  line-height: 1.5;
+  tab-size: 2;
+  overflow-x: auto;
+  white-space: pre;
+}
+
+/* Add these specific styles for proper rendering of code examples */
+.editor-content .code-example {
+  background-color: #1e1e1e;
+  color: #d4d4d4;
+  padding: 1rem;
+  border-radius: 0.375rem;
+  margin: 1rem 0;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 0.9em;
+  white-space: pre;
+  overflow-x: auto;
+}
+
+/* Special style for code blocks in the rendered content */
+.prose pre {
+  background-color: #1e1e1e;
+  color: #d4d4d4;
+  padding: 1rem;
+  border-radius: 0.375rem;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  /* font-size: 0.9em; */
+  margin: 1rem 0.5rem;
+  white-space: pre;
+  overflow-x: auto;
+}
+
+.prose code {
+  background-color: hsl(var(--muted));
+  padding: 0.2em 0.4em;
+  border-radius: 0.25rem;
+  font-family: monospace;
+  /* font-size: 0.9em; */
+  white-space: pre-wrap;
+}
+
+.prose pre code {
+  padding: 0 0;
+  background-color: transparent;
+}
+
+/* Ensure arrays and numerical data render correctly */
+.prose .array {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  white-space: pre;
+}
+
+/* Style for example sections */
+/* .prose .example {
+  margin: 1.5rem 1rem;
+} */
+
+.prose .example-header {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.prose .example-content {
+  background-color: #1e1e1e;
+  color: #d4d4d4;
+  padding: 1rem;
+  border-radius: 0.375rem;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  white-space: pre;
+}
+
+/* Dark mode styles */
+.editor-content {
+  color: hsl(var(--foreground));
+}
+
+.editor-content code {
+  background-color: hsl(var(--muted));
+  color: hsl(var(--foreground));
+}
+
+.editor-content pre {
+  background-color: hsl(var(--muted));
+}
+
+.editor-content blockquote {
+  color: hsl(var(--muted-foreground));
+}
+
+/* Fullscreen mode */
+.rich-text-editor.fixed {
+  z-index: 100;
+  background-color: hsl(var(--background));
+}
+
+.rich-text-editor.fixed .editor-content {
+  min-height: calc(100vh - 48px);
+}

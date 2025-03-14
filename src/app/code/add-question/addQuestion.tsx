@@ -28,12 +28,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Plus, Minus } from "lucide-react"
 import { addQuestion } from "../apiCalls"
 import CircleLoading from "@/components/ui/circleLoading"
-import dynamic from "next/dynamic";
-const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
-import "react-quill/dist/quill.snow.css"
 import { checkAuthorization } from "@/utils/authorization"
 import { useAppDispatch } from "@/redux/store"
 import { useRouter } from "next/navigation"
+import RichTextEditorField from "@/components/richTextEditorField"
 
 const languageOptions = ["py", "js", "java", "c", "cpp", "go"]
 
@@ -67,7 +65,7 @@ export default function QuestionSubmissionForm() {
         resolver: zodResolver(formSchema),
         defaultValues: {
             title: "",
-            description: "",
+            description: "<p>You can start from here</p>",
             difficulty: "medium",
             //   tags: "",
             sampleTestCases: [{ input: "", output: "" }],
@@ -92,7 +90,7 @@ export default function QuestionSubmissionForm() {
         try {
             const response = await addQuestion(values);
             await checkAuthorization(response, dispatch, router, true);
-            alert(response+". It will be updated after admin approval");
+            alert(response + ". It will be updated after admin approval");
         } catch (error) {
             console.error('Error submitting question:', error);
             alert('Failed to submit question. Please try again.'); // User-friendly error message
@@ -128,13 +126,11 @@ export default function QuestionSubmissionForm() {
                                 control={form.control}
                                 name="description"
                                 render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Description</FormLabel>
-                                        <FormControl>
-                                            <ReactQuill value={field.value} onChange={field.onChange} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
+                                    <RichTextEditorField
+                                        field={field}
+                                        label="Description"
+                                        placeholder="Write your description here..."
+                                    />
                                 )}
                             />
 
