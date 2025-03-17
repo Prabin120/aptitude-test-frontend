@@ -18,14 +18,14 @@ export const editProfile = '/p/api/v1/user/profile'   // put
 export const getProfile = '/p/api/v1/user/profile'   // get
 
 // code
-export const codeRunCode = "/s/run-code"
-export const codeSubmitCode = "/s/submit-code"
-export const getCodeSubmissions = "/s/code-submissions"
+export const codeRunCode = "/s/code/run-code"
+export const codeSubmitCode = "/s/code/submit-code"
+export const getCodeSubmissions = "/s/code/code-submissions"
 export const codeQuestion = "/s/question"
 export const codeQuestions = "/s/questions"
 export const codeValidateQuestionIds = "/s/test/validate-questions"
-export const codeAihint = "/s/ai-hint"
-export const codeAiFeedback = "/s/ai-feedback"
+export const codeAihint = "/s/code/ai-hint"
+export const codeAiFeedback = "/s/code/ai-feedback"
 
 // test cases
 export const testCases = "/s/test-cases"
