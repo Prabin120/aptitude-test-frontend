@@ -123,7 +123,7 @@ export default function CodingPlatformPage(parameters: Readonly<{ slug: string, 
                     await checkAuthorization(response, dispatch)
                 }
                 const res = await response.json()
-                if (!res.status) {
+                if (!res.success) {
                     setError(res.message)
                 } else {
                     setTestCases(res.data)
@@ -151,7 +151,7 @@ export default function CodingPlatformPage(parameters: Readonly<{ slug: string, 
                 await checkAuthorization(response, dispatch)
                 const res = await response.json()
                 let status;
-                if (res.status) {
+                if (res.success) {
                     if (res.data.failedCase == null) {
                         status = "accepted"
                     } else {
