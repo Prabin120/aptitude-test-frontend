@@ -1,0 +1,51 @@
+export interface CountryCode {
+    name: string;
+    code: string;
+    dial_code: string;
+    flag: string;
+}
+
+export const countryCodes: CountryCode[] = [
+    { name: "Afghanistan", code: "AF", dial_code: "+93", flag: "🇦🇫" },
+    { name: "Albania", code: "AL", dial_code: "+355", flag: "🇦🇱" },
+    { name: "Algeria", code: "DZ", dial_code: "+213", flag: "🇩🇿" },
+    { name: "Andorra", code: "AD", dial_code: "+376", flag: "🇦🇩" },
+    { name: "Angola", code: "AO", dial_code: "+244", flag: "🇦🇴" },
+    { name: "Antigua and Barbuda", code: "AG", dial_code: "+1-268", flag: "🇦🇬" },
+    { name: "Argentina", code: "AR", dial_code: "+54", flag: "🇦🇷" },
+    { name: "Armenia", code: "AM", dial_code: "+374", flag: "🇦🇲" },
+    { name: "Australia", code: "AU", dial_code: "+61", flag: "🇦🇺" },
+    { name: "Austria", code: "AT", dial_code: "+43", flag: "🇦🇹" },
+    { name: "Azerbaijan", code: "AZ", dial_code: "+994", flag: "🇦🇿" },
+    { name: "Bahamas", code: "BS", dial_code: "+1-242", flag: "🇧🇸" },
+    { name: "Bahrain", code: "BH", dial_code: "+973", flag: "🇧🇭" },
+    { name: "Bangladesh", code: "BD", dial_code: "+880", flag: "🇧🇩" },
+    { name: "Barbados", code: "BB", dial_code: "+1-246", flag: "🇧🇧" },
+    { name: "Belarus", code: "BY", dial_code: "+375", flag: "🇧🇾" },
+    { name: "Belgium", code: "BE", dial_code: "+32", flag: "🇧🇪" },
+    { name: "Belize", code: "BZ", dial_code: "+501", flag: "🇧🇿" },
+    { name: "Benin", code: "BJ", dial_code: "+229", flag: "🇧🇯" },
+    { name: "Bhutan", code: "BT", dial_code: "+975", flag: "🇧🇹" },
+    { name: "Bolivia", code: "BO", dial_code: "+591", flag: "🇧🇴" },
+    { name: "Bosnia and Herzegovina", code: "BA", dial_code: "+387", flag: "🇧🇦" },
+    { name: "Botswana", code: "BW", dial_code: "+267", flag: "🇧🇼" },
+    { name: "Brazil", code: "BR", dial_code: "+55", flag: "🇧🇷" },
+    { name: "Brunei", code: "BN", dial_code: "+673", flag: "🇧🇳" },
+    { name: "Bulgaria", code: "BG", dial_code: "+359", flag: "🇧🇬" },
+    { name: "Burkina Faso", code: "BF", dial_code: "+226", flag: "🇧🇫" },
+    { name: "Burundi", code: "BI", dial_code: "+257", flag: "🇧🇮" },
+    { name: "Canada", code: "CA", dial_code: "+1", flag: "🇨🇦" },
+    { name: "China", code: "CN", dial_code: "+86", flag: "🇨🇳" },
+    { name: "France", code: "FR", dial_code: "+33", flag: "🇫🇷" },
+    { name: "Germany", code: "DE", dial_code: "+49", flag: "🇩🇪" },
+    { name: "India", code: "IN", dial_code: "+91", flag: "🇮🇳" },
+    { name: "Japan", code: "JP", dial_code: "+81", flag: "🇯🇵" },
+    { name: "Mexico", code: "MX", dial_code: "+52", flag: "🇲🇽" },
+    { name: "Nepal", code: "NP", dial_code: "+977", flag: "🇳🇵" },
+    { name: "Nigeria", code: "NG", dial_code: "+234", flag: "🇳🇬" },
+    { name: "Pakistan", code: "PK", dial_code: "+92", flag: "🇵🇰" },
+    { name: "Russia", code: "RU", dial_code: "+7", flag: "🇷🇺" },
+    { name: "South Africa", code: "ZA", dial_code: "+27", flag: "🇿🇦" },
+    { name: "United Kingdom", code: "GB", dial_code: "+44", flag: "🇬🇧" },
+    { name: "United States", code: "US", dial_code: "+1", flag: "🇺🇸" },
+];

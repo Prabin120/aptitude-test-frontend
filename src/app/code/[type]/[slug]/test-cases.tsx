@@ -19,6 +19,8 @@ interface TestCaseProps {
 }
 
 const TestCases: React.FC<TestCaseProps> = ({ testCases, testCaseVariableNames, loading, error, aihelp, aiHintFunction, type }) => {
+    console.log("testCases com", testCases);
+    
     const [activeTestCase, setActiveTestCase] = useState("0")
     // const [newTestcase, setNewTestcase] = useState<boolean>(false)
     const [activeTab, setActiveTab] = useState("testcases");

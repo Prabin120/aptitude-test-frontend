@@ -10,7 +10,7 @@ import { setAuthState } from '@/redux/auth/authSlice'
 import { useAppDispatch, useAppSelector } from '@/redux/store'
 import { setUserState, userInitialState } from '@/redux/user/userSlice'
 import { handleGetMethod } from '@/utils/apiCall'
-import { LogOut, Play, Send, Settings, User } from 'lucide-react'
+import { LogOut, Play, Send, User } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
@@ -118,16 +118,12 @@ function CodeHeader({ runCode, submitCode, loading, type, time }: Readonly<Heade
                                 </div>
                             </div>
                             <nav className="space-y-2">
-                                <Link href={"/profile"}>
+                                <Link href={"/profile/" + userDetail.username +"/code"}>
                                     <Button className="w-full justify-start" variant="ghost">
                                         <User className="mr-2 h-4 w-4" />
                                         View Profile
                                     </Button>
                                 </Link>
-                                <Button className="w-full justify-start" variant="ghost">
-                                    <Settings className="mr-2 h-4 w-4" />
-                                    Settings
-                                </Button>
                                 <Button className="w-full justify-start" onClick={handleLogout} variant="ghost">
                                     <LogOut className="mr-2 h-4 w-4" />
                                     Log out

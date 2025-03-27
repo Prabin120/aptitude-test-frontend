@@ -155,7 +155,7 @@ const Header = () => {
                                         </div>
                                     </div>
                                     <nav className="space-y-2">
-                                        <Link href={"/profile"} onClick={() => setIsSheetOpen(false)}>
+                                        <Link href={"/profile/"+userDetail.username+"/code"} onClick={() => setIsSheetOpen(false)}>
                                             <Button className="w-full justify-start" variant="ghost">
                                                 <User className="mr-2 h-4 w-4" />
                                                 View Profile
@@ -241,7 +241,7 @@ const Header = () => {
                                 </Link>
                                 {authenticate && (
                                     <>
-                                        <Link href={"/profile"} onClick={() => setIsSheetOpen(false)}>
+                                        <Link href={"/profile/"+userDetail.username+"/code"} onClick={() => setIsSheetOpen(false)}>
                                             <Button className="w-full justify-start" variant="ghost">
                                                 View Profile
                                             </Button>

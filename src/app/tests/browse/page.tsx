@@ -14,7 +14,7 @@ import ReduxProvider from '@/redux/redux-provider'
 import { useAppSelector } from '@/redux/store'
 
 interface ButtonLinkProps {
-    userId: string | undefined;
+    username: string | undefined;
     setShowRegistration: (showInstructions: boolean) => void;
     registered: boolean | undefined;
   }
@@ -30,8 +30,8 @@ function BrowseTestButton() {
     )
 }
 
-const ButtonLink: React.FC<ButtonLinkProps> = ({ userId, setShowRegistration, registered }) => {
-    if (!userId) {
+const ButtonLink: React.FC<ButtonLinkProps> = ({ username, setShowRegistration, registered }) => {
+    if (!username) {
         return (
             <Button variant={"default"} className="w-full">
                 <Link href={"/login"}>Login to Register</Link>
@@ -93,7 +93,7 @@ function TestCardComponent({ data }: Readonly<{ data: TestCard }>) {
                 </p>
             </CardHeader>
             <CardFooter className="mt-auto gap-2">
-                <ButtonLink userId={user._id} setShowRegistration={setShowRegistration} registered={data.registered} />
+                <ButtonLink username={user.username} setShowRegistration={setShowRegistration} registered={data.registered} />
                 {/* {data.registered ?
                     <Button variant={"secondary"} disabled className="w-full">
                         Registered

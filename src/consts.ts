@@ -16,6 +16,8 @@ export const validAdminAccess = "/p/api/v1/auth/valid-admin-access"
 // profile
 export const editProfile = '/p/api/v1/user/profile'   // put
 export const getProfile = '/p/api/v1/user/profile'   // get
+export const codeProfile = '/s/profile'   // get
+export const codeSubmissionStats = '/s/profile/submission-stats'   // get
 
 // code
 export const codeRunCode = "/s/code/run-code"

@@ -167,7 +167,7 @@ function GroupTests() {
     const [loading, setLoading] = useState(true)
     const user = useAppSelector((state) => state.user)
     useEffect(() => {
-        user._id && (async () => {
+        user.username && (async () => {
             setLoading(true)
             const response = await handleGetMethod(getGroupTestEndpoint)
             if (response instanceof Response) {
@@ -186,13 +186,13 @@ function GroupTests() {
             setLoading(false)
         })()
         setLoading(false)
-    }, [])
+    }, [user.username])
 
     if (loading) {
         return <Loading />
     }
 
-    if (!user._id) {
+    if (!user.username) {
         return (
             <div className="container mx-auto py-8">
                 {/* <BrowseTestButton /> */}

@@ -34,9 +34,11 @@ export const structuredTestCases = (testCase: string, testCaseVariableNames: str
     if (!testCase || !testCaseVariableNames) {
         return {};
     }
+    console.log(testCaseVariableNames);
     const variableInfo = parseVariableNames(testCaseVariableNames);
     const inputLines = testCase.split('\n'); // Split input by newline
     const numberOfLines = parseInt(inputLines[0]); // First line indicates number of variables
+    console.log(variableInfo, inputLines, numberOfLines);
     const structuredInput: StructuredInput = {};
     for (let i = 1; i <= numberOfLines; i++) {
         const { name, structure, type } = variableInfo[i - 1];

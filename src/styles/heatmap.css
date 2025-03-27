@@ -1,0 +1,28 @@
+.bg-gray-800 {
+    fill: #1f2937;
+}
+
+.heatmap-color-1 {
+    fill: #2e7d32;
+    /* Light Green */
+}
+
+.heatmap-color-2 {
+    fill: #1e5820;
+    /* Medium Green */
+}
+
+.heatmap-color-3 {
+    fill: #0f3d12;
+    /* Dark Green */
+}
+
+.heatmap-color-4 {
+    fill: #0a3b1d;
+    /* Darker Green */
+}
+
+.heatmap-color-5 {
+    fill: #02290f;
+    /* Darkest Green */
+}

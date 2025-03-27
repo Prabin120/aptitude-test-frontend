@@ -159,7 +159,7 @@ export default function AptitudeListingPage() {
     const [loading, setLoading] = useState(true)
     const user = useAppSelector((state) => state.user)
     useEffect(() => {
-        user._id && (async () => {
+        user.username && (async () => {
             setLoading(true)
             const response = await handleGetMethod(getMyTestsEndpoint)
             if (response instanceof Response) {
@@ -184,7 +184,7 @@ export default function AptitudeListingPage() {
         return <Loading />
     }
 
-    if(!user._id) {
+    if(!user.username) {
         return (
             <div className="container mx-auto py-8">
                 <BrowseTestButton/>

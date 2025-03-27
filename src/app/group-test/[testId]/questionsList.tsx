@@ -43,7 +43,7 @@ function QuestionsList({ testIdn }: Readonly<{ testIdn: string }>) {
 
     useEffect(() => {
         let animationFrame: number;
-        if (!user?._id) {
+        if (!user?.username) {
             router.push("/login");
         }
         const calculateTimeLeft = () => {

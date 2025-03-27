@@ -145,7 +145,7 @@ const getAllQuestions = async (search: string) => {
 };
 
 const getQuestionById = async (id: string) => {
-	const response = await handleGetMethod(`${codeQuestion}?id=${id}`);
+	const response = await handleGetMethod(`${codeQuestion}/id?id=${id}`);
 	if (response instanceof Response) {
 		const res = await response.json();
 		if (response.status === 200 || response.status === 201) {

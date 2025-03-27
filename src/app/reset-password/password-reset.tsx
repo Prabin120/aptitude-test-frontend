@@ -8,12 +8,12 @@ import { setAuthState } from '@/redux/auth/authSlice'
 import { useAppDispatch } from '@/redux/store'
 import { setUserState } from '@/redux/user/userSlice'
 import { handlePostMethod } from '@/utils/apiCall'
-import { resetPasswordSchema } from '@/utils/zod_schema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter, useSearchParams } from 'next/navigation'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { resetPasswordSchema } from '../login/zod_schema'
 
 const ResetPasswordComponent = () => {
     const [isLoading, setIsLoading] = useState(false)
