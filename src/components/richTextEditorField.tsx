@@ -33,7 +33,7 @@ const RichTextEditorField = <T extends FieldValues>({
             </FormControl>
             <FormMessage />
             <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-                <DialogTitle>Description View</DialogTitle>
+                {/* <DialogTitle>Description View</DialogTitle> */}
                 <DialogContent className='w-full max-h-screen overflow-scroll'>
                     <div
                         className="prose dark:prose-invert p-4 border rounded-md"

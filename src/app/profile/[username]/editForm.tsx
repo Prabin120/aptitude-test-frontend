@@ -136,6 +136,7 @@ export function ProfileEditForm({
                     <FormField
                         control={form.control}
                         name="email"
+                        disabled={true}
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Email</FormLabel>

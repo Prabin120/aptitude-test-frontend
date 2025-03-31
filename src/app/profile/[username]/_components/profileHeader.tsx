@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Building2, Globe, Github, Twitter, MapPin, Calendar, Edit2 } from "lucide-react";
+import { Building2, Globe, Github, Twitter, MapPin, Calendar, Edit2, Lock } from "lucide-react";
 import {
     Dialog,
     DialogContent,
@@ -16,6 +16,25 @@ import { toast } from "sonner";
 import { ProfileEditForm } from "../editForm";
 import { UserData } from "../schema";
 import { useAppSelector } from "@/redux/store";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { handlePostMethod } from "@/utils/apiCall";
+import { changePasswordEndpoint } from "@/consts";
+
+const passwordChangeSchema = z.object({
+    currentPassword: z.string().min(1, "Current password is required"),
+    newPassword: z.string().min(8, "Password must be at least 8 characters"),
+    confirmPassword: z.string()
+}).refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+});
+
+type PasswordChangeForm = z.infer<typeof passwordChangeSchema>;
 
 interface ProfileHeaderProps {
     user: UserData;
@@ -24,8 +43,18 @@ interface ProfileHeaderProps {
 
 const ProfileHeader = ({ user, updateUser }: ProfileHeaderProps) => {
     const [isEditing, setIsEditing] = useState(false);
+    const [isPasswordDialogOpen, setIsPasswordDialogOpen] = useState(false);
     const userDetails = useAppSelector((state) => state.user);
     const isEditingMode = user.username === userDetails.username;
+
+    const form = useForm<PasswordChangeForm>({
+        resolver: zodResolver(passwordChangeSchema),
+        defaultValues: {
+            currentPassword: "",
+            newPassword: "",
+            confirmPassword: "",
+        },
+    });
 
     const handleEditProfile = () => {
         setIsEditing(true);
@@ -35,13 +64,34 @@ const ProfileHeader = ({ user, updateUser }: ProfileHeaderProps) => {
         if (updateUser) {
             updateUser(values);
         }
-
         toast.success("Profile updated successfully");
         setIsEditing(false);
     };
 
     const handleCancelEdit = () => {
         setIsEditing(false);
+    };
+
+    const onSubmitPasswordChange = async (values: PasswordChangeForm) => {
+        try {
+            const response = await handlePostMethod(changePasswordEndpoint, values);
+            if(response instanceof Response) {
+                const res = await response.json();
+                console.log(res);
+                if(response.status === 200) {
+                toast.success("Password changed successfully");
+                    setIsPasswordDialogOpen(false);
+                    form.reset();
+                }
+                else {
+                    toast.error(res.message);
+                }
+            } else {
+                toast.error("Something went wrong");
+            }
+        } catch (error) {
+            toast.error("Something went wrong");
+        }
     };
 
     if (!user) {
@@ -148,17 +198,28 @@ const ProfileHeader = ({ user, updateUser }: ProfileHeaderProps) => {
                                         </Tooltip>
                                     </TooltipProvider>
                                 )}
-                                {isEditingMode && 
-                                    <Button
-                                    variant="outline"
-                                    size="sm"
-                                    className="h-9 gap-1"
-                                    onClick={handleEditProfile}
-                                    >
-                                        <Edit2 size={16} />
-                                        <span className="hidden sm:inline">Edit Profile</span>
-                                    </Button>
-                                }
+                                {isEditingMode && (
+                                    <>
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            className="h-9 gap-1"
+                                            onClick={handleEditProfile}
+                                        >
+                                            <Edit2 size={16} />
+                                            <span className="hidden sm:inline">Edit Profile</span>
+                                        </Button>
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            className="h-9 gap-1"
+                                            onClick={() => setIsPasswordDialogOpen(true)}
+                                        >
+                                            <Lock size={16} />
+                                            <span className="hidden sm:inline">Change Password</span>
+                                        </Button>
+                                    </>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -190,6 +251,70 @@ const ProfileHeader = ({ user, updateUser }: ProfileHeaderProps) => {
                         onSubmit={handleSaveProfile}
                         onCancel={handleCancelEdit}
                     />
+                </DialogContent>
+            </Dialog>
+
+            <Dialog open={isPasswordDialogOpen} onOpenChange={setIsPasswordDialogOpen}>
+                <DialogContent className="sm:max-w-[400px]">
+                    <DialogHeader>
+                        <DialogTitle>Change Password</DialogTitle>
+                        <DialogDescription>
+                            Enter your current password and set a new password.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <Form {...form}>
+                        <form onSubmit={form.handleSubmit(onSubmitPasswordChange)} className="space-y-4">
+                            <FormField
+                                control={form.control}
+                                name="currentPassword"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Current Password</FormLabel>
+                                        <FormControl>
+                                            <Input type="password" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="newPassword"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>New Password</FormLabel>
+                                        <FormControl>
+                                            <Input type="password" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="confirmPassword"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Confirm New Password</FormLabel>
+                                        <FormControl>
+                                            <Input type="password" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <div className="flex justify-end gap-2">
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    onClick={() => setIsPasswordDialogOpen(false)}
+                                >
+                                    Cancel
+                                </Button>
+                                <Button type="submit">Change Password</Button>
+                            </div>
+                        </form>
+                    </Form>
                 </DialogContent>
             </Dialog>
         </>

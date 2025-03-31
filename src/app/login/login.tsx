@@ -186,7 +186,7 @@ export function LoginForm() {
                     Forgot Password
                 </Link>
                 <div className="text-sm text-center w-full">
-                    Don&apos;t have an account?
+                    Don&apos;t have an account?{" "}
                     <Link href="/signup" className="font-medium text-primary hover:underline underline-offset-4">
                         Sign up
                     </Link>
