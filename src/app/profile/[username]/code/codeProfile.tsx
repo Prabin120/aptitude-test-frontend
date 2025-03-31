@@ -19,8 +19,6 @@ const Profile = () => {
     useEffect(() => {
         username && (async () => {
             const data = await fetchCodeProfile(username);
-            console.log(data);
-            
             setUserProfile({
                 userProfile: data.userProfile,
                 codeProfileInfo: data.codingInfo.codeProfileInfo,

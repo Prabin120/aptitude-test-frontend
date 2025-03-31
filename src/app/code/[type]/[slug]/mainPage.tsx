@@ -66,7 +66,6 @@ export default function CodingPlatformPage(parameters: Readonly<{ slug: string, 
           const userCodeTemp: UserCode = {}
     
           languages.forEach((lang) => {
-            console.log(response.codeTemplates)
             const savedCode = savedCodes[type]?.[questionRes._id]?.[lang]
             defaultCodeTemp[lang] = response.codeTemplates[lang]
             userCodeTemp[lang] = savedCode || response.codeTemplates[lang].template
@@ -231,7 +230,6 @@ export default function CodingPlatformPage(parameters: Readonly<{ slug: string, 
     if (isLoading) {
         return <Loading />
     }
-    console.log("testCases", testCases);
     
     return (
         <div className="flex flex-col h-screen">

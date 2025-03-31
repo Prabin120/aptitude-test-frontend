@@ -17,7 +17,6 @@ import { ProfileEditForm } from "../editForm";
 import { UserData } from "../schema";
 import { useAppSelector } from "@/redux/store";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -77,7 +76,6 @@ const ProfileHeader = ({ user, updateUser }: ProfileHeaderProps) => {
             const response = await handlePostMethod(changePasswordEndpoint, values);
             if(response instanceof Response) {
                 const res = await response.json();
-                console.log(res);
                 if(response.status === 200) {
                 toast.success("Password changed successfully");
                     setIsPasswordDialogOpen(false);

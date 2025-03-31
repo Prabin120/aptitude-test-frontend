@@ -109,9 +109,7 @@ export default function ModifyQuestionForm() {
                 if (!response.ok) {
                     throw new Error("Failed to fetch description content")
                 }
-                const descriptionContent = await response.text()
-                console.log({ __html: descriptionContent });
-                
+                const descriptionContent = await response.text()                
                 form.reset({
                     title: questionData.title,
                     description: descriptionContent,

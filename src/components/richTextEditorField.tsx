@@ -3,7 +3,7 @@ import { FormControl, FormItem, FormLabel, FormMessage } from '@/components/ui/f
 import { ControllerRenderProps, FieldValues, Path } from 'react-hook-form';
 import RichTextEditor from './RichTextEditor';
 import { Button } from './ui/button';
-import { Dialog, DialogContent, DialogTitle } from './ui/dialog';
+import { Dialog, DialogContent } from './ui/dialog';
 
 interface RichTextEditorFieldProps<T extends FieldValues> {
     label?: string;
