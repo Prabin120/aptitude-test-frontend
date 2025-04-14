@@ -28,6 +28,11 @@ export const codeQuestions = "/s/questions"
 export const codeValidateQuestionIds = "/s/test/validate-questions"
 export const codeAihint = "/s/code/ai-hint"
 export const codeAiFeedback = "/s/code/ai-feedback"
+export const getAdminCodeQuestions = "/s/questions/owned-questions"
+export const getQuestionTags = "/s/questions/tags"  //getting question tags
+export const getQuestionCompanies = "/s/questions/companies"  //
+export const getOwnedQuestion = "/s/questions/owned-question"
+export const verifyUserUploadedCode = "/s/code/verify-code"
 
 // test cases
 export const testCases = "/s/test-cases"
@@ -43,6 +48,7 @@ export const getAptiQuestionByCompanyEndpoint = '/p/api/v1/aptitude/questions/co
 export const addAptiQuestionTagEndpoint = '/p/api/v1/aptitude/question-tag'   // post
 export const getAptiQuestionTagEndpoint = '/p/api/v1/aptitude/question-tag'   // get
 export const getAptiQuestionsLikeEndpoint = '/p/api/v1/aptitude/questions/like'   // get
+export const getAdminAptiQuestionsEndpoint = '/p/api/v1/aptitude/questions/admin'   // get
 
 // test
 export const getTestsEndpoint = '/p/api/v1/test'   // get

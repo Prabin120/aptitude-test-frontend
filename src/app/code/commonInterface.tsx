@@ -1,5 +1,6 @@
 interface QuestionPage {
     _id: string
+    slug: string
     title: string
     difficulty: string
     description: string
@@ -8,6 +9,13 @@ interface QuestionPage {
     donatedBy: {
         userId: string,
         name: string
+    }
+    codeTemplates?: {
+        [key: string]: {
+            precode: string,
+            template: string,
+            postcode: string
+        }
     }
 }
 

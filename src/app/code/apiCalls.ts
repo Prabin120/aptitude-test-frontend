@@ -5,8 +5,7 @@ import {
 	codeQuestion,
 	codeQuestions,
 	codeRunCode,
-	codeSubmitCode,
-	testCases,
+	codeSubmitCode
 } from "@/consts";
 import { checkRefresh } from "@/utils/apiCall";
 
@@ -118,19 +117,6 @@ const submitCodeAPI = async (
 	return response;
 };
 
-const addQuestion = async (data: object) => {
-	const response = await handlePostMethod(codeQuestion, data);
-	if (response instanceof Response) {
-		if (response.status === 200 || response.status === 201) {
-			return "Question added successfully";
-		} else {
-			const res = await response.json();
-			return res.message;
-		}
-	}
-	return "Server error, please try again later.";
-};
-
 const getAllQuestions = async (search: string) => {
 	const response = await handleGetMethod(codeQuestions + search);
 	if (response instanceof Response) {
@@ -170,35 +156,7 @@ const getQuestionBySlug = async (slug: string) => {
 	return "Server error, please try again later.";
 };
 
-const updateQuestion = async (id: string, data: object) => {
-	const response = await handlePutMethod(`${codeQuestion}?id=${id}`, data);
-	if (response instanceof Response) {
-		if (response.status === 200 || response.status === 201) {
-			return "Question added successfully";
-		} else {
-			const res = await response.json();
-			return res.message;
-		}
-	}
-	return "Server error, please try again later.";
-};
 
-const addTestCases = async (data: object) => {
-	const response = await handlePostMethod(testCases, data);
-	return response;
-};
-const modifyTestCase = async (id: string, data: object) => {
-	const response = await handlePutMethod(`${testCases}?id=${id}`, data);
-	if (response instanceof Response) {
-		if (response.status === 200 || response.status === 201) {
-			return "Test cases added successfully";
-		} else {
-			const res = await response.json();
-			return res.message;
-		}
-	}
-	return "Server error, please try again later.";
-};
 
 const getAihint = async (code: string, langauge: string, question: string) => {
 	const data = {
@@ -241,14 +199,12 @@ const getAiFeedback = async (code: string, langauge: string, question: string, p
 export {
 	runTest,
 	submitCodeAPI,
-	addQuestion,
 	getAllQuestions,
 	getQuestionById,
-	updateQuestion,
 	getQuestionBySlug,
-	addTestCases,
-	modifyTestCase,
 	handleGetMethod,
+	handlePutMethod,
+	handlePostMethod,
 	getAihint,
 	getAiFeedback,
 };

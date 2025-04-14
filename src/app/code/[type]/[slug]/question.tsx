@@ -2,24 +2,16 @@ import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { BrainCircuit, CircleCheck } from 'lucide-react';
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { QuestionPage } from '../../commonInterface';
 import "@/components/RichTextEditor/styles.css"
 
 interface QuestionPageProps {
-    data: QuestionPage | undefined;
+    data: QuestionPage;
     type: string
 }
 
 const CodeQuestion: React.FC<QuestionPageProps> = ({ data, type }) => {
-    const [desc, setDesc] = useState<string>("")
-    useEffect(()=>{
-        data && (async()=>{
-            const response = await fetch(data?.description)
-            const res = await response.text();
-            setDesc(res)
-        })()
-    },[])
     return (
         <Card>
             <CardHeader>
@@ -42,7 +34,7 @@ const CodeQuestion: React.FC<QuestionPageProps> = ({ data, type }) => {
                 <ScrollArea className="h-[calc(100vh-200px)]">
                     <div 
                         className="prose dark:prose-invert max-w-none p-4 border rounded-md"
-                        dangerouslySetInnerHTML={{ __html: desc }}
+                        dangerouslySetInnerHTML={{ __html: data.description }}
                     />
                     <h3 className="text-lg font-bold mt-6 mb-2">Tags</h3>
                     {data?.tags ? data.tags.map((tag) => (

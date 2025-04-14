@@ -26,6 +26,7 @@ import AiHelp from "./aiHelp"
 import { useGetQuestionBySlug } from "@/hooks/reactQuery"
 import Loading from "./loading"
 import { setUserCodeState } from "@/redux/userCode/userCode"
+import { getQuestionDescription } from "@/utils/cloudinary"
 
 export default function CodingPlatformPage(parameters: Readonly<{ slug: string, type: string, time: string }>) {
     const [code, setCode] = useState<UserCode>()
@@ -49,50 +50,61 @@ export default function CodingPlatformPage(parameters: Readonly<{ slug: string, 
 
     const { data: response, isLoading, isError } = useGetQuestionBySlug(slug);
 
-    useEffect(() => {
-        if (response) {
-          const questionRes = {
+    const initilisation = async (response: QuestionPage) => {
+        const questionRes = {
             _id: response._id,
             title: response.title,
+            slug: response.slug,
             description: response.description,
             difficulty: response.difficulty,
             tags: response.tags,
             userStatus: response.userStatus,
             donatedBy: response.donatedBy,
-          }
-          setQuestion(questionRes)
-          const languages = ["c", "cpp", "go", "java", "js", "py"]
-          const defaultCodeTemp: DefaultCode = {}
-          const userCodeTemp: UserCode = {}
-    
-          languages.forEach((lang) => {
-            const savedCode = savedCodes[type]?.[questionRes._id]?.[lang]
-            defaultCodeTemp[lang] = response.codeTemplates[lang]
-            userCodeTemp[lang] = savedCode || response.codeTemplates[lang].template
-
-            if (!savedCode) {
-              dispatch(
-                setUserCodeState({
-                  type: type,
-                  questionNo: questionRes._id,
-                  language: lang,
-                  code: response.codeTemplates[lang].template,
-                }),
-              )
-            }
-          })
-    
-          setDefaultCode(defaultCodeTemp)
-          setCode(userCodeTemp)
-          const savedLanguage = Object.keys(savedCodes[type]?.[questionRes._id] || {})[0]
-          setLanguage(savedLanguage || "py")
-          setTestCases(response.sampleTestCases)
-          setTestCaseVariableNames(response.testCaseVariableNames)
-        }
-      }, [response])
+        };
+        questionRes.description = await getQuestionDescription(response.slug)
+        setQuestion(questionRes)
+        return questionRes
+    }
 
     useEffect(() => {
+        if (response) {
+            (async () => {
+                const questionRes = await initilisation(response)
+                const languages = ["c", "cpp", "go", "java", "js", "py"]
+                const defaultCodeTemp: DefaultCode = {}
+                const userCodeTemp: UserCode = {}
+
+                languages.forEach((lang) => {
+                    const savedCode = savedCodes[type]?.[questionRes._id]?.[lang]
+                    defaultCodeTemp[lang] = response.codeTemplates[lang]
+                    userCodeTemp[lang] = savedCode || response.codeTemplates[lang].template
+
+                    if (!savedCode) {
+                        dispatch(
+                            setUserCodeState({
+                                type: type,
+                                questionNo: questionRes._id,
+                                language: lang,
+                                code: response.codeTemplates[lang].template,
+                            }),
+                        )
+                    }
+                })
+
+                setDefaultCode(defaultCodeTemp)
+                setCode(userCodeTemp)
+                const savedLanguage = Object.keys(savedCodes[type]?.[questionRes._id] || {})[0]
+                setLanguage(savedLanguage || "py")
+                setTestCases(response.sampleTestCases)
+                setTestCaseVariableNames(response.testCaseVariableNames)
+            })()
+        }
+    }, [response])
+
+    const fetchSubmissions = async () => {
+        console.log("Fetching submissions");
         if (activeTabQuestion === "submissions" && submissions?.length === 0) {
+            console.log("Fetching submissions api");
             const data = async () => {
                 const response = await handleGetMethod(getCodeSubmissions + `?question=${question?._id}`);
                 if (response instanceof Response) {
@@ -108,7 +120,7 @@ export default function CodingPlatformPage(parameters: Readonly<{ slug: string, 
             }
             data()
         }
-    }, [question?._id])
+    }
     const runCode = async () => {
         setLoading(true)
         if (!code || !language || !question) {
@@ -164,9 +176,9 @@ export default function CodingPlatformPage(parameters: Readonly<{ slug: string, 
                 }
                 res.data.status = status
                 setSubmissionResult(res.data)
-                if(!submissions || submissions.length === 0){
+                if (!submissions || submissions.length === 0) {
                     setSubmissions([{ ...res.data, code: code[language], language: language }])
-                } else{
+                } else {
                     setSubmissions(prev => [...prev, { ...res.data, code: code[language], language: language }])
                 }
                 setIsResultModalOpen(true)
@@ -230,7 +242,7 @@ export default function CodingPlatformPage(parameters: Readonly<{ slug: string, 
     if (isLoading) {
         return <Loading />
     }
-    
+
     return (
         <div className="flex flex-col h-screen">
             {/* Header */}
@@ -248,7 +260,7 @@ export default function CodingPlatformPage(parameters: Readonly<{ slug: string, 
                             <TabsTrigger value={"question"}>Description</TabsTrigger>
                             {type !== "exam" &&
                                 <>
-                                    <TabsTrigger value="submissions">Submissions</TabsTrigger>
+                                    <TabsTrigger onClick={fetchSubmissions} value="submissions">Submissions</TabsTrigger>
                                     <TabsTrigger value="aihelp"><Lightbulb color="yellow" size={15} /> Smart AC</TabsTrigger>
                                 </>
                             }
