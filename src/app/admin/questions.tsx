@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { handleGetMethod } from '@/utils/apiCall'
 
 interface Question {
-    _id: number
+    questionNo: number
     slug: string
     title: string
     type: string
@@ -62,8 +62,8 @@ function AdminQuestions() {
             </TableHeader>
             <TableBody>
                 {questions.map((question) => (
-                    <TableRow key={question._id}>
-                        <TableCell>{question._id}</TableCell>
+                    <TableRow key={question.questionNo}>
+                        <TableCell>{question.questionNo}</TableCell>
                         <TableCell>{question.title}</TableCell>
                         <TableCell>{question.type}</TableCell>
                         <TableCell>{question.status}</TableCell>

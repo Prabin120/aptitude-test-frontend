@@ -1,5 +1,5 @@
 interface QuestionPage {
-    _id: string
+    questionNo: string
     slug: string
     title: string
     difficulty: string
@@ -20,7 +20,7 @@ interface QuestionPage {
 }
 
 interface Problem {
-    _id: number
+    questionNo: number
     title: string
     difficulty: string
     slug: string

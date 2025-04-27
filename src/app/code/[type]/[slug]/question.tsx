@@ -12,11 +12,12 @@ interface QuestionPageProps {
 }
 
 const CodeQuestion: React.FC<QuestionPageProps> = ({ data, type }) => {
+    console.log(data);
     return (
         <Card>
             <CardHeader>
                 <div className="flex justify-between items-center">
-                    <CardTitle>{data?._id}. {data?.title}</CardTitle>
+                    <CardTitle>{data?.questionNo}. {data?.title}</CardTitle>
                     { type !== "exam" &&
                         <div className='flex space-x-4 items-center'>
                             {data?.userStatus === "solved"?

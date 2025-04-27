@@ -52,7 +52,7 @@ export default function CodingPlatformPage(parameters: Readonly<{ slug: string, 
 
     const initilisation = async (response: QuestionPage) => {
         const questionRes = {
-            _id: response._id,
+            questionNo: response.questionNo,
             title: response.title,
             slug: response.slug,
             description: response.description,
@@ -75,7 +75,7 @@ export default function CodingPlatformPage(parameters: Readonly<{ slug: string, 
                 const userCodeTemp: UserCode = {}
 
                 languages.forEach((lang) => {
-                    const savedCode = savedCodes[type]?.[questionRes._id]?.[lang]
+                    const savedCode = savedCodes[type]?.[questionRes.questionNo]?.[lang]
                     defaultCodeTemp[lang] = response.codeTemplates[lang]
                     userCodeTemp[lang] = savedCode || response.codeTemplates[lang].template
 
@@ -83,17 +83,16 @@ export default function CodingPlatformPage(parameters: Readonly<{ slug: string, 
                         dispatch(
                             setUserCodeState({
                                 type: type,
-                                questionNo: questionRes._id,
+                                questionNo: questionRes.questionNo,
                                 language: lang,
                                 code: response.codeTemplates[lang].template,
                             }),
                         )
                     }
                 })
-
                 setDefaultCode(defaultCodeTemp)
                 setCode(userCodeTemp)
-                const savedLanguage = Object.keys(savedCodes[type]?.[questionRes._id] || {})[0]
+                const savedLanguage = Object.keys(savedCodes[type]?.[questionRes.questionNo] || {})[0]
                 setLanguage(savedLanguage || "py")
                 setTestCases(response.sampleTestCases)
                 setTestCaseVariableNames(response.testCaseVariableNames)
@@ -106,7 +105,7 @@ export default function CodingPlatformPage(parameters: Readonly<{ slug: string, 
         if (activeTabQuestion === "submissions" && submissions?.length === 0) {
             console.log("Fetching submissions api");
             const data = async () => {
-                const response = await handleGetMethod(getCodeSubmissions + `?question=${question?._id}`);
+                const response = await handleGetMethod(getCodeSubmissions + `?question=${question?.questionNo}`);
                 if (response instanceof Response) {
                     const res = await response.json()
                     if (response.status === 200 || response.status === 201) {
@@ -127,7 +126,7 @@ export default function CodingPlatformPage(parameters: Readonly<{ slug: string, 
             return
         }
         try {
-            const response = await runTest(code ? code[language] : "", language, question._id)
+            const response = await runTest(code ? code[language] : "", language, question.questionNo)
             if (response instanceof Response) {
                 await checkAuthorization(response, dispatch)
                 if (response.status == 401) {
@@ -158,7 +157,7 @@ export default function CodingPlatformPage(parameters: Readonly<{ slug: string, 
             if (!code || !language || !question) {
                 return
             }
-            const response = await submitCodeAPI(code ? code[language] : "", language, question._id, question.userStatus)
+            const response = await submitCodeAPI(code ? code[language] : "", language, question.questionNo, question.userStatus)
             if (response instanceof Response) {
                 await checkAuthorization(response, dispatch)
                 const res = await response.json()
@@ -185,7 +184,7 @@ export default function CodingPlatformPage(parameters: Readonly<{ slug: string, 
                 if (type === "exam") {
                     dispatch(
                         setCodingTestState({
-                            questionNo: question?._id ?? "",
+                            questionNo: question?.questionNo ?? "",
                             code: code ? code[language] : "",
                             questionKind: "aptitude",
                             language: language,
@@ -283,7 +282,7 @@ export default function CodingPlatformPage(parameters: Readonly<{ slug: string, 
                     <ResizablePanelGroup direction="vertical">
                         <ResizablePanel defaultSize={60}>
                             {/* Code editor */}
-                            <CodeEditor key={"code-editor"} code={code} setCode={setCode} language={language} setLanguage={setLanguage} defaultCode={defaultCode} questionNo={question._id} type={type} />
+                            <CodeEditor key={"code-editor"} code={code} setCode={setCode} language={language} setLanguage={setLanguage} defaultCode={defaultCode} questionNo={question.questionNo} type={type} />
                         </ResizablePanel>
                         <ResizableHandle />
                         <ResizablePanel defaultSize={40}>

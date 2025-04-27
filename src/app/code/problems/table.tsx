@@ -29,7 +29,7 @@ const QuestionTable: React.FC<QuestionTableProps> = ({ filteredProblems, totalPa
             </TableHeader>
             <TableBody>
                 {filteredProblems?.map((problem) => (
-                    <TableRow key={problem._id} >
+                    <TableRow key={problem.questionNo} >
                         <TableCell>
                             {problem.userStatus === "solved"?
                                 <Badge variant="outline" className="text-green-800">
@@ -44,7 +44,7 @@ const QuestionTable: React.FC<QuestionTableProps> = ({ filteredProblems, totalPa
                         </TableCell>
                         <TableCell>
                             <Link href={`/code/problems/${problem.slug}`}>
-                                {problem._id}. {problem.title}
+                                {problem.questionNo}. {problem.title}
                             </Link>
                         </TableCell>
                         <TableCell>
