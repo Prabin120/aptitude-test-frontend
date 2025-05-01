@@ -15,6 +15,7 @@ interface TestCasesStepProps {
 }
 
 export default function TestCasesStep({ form }: TestCasesStepProps) {
+  console.log("TestCasesStep rendered", form.getValues())
   const [activeTab, setActiveTab] = useState("simple")
   const [jsonError, setJsonError] = useState<Record<string, string | null>>({
     simple: null,
@@ -151,9 +152,9 @@ export default function TestCasesStep({ form }: TestCasesStepProps) {
                         <FormControl>
                           <textarea
                             {...field}
-                            className={`w-full min-h-[300px] p-3 font-mono text-sm border rounded-md bg-background ${
-                              jsonError[level] ? "border-red-500" : jsonValid[level] ? "border-green-500" : ""
-                            }`}
+                            className={`w-full min-h-[300px] p-3 font-mono text-sm border rounded-md bg-background ${jsonError[level] 
+                              ? "border-red-500" : 
+                              jsonValid[level] ? "border-green-500" : ""}`}
                             placeholder={`Enter ${level} test cases in JSON format`}
                             onChange={(e) => {
                               field.onChange(e.target.value)

@@ -33,7 +33,7 @@ const RecentActivity = ({ activities, viewMode }: RecentActivityProps) => {
             </CardHeader>
             <CardContent>
                 <div className="space-y-4">
-                    {activities.map((activity, index) => (
+                    {activities?.map((activity, index) => (
                         <div key={index} className="flex gap-3">
                             <div className="flex-shrink-0 mt-1">
                                 {getActivityIcon(activity)}

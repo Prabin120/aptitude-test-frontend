@@ -1,3 +1,4 @@
+import { random } from "lodash"
 import * as z from "zod"
 
 export const languageOptions = ["py", "java", "c", "cpp", "go"]
@@ -19,6 +20,7 @@ export const basicInfoSchema = z.object({
   difficulty: z.enum(["easy", "medium", "hard"]),
   tags: z.string().default(""),
   companies: z.string().default(""),
+  questionNo: z.number().positive("Question number must be positive"),
 })
 
 // Step 2: Sample Test Cases Schema
@@ -84,6 +86,7 @@ export const defaultBasicInfo: BasicInfoValues = {
   difficulty: "medium",
   tags: "",
   companies: "",
+  questionNo: random(1, 100), 
 }
 
 export const defaultSampleTestCases: SampleTestCasesValues = {

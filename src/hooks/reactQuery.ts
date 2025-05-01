@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { getTestsEndpoint, groupTestSingle, validAdminAccess } from '@/consts'
+import { getTestsEndpoint, groupTestSingle, validAdminAccess, validCreatorAccess } from '@/consts'
 import { handleGetMethod } from '@/utils/apiCall'
 import { getAllQuestions, getQuestionBySlug } from '@/app/code/apiCalls'
 import { IAptiQuestion, ICodingQuestion } from '@/app/group-test/[testId]/questionsList'
@@ -50,10 +50,29 @@ const checkAdminAccess = async () => {
     return false
 }
 
+const checkCreatorAccess = async () => {
+    const response = await handleGetMethod(validCreatorAccess)
+    if (response.status === 200){
+        return true
+    }
+    return false
+}
+
 export const useCheckAdminAccess = () => {
     return useQuery({
         queryKey: ['checkAdminAccess'],
         queryFn: () => checkAdminAccess(),
+        staleTime: 3600000,
+        gcTime: 3600000,
+        retry: 2,
+        enabled: true,
+    })
+}
+
+export const useCheckCreatorAccess = () => {
+    return useQuery({
+        queryKey: ['checkCreatorAccess'],
+        queryFn: () => checkCreatorAccess(),
         staleTime: 3600000,
         gcTime: 3600000,
         retry: 2,

@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react"
 import { useParams, useRouter } from "next/navigation"
 import ReduxProvider from "@/redux/redux-provider"
-import { withAdminAuth } from "@/components/withAdminAuth"
 import CircleLoading from "@/components/ui/circleLoading"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { AlertCircle } from "lucide-react"
@@ -13,6 +12,7 @@ import FormContainer from "../../_components/form-container"
 import { Toaster } from "sonner"
 import { getQuestionDescription } from "@/utils/cloudinary"
 import { getOwnedQuestionBySlug } from "../../apiCalls"
+import { withCreatorAccess } from "@/components/withCreatorAccess"
 
 function EditQuestion() {
     const params = useParams()
@@ -29,6 +29,11 @@ function EditQuestion() {
                 setLoading(true)
                 const [data, description] = await Promise.all([getOwnedQuestionBySlug(questionSlug), getQuestionDescription(questionSlug)])
                 data.description = description
+                // Convert test cases arrays to JSON strings for the form
+                data.simpleTestCases = JSON.stringify(data.simpleTestCases ?? [])
+                data.mediumTestCases = JSON.stringify(data.mediumTestCases ?? [])
+                data.largeTestCases = JSON.stringify(data.largeTestCases ?? [])
+                console.log(data.simpleTestCases, data.mediumTestCases, data.largeTestCases)
                 setQuestion(data)
                 setError(null)
             } catch (err) {
@@ -92,5 +97,5 @@ function EditQuestion() {
     )
 }
 
-export default withAdminAuth(EditQuestion)
+export default withCreatorAccess(EditQuestion)
 

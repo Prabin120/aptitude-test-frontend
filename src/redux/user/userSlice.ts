@@ -5,8 +5,7 @@ export interface IUserState {
   name: string;
   email: string;
   image: string;
-  mobile: string;
-  institute?: string;
+  coins: number;
 }
 
 export const userInitialState = {
@@ -14,7 +13,7 @@ export const userInitialState = {
   name: "",
   email: "",
   image: "",
-  mobile: ""
+  coins: 0,
 }
 
 const initialState: IUserState = userInitialState;

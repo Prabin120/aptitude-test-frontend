@@ -1,7 +1,7 @@
 'use client'
 import ReduxProvider from '@/redux/redux-provider'
-import { withAdminAuth } from '@/components/withAdminAuth'
 import FormContainer from '../_components/form-container'
+import { withCreatorAccess } from '@/components/withCreatorAccess'
 
 function AddQuestion(){
     return (
@@ -13,4 +13,4 @@ function AddQuestion(){
     )
 }
 
-export default withAdminAuth(AddQuestion);
+export default withCreatorAccess(AddQuestion);

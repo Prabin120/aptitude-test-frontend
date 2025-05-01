@@ -41,7 +41,7 @@ export default function TestRegistration({ showRegistration, setShowRegistration
                     alert(order.msg);
                 } else {
                     handleRazorpayPayment(amount, order.order_id, verifyPaymentEndpoint, userDetail.name, userDetail.email, 
-                        userDetail.mobile, null, router, {testId: id})
+                         null, router, {testId: id})
                 }
             }
         } catch (error) {

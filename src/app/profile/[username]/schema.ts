@@ -13,6 +13,8 @@ export interface UserData {
     website?: string;
     github?: string;
     twitter?: string;
+    emailVerified?: boolean;
+    coins?: number;
 }
 
 export interface ContestInfo {
@@ -34,6 +36,7 @@ export interface CodingStats {
     currentStreak: number;
     contributionPoints: number;
     reputation: number;
+    totalSubmissions: number;
 }
 
 export interface CodeProfileInfo {

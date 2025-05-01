@@ -76,19 +76,7 @@ export default function FormContainer({ mode = "create", questionId = "", initia
                     // return
                 }
             }
-
-            // Otherwise try to load from localStorage
-            // const storageKey = getStorageKey()
-            // const savedProgress = getFormProgress(storageKey)
-            // const savedStep = getCurrentStep(storageKey)
-
-            // if (Object.keys(savedProgress).length > 0) {
-            //     form.reset({ ...defaultValues, ...savedProgress })
-            //     setCurrentStep(savedStep)
-            // }
-
         }
-
         loadData()
     }, [form, initialData, mode, questionId])
 
@@ -103,7 +91,7 @@ export default function FormContainer({ mode = "create", questionId = "", initia
             const mediumTestCases = JSON.parse(allValues.mediumTestCases);
             const largeTestCases = JSON.parse(allValues.largeTestCases);
             const data = {
-                question: {...allValues, tags, companies},
+                question: {...allValues, tags, companies, questionNo: initialData.questionNo},
                 testCase: {simpleTestCases, mediumTestCases, largeTestCases}
             }
             let response;

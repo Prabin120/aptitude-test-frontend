@@ -1,14 +1,14 @@
 "use client"
 
-import { withAdminAuth } from '@/components/withAdminAuth'
-import AdminQuestions from './questions'
+import CreatorsQuestions from './questions'
+import { withCreatorAccess } from '@/components/withCreatorAccess'
 
 function AdminDashboard() {
   return (
     <div className="container mx-auto p-4">
-      <AdminQuestions/>
+      <CreatorsQuestions/>
     </div>
   )
 }
 
-export default withAdminAuth(AdminDashboard)
+export default withCreatorAccess(AdminDashboard)

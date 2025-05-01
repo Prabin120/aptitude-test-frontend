@@ -56,8 +56,7 @@ export default function CreateTestsPage() {
                 await checkAuthorization(response, dispatch)
                 const res = await response.json()
                 if (response.status === 200 || response.status === 201) {
-                    handleRazorpayPayment(res.amount, res.order_id, groupTestVerifyPaymentEndpoint, userDetail.name, userDetail.email, 
-                        userDetail.mobile, redirectUrl, router, {orderId: res.order_id})
+                    handleRazorpayPayment(res.amount, res.order_id, groupTestVerifyPaymentEndpoint, userDetail.name, userDetail.email, redirectUrl, router, {orderId: res.order_id})
                 } else {
                     alert(res.message)
                 }

@@ -13,8 +13,6 @@ interface ContributionGraphProps {
 
 const ContributionGraph: React.FC<ContributionGraphProps> = ({
   dailyBreakdown,
-  currentStreak,
-  longestStreak,
 }) => {
   // Convert dailyBreakdown to array format
   const heatmapData = Object.entries(dailyBreakdown).map(([date, count]) => ({
@@ -34,9 +32,9 @@ const ContributionGraph: React.FC<ContributionGraphProps> = ({
   return (
     <div className="w-full p-4 text-white rounded-lg shadow-lg border border-neutral-800">
       <h2 className="text-xl font-bold mb-2">Coding Submissions (Past Year)</h2>
-      <p className="text-sm text-gray-400">
+      {/* <p className="text-sm text-gray-400">
         Current Streak: <strong>{currentStreak ?? 0}</strong> | Longest Streak: <strong>{longestStreak ?? 0}</strong>
-      </p>
+      </p>   */}
 
       <div className="overflow-x-auto mt-4">
         <CalendarHeatmap

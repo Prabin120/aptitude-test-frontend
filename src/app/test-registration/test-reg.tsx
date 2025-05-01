@@ -137,8 +137,7 @@ export default function TestSetupAndPayment() {
                     },
                     prefill: {
                         name: user.name,
-                        email: user.email,
-                        contact: user.mobile
+                        email: user.email
                     },
                     theme: {
                         color: "#09090a"

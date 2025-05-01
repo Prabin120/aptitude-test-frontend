@@ -15,6 +15,7 @@ interface CodingStats {
     submissionsInLastYear: number;
     contributionPoints: number;
     reputation: number;
+    totalSubmissions: number;
 }
 
 interface MCQStats {
@@ -41,6 +42,7 @@ interface StatsProps {
     languages: { [key: string]: number };
     viewMode: "coding" | "mcq";
     totalProblems: TotalProblems;
+    totalSubmissions?: number;
 }
 
 const ProfileStats = ({ stats, contests, skills, languages, viewMode, totalProblems }: StatsProps) => {
@@ -122,7 +124,7 @@ const ProfileStats = ({ stats, contests, skills, languages, viewMode, totalProbl
                                             <div className="flex justify-between text-sm mb-1">
                                                 <span className="problem-easy">Easy</span>
                                                 <span className="font-medium">
-                                                    {codingStats.easyProblems} / {totalProblems.totalEasyProblems}
+                                                    {codingStats.easyProblems??0} / {totalProblems.totalEasyProblems}
                                                 </span>
                                             </div>
                                             <Progress
@@ -135,7 +137,7 @@ const ProfileStats = ({ stats, contests, skills, languages, viewMode, totalProbl
                                             <div className="flex justify-between text-sm mb-1">
                                                 <span className="problem-medium">Medium</span>
                                                 <span className="font-medium">
-                                                    {codingStats.mediumProblems} / {totalProblems.totalMediumProblems}
+                                                    {codingStats.mediumProblems??0} / {totalProblems.totalMediumProblems}
                                                 </span>
                                             </div>
                                             <Progress
@@ -258,12 +260,12 @@ const ProfileStats = ({ stats, contests, skills, languages, viewMode, totalProbl
                                 <>
                                     <div className="space-y-1">
                                         <div className="text-sm text-muted-foreground">Acceptance Rate</div>
-                                        <div className="text-2xl font-semibold">{codingStats.acceptanceRate.toPrecision(2)}%</div>
+                                        <div className="text-2xl font-semibold">{codingStats.acceptanceRate.toFixed(2)}%</div>
                                     </div>
 
                                     <div className="space-y-1">
-                                        <div className="text-sm text-muted-foreground">Submissions (Year)</div>
-                                        <div className="text-2xl font-semibold">{codingStats.submissionsInLastYear}</div>
+                                        <div className="text-sm text-muted-foreground">Total Submissions</div>
+                                        <div className="text-2xl font-semibold">{codingStats.totalSubmissions}</div>
                                     </div>
 
                                     <div className="space-y-1">

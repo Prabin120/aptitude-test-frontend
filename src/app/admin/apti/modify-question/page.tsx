@@ -2,7 +2,7 @@
 
 import ReduxProvider from "@/redux/redux-provider";
 import EditQuestionPage from "./editQuestionPage";
-import { withAdminAuth } from "@/components/withAdminAuth";
+import { withCreatorAccess } from "@/components/withCreatorAccess";
 
 function Page() {
   return (
@@ -12,4 +12,4 @@ function Page() {
   )
 }
 
-export default withAdminAuth(Page);
+export default withCreatorAccess(Page);

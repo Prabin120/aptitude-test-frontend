@@ -3,7 +3,7 @@ import { handlePostMethod } from "./apiCall";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 export const handleRazorpayPayment = async (amount: number, orderId: string, verifyEndPoint: string, name: string,
-    email: string, mobile: string, redirectUrl: string | null, router: AppRouterInstance, data: object) => {        
+    email: string, redirectUrl: string | null, router: AppRouterInstance, data: object) => {        
     const res = await loadRazorpayScript('https://checkout.razorpay.com/v1/checkout.js');
     if (!res) {
         alert('Razorpay SDK failed to load. Please check your internet connection.');
@@ -37,7 +37,6 @@ export const handleRazorpayPayment = async (amount: number, orderId: string, ver
         prefill: {
             name: name || 'Test User',
             email: email || 'test@example.com',
-            contact: mobile
         },
         theme: {
             color: '#09090a'

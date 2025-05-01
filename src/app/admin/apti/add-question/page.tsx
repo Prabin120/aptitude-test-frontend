@@ -1,7 +1,7 @@
 'use client'
 import ReduxProvider from '@/redux/redux-provider'
 import QuestionCreationPage from './addQuestion'
-import { withAdminAuth } from '@/components/withAdminAuth'
+import { withCreatorAccess } from '@/components/withCreatorAccess'
 
 function AddAptiQuestion(){
     return (
@@ -13,4 +13,4 @@ function AddAptiQuestion(){
     )
 }
 
-export default withAdminAuth(AddAptiQuestion)
+export default withCreatorAccess(AddAptiQuestion)

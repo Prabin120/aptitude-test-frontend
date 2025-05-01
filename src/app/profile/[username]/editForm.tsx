@@ -14,13 +14,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { handlePutMethod } from "@/utils/apiCall";
 import { setUserState, userInitialState } from "@/redux/user/userSlice";
 import { useAppDispatch } from "@/redux/store";
-import { editProfile } from "@/consts";
+import { editProfile, sendMailVerificationLink } from "@/consts";
 import { setAuthState } from "@/redux/auth/authSlice";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { handleGetMethod, handlePutMethod } from "@/utils/apiCall";
 
 const profileFormSchema = z.object({
     username: z.string().min(3, {
@@ -49,12 +49,14 @@ type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
 interface ProfileEditFormProps {
     defaultValues: Partial<ProfileFormValues>;
+    emailVerified: boolean | undefined;
     onSubmit: (values: ProfileFormValues) => void;
     onCancel: () => void;
 }
 
 export function ProfileEditForm({
     defaultValues,
+    emailVerified,
     onSubmit,
     onCancel,
 }: ProfileEditFormProps) {
@@ -65,6 +67,7 @@ export function ProfileEditForm({
     });
 
     const [loading, setLoading] = useState(false)
+    const [emailVerifyResponse, setEmailVerifyResponse] = useState("")
     const router = useRouter();
     const dispatch = useAppDispatch();
 
@@ -84,6 +87,17 @@ export function ProfileEditForm({
             }
         }
         setLoading(false)
+    }
+
+    const sentVerifyMail = async () => {
+        const response = await handleGetMethod(sendMailVerificationLink);
+        if (response instanceof Response) {
+            if (response.status === 200 || response.status === 201) {
+                toast("A link for verification is sent to your email.");
+                setEmailVerifyResponse("A link for verification is sent to your email.");
+            }
+        }
+        emailVerified = true;
     }
 
     if (loading) {
@@ -151,6 +165,15 @@ export function ProfileEditForm({
                                     Your contact email.
                                 </FormDescription>
                                 <FormMessage />
+                                {
+                                    emailVerified ?
+                                        <span className="text-sm text-muted-foreground">Verified</span>
+                                    :
+                                    emailVerifyResponse?
+                                        <span className="text-sm text-muted-foreground"> {emailVerifyResponse}</span>
+                                        : 
+                                        <Button size={"sm"} type="button" onClick={sentVerifyMail}>Verify Email</Button>
+                                }
                             </FormItem>
                         )}
                     />

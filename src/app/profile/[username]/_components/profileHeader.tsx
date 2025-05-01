@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Building2, Globe, Github, Twitter, MapPin, Calendar, Edit2, Lock } from "lucide-react";
+import { Building2, Globe, Github, Twitter, MapPin, Calendar, Edit2, Lock, Coins } from "lucide-react";
 import {
     Dialog,
     DialogContent,
@@ -23,6 +23,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { handlePostMethod } from "@/utils/apiCall";
 import { changePasswordEndpoint } from "@/consts";
+import Link from "next/link";
 
 const passwordChangeSchema = z.object({
     currentPassword: z.string().min(1, "Current password is required"),
@@ -219,6 +220,12 @@ const ProfileHeader = ({ user, updateUser }: ProfileHeaderProps) => {
                                     </>
                                 )}
                             </div>
+                            <Link href="/rewards">
+                                <Button type="button" variant={"outline"} className="my-4 flex gap-2 items-center">
+                                    Available Coins: 
+                                    <span className="font-bold text-yellow-500 flex items-center gap-1">{user.coins} <Coins size={16} color="#facc15"/></span>
+                                </Button>
+                            </Link>
                         </div>
                     </div>
                 </div>
@@ -246,6 +253,7 @@ const ProfileHeader = ({ user, updateUser }: ProfileHeaderProps) => {
                             github: user.github,
                             twitter: user.twitter,
                         }}
+                        emailVerified={user?.emailVerified}
                         onSubmit={handleSaveProfile}
                         onCancel={handleCancelEdit}
                     />

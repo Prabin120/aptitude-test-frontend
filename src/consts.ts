@@ -12,12 +12,16 @@ export const resetPassword = '/p/api/v1/auth/reset-password'   // post
 export const checkTokenValidation = "/s/is-authenticated"     // go server call
 export const refreshToken = "/p/api/v1/auth/refresh-token"   // post
 export const validAdminAccess = "/p/api/v1/auth/valid-admin-access"
+export const validCreatorAccess = "/p/api/v1/auth/valid-creator-access"
+export const accessForCreator = "/p/api/v1/auth/access-for-creator" //get
 
 // profile
 export const editProfile = '/p/api/v1/user/profile'   // put
 export const getProfile = '/p/api/v1/user/profile'   // get
 export const codeProfile = '/s/profile'   // get
 export const codeSubmissionStats = '/s/profile/submission-stats'   // get
+export const verifyMail = '/p/api/v1/auth/verify-email'  //post
+export const sendMailVerificationLink = '/p/api/v1/auth/email-verification-link'  //get
 
 // code
 export const codeRunCode = "/s/code/run-code"
@@ -29,13 +33,12 @@ export const codeValidateQuestionIds = "/s/test/validate-questions"
 export const codeAihint = "/s/code/ai-hint"
 export const codeAiFeedback = "/s/code/ai-feedback"
 export const getAdminCodeQuestions = "/s/questions/owned-questions"
+export const getQuestionsToReview = "/s/questions/to-review"
 export const getQuestionTags = "/s/questions/tags"  //getting question tags
 export const getQuestionCompanies = "/s/questions/companies"  //
 export const getOwnedQuestion = "/s/questions/owned-question"
 export const verifyUserUploadedCode = "/s/code/verify-code"
-
-// test cases
-export const testCases = "/s/test-cases"
+export const updateQuestionStatus = "/s/questions/update-question-status"
 
 // apti question
 export const addAptiQuestionEndpoint = '/p/api/v1/aptitude/questions'   // post
@@ -87,3 +90,13 @@ export const groupTestEditMail = '/p/api/v1/group-test/edit-mail'   // post
 export const groupTestSingle = '/p/api/v1/group-test/single'   // get
 export const groupTestSubmitTest = '/p/api/v1/group-test/submit-test'   // post
 export const groupTestExamReport = '/p/api/v1/group-test/exam-report'   // get
+
+
+// Services
+export const sendQuesionRejectedMail = '/p/api/v1/services/question-rejected-mail'
+export const sendQuestionApprovedMail = '/p/api/v1/services/question-approaved-mail'
+
+// Reward
+export const getCoins = '/p/api/v1/reward/coins'
+export const rewardDashboard = '/p/api/v1/reward/dashboard'
+export const rewardHistory = '/p/api/v1/reward/history'

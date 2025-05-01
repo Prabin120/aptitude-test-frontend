@@ -2,9 +2,9 @@
 import Link from 'next/link'
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { getAdminCodeQuestions } from '@/consts'
+import { getAdminCodeQuestions, updateQuestionStatus } from '@/consts'
 import { useEffect, useState } from 'react';
-import { handleGetMethod } from '@/utils/apiCall'
+import { handleGetMethod, handlePostMethod } from '@/utils/apiCall'
 
 interface Question {
     questionNo: number
@@ -12,9 +12,13 @@ interface Question {
     title: string
     type: string
     status: string
+    donatedBy: {
+        name: string,
+        username: string
+    }
 }
 
-function AdminQuestions() {
+function CreatorsQuestions() {
     const [questionsData, setQuestionsData] = useState<Question[]>();
     const [error, setError] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
@@ -48,6 +52,35 @@ function AdminQuestions() {
         };
         fetchQuestions();
     }, []);
+
+    const handleSendForReview = async(index: number) =>{
+        const conf = confirm("Are you sure want to send for review?")
+        if(!conf) return
+        setLoading(true);
+        const response = await handlePostMethod(updateQuestionStatus, {
+            questionNo: questionsData?.at(index)?.questionNo,
+            status: "pending",
+            username: questionsData?.at(index)?.donatedBy.username
+        })
+        if(response instanceof Response) {
+            const res = await response.json();
+            if(response.status === 200 || response.status === 201) {
+                alert("Question sent for review successfully");
+                setError("")
+                setQuestionsData(prevQuestions => 
+                    prevQuestions?.map((q, i) => 
+                        i === index ? { ...q, status: "pending" } : q
+                    )
+                )
+            } else {
+                console.error(res.message);
+                setError(res.message);
+            }
+        } else {
+            setError(response.message);
+        }
+        setLoading(false);
+    }
     
     const renderQuestions = (questions: Question[]) => (
         <Table className="border">
@@ -55,17 +88,15 @@ function AdminQuestions() {
                 <TableRow>
                     <TableHead>ID</TableHead>
                     <TableHead>Title</TableHead>
-                    <TableHead>Type</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead>Actions</TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {questions.map((question) => (
+                {questions.map((question, index) => (
                     <TableRow key={question.questionNo}>
                         <TableCell>{question.questionNo}</TableCell>
                         <TableCell>{question.title}</TableCell>
-                        <TableCell>{question.type}</TableCell>
                         <TableCell>{question.status}</TableCell>
                         <TableCell>
                             {question.status !== 'live' && (
@@ -73,8 +104,8 @@ function AdminQuestions() {
                                     <Button variant="outline" size="sm" className="mr-2">Edit</Button>
                                 </Link>
                             )}
-                            {question.status === 'rejected' && (
-                                <Button variant="outline" size="sm">Resend</Button>
+                            {question.status === 'invalid' && (
+                                <Button onClick={() => handleSendForReview(index)} type='button' variant="outline" size="sm">Resend</Button>
                             )}
                         </TableCell>
                     </TableRow>
@@ -124,4 +155,4 @@ function AdminQuestions() {
     )
 }
 
-export default AdminQuestions
+export default CreatorsQuestions

@@ -7,6 +7,7 @@ export const getOwnedQuestionBySlug = async (slug: string) => {
     if (response instanceof Response) {
         const res = await response.json();
         if (response.status === 200 || response.status === 201) {
+            res.data = {...res.data, ...res.testcases};
             return res.data;
         } else {
             return res.message;
