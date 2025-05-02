@@ -51,7 +51,7 @@ export default function SolutionStep({ form, setIsFullSolutionVerified }: Soluti
                 form.setValue(`memoryLimits.${lang}`, response.data.maxMemoryUsed || 1);
             } else{
                 console.error("Failed test case", response.data);
-                setError(prev => ({ ...prev, [lang]: "Failed test case\n"+{...response.data} }));
+                setError(prev => ({ ...prev, [lang]: "Failed test case\n" + JSON.stringify(response.data, null, 2) }));
                 setIsVerified(prev => ({ ...prev, [lang]: false }));
             }
         } else {

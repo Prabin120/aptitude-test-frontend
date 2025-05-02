@@ -163,7 +163,7 @@ export default function SubmissionResult({
                                                 <pre className="font-mono text-sm">
                                                     {Object.keys(structuredTestCases(failedCase.input,testCaseVariableNames)).map((key) => (
                                                         <div key={key} className='bg-neutral-950 p-2 m-2 rounded'>
-                                                            <p>{key} = </p>
+                                                            <p className="w-fix max-h-40 overflow-y-scroll">{key} = </p>
                                                             <p>{JSON.stringify(structuredTestCases(failedCase.input,testCaseVariableNames)[key])}</p>
                                                         </div>
                                                     ))}

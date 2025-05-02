@@ -6,26 +6,34 @@ import TransactionHistory from "./components/transaction-history"
 import { useEffect, useState } from "react"
 import { handleGetMethod } from "@/utils/apiCall"
 import { rewardDashboard } from "@/consts"
-import { ICoin, ICoinTransaction } from "./schema"
+import { ICoin, IHistory } from "./schema"
+import Loading from "../loading"
 
 
 export default function RewardsPage() {
     const [overView, setOverView] = useState<ICoin>({ username: "", balance: 0, lifetimeEarnings: 0, totalWithdraw: 0 });
-    const [transactions, setTransactions] = useState<ICoinTransaction[]>([]);
+    const [history, setHistory] = useState<IHistory>({ transactions: [], total: 0, page: 0, totalPages: 0 });
+    const [loading, setLoading] = useState(false);
+    const [filter, setFilter] = useState("all");
 
     useEffect(() => {
+        setLoading(true);
         (async () => {
-            const response = await handleGetMethod(rewardDashboard);
+            const response = await handleGetMethod(rewardDashboard, `filter=${filter}`);
             if (response instanceof Response) {
                 const res = await response.json();
                 console.log(res);
                 if (response.status === 200 || response.status === 201) {
                     setOverView(res.coins);
-                    setTransactions(res.history);
+                    setHistory(res.history);
                 }
             }
+            setLoading(false);
         })();
-    }, [rewardDashboard]);
+    }, [rewardDashboard, filter]);
+    if (loading) {
+        return <Loading/>
+    }
     return (
         <div className="min-h-screen bg-black text-white">
             <div className="container mx-auto px-4 py-8">
@@ -46,7 +54,7 @@ export default function RewardsPage() {
                 </div>
 
                 <div className="mb-8">
-                    <TransactionHistory transactions={transactions} />
+                    <TransactionHistory history={history} filter={filter} setFilter={setFilter} />
                 </div>
                 {/* <div>
             <RewardsTiers />

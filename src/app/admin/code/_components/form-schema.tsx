@@ -20,7 +20,7 @@ export const basicInfoSchema = z.object({
   difficulty: z.enum(["easy", "medium", "hard"]),
   tags: z.string().default(""),
   companies: z.string().default(""),
-  questionNo: z.number().positive("Question number must be positive"),
+  questionNo: z.string(),
 })
 
 // Step 2: Sample Test Cases Schema
@@ -86,7 +86,7 @@ export const defaultBasicInfo: BasicInfoValues = {
   difficulty: "medium",
   tags: "",
   companies: "",
-  questionNo: random(1, 100), 
+  questionNo: String(random(1, 100)), 
 }
 
 export const defaultSampleTestCases: SampleTestCasesValues = {

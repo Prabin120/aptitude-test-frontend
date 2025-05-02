@@ -83,10 +83,9 @@ export default function FormContainer({ mode = "create", questionId = "", initia
     const onSubmit = async () => {
         setLoading(true)
         try {
-            console.log("form submitted");
             const allValues = form.getValues(); // Get all form values
-            const tags = allValues.tags.split(", ").map((tag: string) => tag.trim()).filter((tag: string) => tag !== "");
-            const companies = allValues.companies.split(", ").map((company: string) => company.trim()).filter((company: string) => company !== "");
+            const tags = allValues.tags.split(",").map((tag: string) => tag.trim()).filter((tag: string) => tag !== "");
+            const companies = allValues.companies.split(",").map((company: string) => company.trim()).filter((company: string) => company !== "");
             const simpleTestCases = JSON.parse(allValues.simpleTestCases);
             const mediumTestCases = JSON.parse(allValues.mediumTestCases);
             const largeTestCases = JSON.parse(allValues.largeTestCases);
@@ -103,8 +102,8 @@ export default function FormContainer({ mode = "create", questionId = "", initia
             await checkAuthorization(response, dispatch, router, true);
             alert(response + ". It will be updated after admin approval");
             // Clear saved progress after successful submission
-            clearFormProgress();
-            router.replace("/admin")
+            clearLocalData();
+            router.back();
         } catch (error) {
             console.error("Error submitting question:", error);
             alert("Failed to submit question. Please try again.");

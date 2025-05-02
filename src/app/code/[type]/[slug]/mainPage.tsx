@@ -47,6 +47,7 @@ export default function CodingPlatformPage(parameters: Readonly<{ slug: string, 
     const dispatch = useAppDispatch();
     const router = useRouter();
     const savedCodes = useAppSelector((state) => state.userCode.codes)
+    const authenticate = useAppSelector((state) => state.auth.authState)
 
     const { data: response, isLoading, isError } = useGetQuestionBySlug(slug);
 
@@ -101,8 +102,7 @@ export default function CodingPlatformPage(parameters: Readonly<{ slug: string, 
     }, [response])
 
     const fetchSubmissions = async () => {
-        console.log("Fetching submissions");
-        if (activeTabQuestion === "submissions" && submissions?.length === 0) {
+        if (authenticate && activeTabQuestion === "submissions" && submissions?.length === 0) {
             console.log("Fetching submissions api");
             const data = async () => {
                 const response = await handleGetMethod(getCodeSubmissions + `?question=${question?.questionNo}`);

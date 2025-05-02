@@ -26,7 +26,7 @@ export const sendMailVerificationLink = '/p/api/v1/auth/email-verification-link'
 // code
 export const codeRunCode = "/s/code/run-code"
 export const codeSubmitCode = "/s/code/submit-code"
-export const getCodeSubmissions = "/s/code/code-submissions"
+export const getCodeSubmissions = "/s/code/submissions"
 export const codeQuestion = "/s/question"
 export const codeQuestions = "/s/questions"
 export const codeValidateQuestionIds = "/s/test/validate-questions"

@@ -8,6 +8,13 @@ export interface ICoinTransaction {
     createdAt: Date;
 }
 
+export interface IHistory {
+    transactions: ICoinTransaction[];
+    total: number;
+    page: number;
+    totalPages: number;
+}
+
 export interface ICoin {
     username: string;
     balance: number;

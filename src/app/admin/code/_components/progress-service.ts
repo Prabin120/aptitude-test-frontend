@@ -31,6 +31,7 @@ export const clearFormProgress = (storageKey = DEFAULT_FORM_PROGRESS_KEY): void 
   try {
     localStorage.removeItem(storageKey)
     localStorage.removeItem(getStepKey(storageKey))
+    localStorage.removeItem(DEFAULT_IS_VERIFIED_KEY)
     removeIsVerifiedStatus()
   } catch (error) {
     console.error("Error clearing form progress:", error)

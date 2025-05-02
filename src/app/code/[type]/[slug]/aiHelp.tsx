@@ -9,8 +9,8 @@ interface AiHelpProps {
 }
 
 const AiHelp: React.FC<AiHelpProps> = ({ aihelpText }) => {
-    const value = aihelpText
-    if (aihelpText.length === 0)
+    // const value = aihelpText;
+    if (aihelpText?.length === 0)
         return (
             <div className="space-y-4 h-full p-4">
                 <Skeleton className="h-6 w-3/4" />
@@ -26,7 +26,7 @@ const AiHelp: React.FC<AiHelpProps> = ({ aihelpText }) => {
         <div className='p-4 h-full'>
             <h1 className="text-2xl font-bold mb-4">Smart AC</h1>
             <ScrollArea className="h-[calc(100vh-200px)]">
-                <MarkdownPreview source={value} />
+                <MarkdownPreview source={aihelpText} />
             </ScrollArea>
         </div>
     );
