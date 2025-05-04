@@ -78,7 +78,7 @@ export default function FormContainer({ mode = "create", questionId = "", initia
             }
         }
         loadData()
-    }, [form, initialData, mode, questionId])
+    }, [questionId])
 
     const onSubmit = async () => {
         setLoading(true)
