@@ -12,7 +12,6 @@ import { paymentCreateOrderEndpoint, verifyPaymentEndpoint } from '@/consts';
 import { handlePostMethod } from '@/utils/apiCall';
 import { useAppSelector } from '@/redux/store';
 import { handleRazorpayPayment } from '@/utils/razorpayPaymentModal';
-import { useRouter } from 'next/navigation';
 
 interface TestRegistrationProps {
     showRegistration: boolean
@@ -24,7 +23,6 @@ interface TestRegistrationProps {
 
 export default function TestRegistration({ showRegistration, setShowRegistration, id, amount, type }: Readonly<TestRegistrationProps>) {
     const userDetail = useAppSelector((state) => state.user);
-    const router = useRouter();
     const handleCreateOrder = async () => {
         try {
             setShowRegistration(false);
@@ -40,8 +38,8 @@ export default function TestRegistration({ showRegistration, setShowRegistration
                 if (type === "practice") {
                     alert(order.msg);
                 } else {
-                    handleRazorpayPayment(amount, order.order_id, verifyPaymentEndpoint, userDetail.name, userDetail.email, 
-                         null, router, {testId: id})
+                    handleRazorpayPayment(amount, order.order_id, verifyPaymentEndpoint, userDetail.name, userDetail.email
+                        , {testId: id})
                 }
             }
         } catch (error) {

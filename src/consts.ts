@@ -100,3 +100,5 @@ export const sendQuestionApprovedMail = '/p/api/v1/services/question-approaved-m
 export const getCoins = '/p/api/v1/reward/coins'
 export const rewardDashboard = '/p/api/v1/reward/dashboard'
 export const rewardHistory = '/p/api/v1/reward/history'
+export const createRewardOrder = '/p/api/v1/reward/create-order'
+export const verifyRewardCoins = '/p/api/v1/reward/verify-payment'

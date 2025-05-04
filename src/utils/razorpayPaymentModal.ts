@@ -1,16 +1,14 @@
 import { RazorpaySuccessResponse } from "@/razorpay/interface";
 import { handlePostMethod } from "./apiCall";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 export const handleRazorpayPayment = async (amount: number, orderId: string, verifyEndPoint: string, name: string,
-    email: string, redirectUrl: string | null, router: AppRouterInstance, data: object) => {        
+    email: string, data: object) => {        
     const res = await loadRazorpayScript('https://checkout.razorpay.com/v1/checkout.js');
     if (!res) {
-        alert('Razorpay SDK failed to load. Please check your internet connection.');
-        return;
+        return false;
     }
     const options = {
-        key: process.env.RAZORPAY_KEY_ID || '',
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || '',
         amount: amount * 100,
         currency: 'INR',
         name: 'Test Registration',
@@ -24,14 +22,14 @@ export const handleRazorpayPayment = async (amount: number, orderId: string, ver
                     ...data
                 });
 
-                if (verifyResponse.status === 200) {
-                    if (redirectUrl) router.replace(redirectUrl);
-                    else router.refresh();
+                if (verifyResponse.status === 200) { 
+                    return true;
                 } else {
-                    alert('Payment verification failed');
+                    return false;
                 }
             } catch (error) {
                 console.error('Error verifying payment:', error);
+                return false;
             }
         },
         prefill: {
@@ -44,8 +42,8 @@ export const handleRazorpayPayment = async (amount: number, orderId: string, ver
     };
     const rzp1 = new window.Razorpay(options)
     rzp1.on('payment.failed', () => {
-        alert(`Payment failed`);
         console.error('Payment Error:');
+        return false
     });
     rzp1.open();
 };

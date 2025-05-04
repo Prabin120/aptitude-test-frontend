@@ -8,6 +8,7 @@ import { handleGetMethod } from "@/utils/apiCall"
 import { rewardDashboard } from "@/consts"
 import { ICoin, IHistory } from "./schema"
 import Loading from "../loading"
+import ReduxProvider from "@/redux/redux-provider"
 
 
 export default function RewardsPage() {
@@ -35,34 +36,27 @@ export default function RewardsPage() {
         return <Loading/>
     }
     return (
-        <div className="min-h-screen bg-black text-white">
-            <div className="container mx-auto px-4 py-8">
-                {/* <h1 className="text-3xl md:text-4xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600">
-                Your Rewards Dashboard
-                </h1> */}
-                <h1 className="text-3xl md:text-4xl font-bold mb-8">
-                    Your Rewards Dashboard
-                </h1>
+        <ReduxProvider>
+            <div className="min-h-screen bg-black text-white">
+                <div className="container mx-auto px-4 py-8">
+                    <h1 className="text-3xl md:text-4xl font-bold mb-8">
+                        Your Rewards Dashboard
+                    </h1>
 
-                <div className="grid lg:grid-cols-3 gap-6 mb-8">
-                    <div className="lg:col-span-2">
-                        <RewardsOverview overview={overView} />
+                    <div className="grid lg:grid-cols-3 gap-6 mb-8">
+                        <div className="lg:col-span-2">
+                            <RewardsOverview overview={overView} setOverview={setOverView} />
+                        </div>
+                        <div>
+                            <WithdrawForm />
+                        </div>
                     </div>
-                    <div>
-                        <WithdrawForm />
+
+                    <div className="mb-8">
+                        <TransactionHistory history={history} filter={filter} setFilter={setFilter} />
                     </div>
                 </div>
-
-                <div className="mb-8">
-                    <TransactionHistory history={history} filter={filter} setFilter={setFilter} />
-                </div>
-                {/* <div>
-            <RewardsTiers />
-          </div> */}
-                {/* <div className="lg:col-span-2">
-            <EarningsChart />
-          </div> */}
             </div>
-        </div>
+        </ReduxProvider>
     )
 }

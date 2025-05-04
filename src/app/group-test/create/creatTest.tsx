@@ -8,16 +8,19 @@ import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Search} from "lucide-react"
+import { Search } from "lucide-react"
 import { useAppDispatch, useAppSelector } from "@/redux/store"
 import { checkAuthorization } from "@/utils/authorization"
 import { handlePostMethod } from "@/utils/apiCall"
-import { groupTestCreateOrderEndpoint, groupTestVerifyPaymentEndpoint } from "@/consts"
-import { handleRazorpayPayment } from "@/utils/razorpayPaymentModal"
-import { useRouter } from "next/navigation"
+import { groupTestCreateOrderEndpoint } from "@/consts"
 import { Textarea } from "@/components/ui/textarea"
 import { SearchableQuestions } from "@/components/searchQuestion"
 import DateAndTime from "@/components/dateAndTime"
+import { Dialog } from "@radix-ui/react-dialog"
+import { DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { setUserState } from "@/redux/user/userSlice"
 
 const formSchema = z.object({
     title: z.string().min(5, "title must be more than 5 words"),
@@ -33,9 +36,11 @@ const formSchema = z.object({
 
 export default function CreateTestsPage() {
     const [loading, setLoading] = useState(false)
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [requiredCoins, setRequiredCoins] = useState(0)
     const userDetail = useAppSelector((state) => state.user);
     const dispatch = useAppDispatch()
-    const router = useRouter();
+    const router = useRouter()
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -49,16 +54,30 @@ export default function CreateTestsPage() {
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         setLoading(true)
         try {
+            const availableCoins = Number(userDetail.coins);
             const participants = values.participants.split(",").map((id: string) => id.trim());
-            const response = await handlePostMethod(groupTestCreateOrderEndpoint, { ...values, participants:participants})
-            const redirectUrl = "/group-test/owned-tests";
+            const totalParticipants = Number(values.totalParticipants);
+            const amount = totalParticipants * 20;
+            if(3 > totalParticipants|| totalParticipants > 50){
+                return alert("Number of Participants should be between 3 and 50")
+            }
+            if(participants.length > totalParticipants){
+                return alert("Number of Participants entered should be equal or less than Participants No")
+            }
+            setRequiredCoins(amount);
+            if (availableCoins < amount) {
+                setIsModalOpen(true);
+                return
+            }
+            const response = await handlePostMethod(groupTestCreateOrderEndpoint, { ...values, participants: participants })
             if (response instanceof Response) {
-                await checkAuthorization(response, dispatch)
+                await checkAuthorization(response, dispatch);
                 const res = await response.json()
                 if (response.status === 200 || response.status === 201) {
-                    handleRazorpayPayment(res.amount, res.order_id, groupTestVerifyPaymentEndpoint, userDetail.name, userDetail.email, redirectUrl, router, {orderId: res.order_id})
+                    dispatch(setUserState({ ...userDetail, coins: userDetail.coins - amount }))
+                    router.push("/group-test/owned-tests");
                 } else {
-                    alert(res.message)
+                    alert(res.message);
                 }
             } else {
                 alert("Server error")
@@ -113,7 +132,7 @@ export default function CreateTestsPage() {
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormLabel>Start Date and Time</FormLabel>
-                                                <DateAndTime field={field} />
+                                            <DateAndTime field={field} />
                                             <FormMessage />
                                         </FormItem>
                                     )}
@@ -207,6 +226,31 @@ export default function CreateTestsPage() {
                     </Form>
                 </CardContent>
             </Card>
+            <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+                <DialogTrigger asChild>
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8"
+                        aria-label="Insert Table"
+                    >
+                        {/* <Table className="h-4 w-4" /> */}
+                    </Button>
+                </DialogTrigger>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>You Do not have enough coins to create this test</DialogTitle>
+                        <DialogDescription>You have {userDetail.coins} coins and required {requiredCoins} coins to create this test. Please add coins to your wallet</DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter>
+                        <DialogClose asChild>
+                            <Link href="/rewards">
+                                <Button type="button">Add Coins</Button>
+                            </Link>
+                        </DialogClose>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </div>
     )
 }
