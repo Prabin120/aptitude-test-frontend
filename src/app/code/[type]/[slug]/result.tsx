@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { SubmissionResultProps, SubmissionStatus } from "../../commonInterface"
+import { SubmissionResultProps } from "../../commonInterface"
 import { structuredTestCases } from "@/utils/commonFunction"
 
 export default function SubmissionResult({
@@ -21,7 +21,7 @@ export default function SubmissionResult({
     type,
 }: Readonly<SubmissionResultProps>) {
     const [activeTab, setActiveTab] = useState("result")
-    const getStatusColor = (status: SubmissionStatus) => {
+    const getStatusColor = (status: string | undefined) => {
         switch (status) {
             case "accepted":
                 return "text-green-500"
@@ -34,7 +34,7 @@ export default function SubmissionResult({
         }
     }
 
-    const getStatusIcon = (status: SubmissionStatus) => {
+    const getStatusIcon = (status: string | undefined) => {
         switch (status) {
             case "accepted":
                 return <Check className="h-5 w-5" />
@@ -42,10 +42,12 @@ export default function SubmissionResult({
                 return <AlertTriangle className="h-5 w-5" />
             case "wrong_answer":
                 return <XCircle className="h-5 w-5" />
+            default:
+                return <AlertTriangle className="h-5 w-5" />
         }
     }
 
-    const getStatusTitle = (status: SubmissionStatus) => {
+    const getStatusTitle = (status: string | undefined) => {
         switch (status) {
             case "accepted":
                 return "Accepted"
@@ -53,6 +55,8 @@ export default function SubmissionResult({
                 return "Runtime Error"
             case "wrong_answer":
                 return "Wrong Answer"
+            default:
+                return "Unknown Status"
         }
     }
 
@@ -72,7 +76,7 @@ export default function SubmissionResult({
                                 </Badge>
                             )}
                         </div>
-                        {type != "exam" && <Button onClick={aiFeedback} variant={"outline"}>Get Smart FeedBack <Lightbulb size={20} color="yellow"/></Button>}
+                        {type != "exam" && <Button onClick={aiFeedback} variant={"outline"}>Get Smart FeedBack <Lightbulb size={20} color="yellow" /></Button>}
                     </div>
                 </CardHeader>
                 <CardContent className="p-0">
@@ -142,10 +146,10 @@ export default function SubmissionResult({
                                             <h3 className="text-lg font-semibold">Last Executed Input</h3>
                                             <div className="bg-zinc-800/50 rounded-lg p-4">
                                                 <div className="font-mono text-sm">
-                                                    {Object.keys(structuredTestCases(failedCase.input,testCaseVariableNames)).map((key) => (
+                                                    {Object.keys(structuredTestCases(failedCase.input, testCaseVariableNames)).map((key) => (
                                                         <div key={key} className='bg-neutral-950 p-2 m-2 rounded'>
                                                             <p>{key} = </p>
-                                                            <p>{JSON.stringify(structuredTestCases(failedCase.input,testCaseVariableNames)[key])}</p>
+                                                            <p>{JSON.stringify(structuredTestCases(failedCase.input, testCaseVariableNames)[key])}</p>
                                                         </div>
                                                     ))}
                                                 </div>
@@ -161,10 +165,10 @@ export default function SubmissionResult({
                                             <h3 className="text-lg font-semibold mb-2">Input</h3>
                                             <div className="bg-zinc-800/50 rounded-lg p-4">
                                                 <pre className="font-mono text-sm">
-                                                    {Object.keys(structuredTestCases(failedCase.input,testCaseVariableNames)).map((key) => (
+                                                    {Object.keys(structuredTestCases(failedCase.input, testCaseVariableNames)).map((key) => (
                                                         <div key={key} className='bg-neutral-950 p-2 m-2 rounded'>
                                                             <p className="w-fix max-h-40 overflow-y-scroll">{key} = </p>
-                                                            <p>{JSON.stringify(structuredTestCases(failedCase.input,testCaseVariableNames)[key])}</p>
+                                                            <p>{JSON.stringify(structuredTestCases(failedCase.input, testCaseVariableNames)[key])}</p>
                                                         </div>
                                                     ))}
                                                 </pre>

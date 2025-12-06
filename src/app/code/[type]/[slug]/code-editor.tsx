@@ -1,5 +1,6 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useMemo } from 'react';
 import MonacoEditor, { Monaco } from "@monaco-editor/react";
+import { editor, IDisposable } from "monaco-editor";
 import {
     Select,
     SelectContent,
@@ -44,7 +45,7 @@ interface CodeEditorProps {
 const CodeEditor = ({ code, setCode, language, setLanguage, defaultCode, questionNo, type }: CodeEditorProps) => {
     const dispatch = useDispatch();
     const monacoRef = useRef<Monaco | null>(null);
-    const disposableRef = useRef<any>(null);
+    const disposableRef = useRef<IDisposable | null>(null);
 
     // --- IntelliSense Effect ---
     useEffect(() => {
@@ -59,11 +60,6 @@ const CodeEditor = ({ code, setCode, language, setLanguage, defaultCode, questio
 
         try {
             // Register provider based on ACTIVE language
-            // Note: 'language' prop is the short code (py, cpp), we need to check against that
-            // or map it to what the register functions expect (usually the monaco language id)
-            // My register functions register for "python", "cpp", "c", etc.
-
-            // Map short code to standard language ID used by IntelliSense files
             const langId = languageHighlighter(language);
 
             switch (langId) {
@@ -80,10 +76,31 @@ const CodeEditor = ({ code, setCode, language, setLanguage, defaultCode, questio
         return () => {
             if (disposableRef.current) disposableRef.current.dispose();
         };
-    }, [language, monacoRef.current]); // Re-run when language changes
+    }, [language]); // Removed monacoRef.current dependency
 
-    const handleEditorDidMount = (editor: any, monaco: Monaco) => {
+    const handleEditorDidMount = (editor: editor.IStandaloneCodeEditor, monaco: Monaco) => {
         monacoRef.current = monaco;
+        // Trigger IntelliSense registration manually on mount if needed, or let useEffect handle it
+        // Since we set monacoRef.current, the useEffect won't re-run automatically unless 'language' changes or we force it.
+        // We should force a re-run or register directly here.
+        // Easiest is to force re-render, but better is to extract logic.
+        // For now, let's just copy the registration logic or extract it.
+        // Actually, just setLanguage to itself? No.
+        // The useEffect depends on [language].
+        // If we just mounted, monacoRef was null, now it's set. The Effect did NOT run with monaco set.
+        // We need to kick start it.
+        // Let's call a minimal version of the effect logic here.
+
+        try {
+            const langId = languageHighlighter(language);
+            switch (langId) {
+                case 'python': disposableRef.current = registerPythonCompletion(monaco); break;
+                case 'cpp': disposableRef.current = registerCppCompletion(monaco); break;
+                case 'c': disposableRef.current = registerCCompletion(monaco); break;
+                case 'java': disposableRef.current = registerJavaCompletion(monaco); break;
+                case 'go': disposableRef.current = registerGoCompletion(monaco); break;
+            }
+        } catch (e) { console.error(e); }
     };
 
 
@@ -94,16 +111,17 @@ const CodeEditor = ({ code, setCode, language, setLanguage, defaultCode, questio
                 ...code,
                 [language]: newCode,
             })
-            debouncedDispatch(newCode, language)
+            debouncedUpdate(type, questionNo, language, newCode)
         }
     }
 
-    const debouncedDispatch = useCallback(
-        debounce((val: string, lang: string) => {
-            dispatch(setUserCodeState({ type, questionNo, language: lang, code: val }))
+    // Memoized debounce function that takes all changing params as arguments
+    const debouncedUpdate = useMemo(
+        () => debounce((t: string, q: string, l: string, c: string) => {
+            dispatch(setUserCodeState({ type: t, questionNo: q, language: l, code: c }))
         }, 300),
-        [],
-    )
+        [dispatch]
+    );
 
     const changeLanguage = (lang: string) => {
         setLanguage(lang);
@@ -113,7 +131,7 @@ const CodeEditor = ({ code, setCode, language, setLanguage, defaultCode, questio
             ...code,
             [language]: val || ""
         })
-        debouncedDispatch(val || "", language);
+        debouncedUpdate(type, questionNo, language, val || "");
     }
     return (
         <div className='h-full'>

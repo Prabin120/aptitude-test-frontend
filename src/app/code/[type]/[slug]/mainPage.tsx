@@ -26,7 +26,6 @@ import AiHelp from "./aiHelp"
 import { useGetQuestionBySlug } from "@/hooks/reactQuery"
 import Loading from "./loading"
 import { setUserCodeState } from "@/redux/userCode/userCode"
-import { getQuestionDescription } from "@/utils/cloudinary"
 
 export default function CodingPlatformPage(parameters: Readonly<{ slug: string, type: string, time: string }>) {
     const [code, setCode] = useState<UserCode>()

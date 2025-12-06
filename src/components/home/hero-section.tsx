@@ -16,7 +16,7 @@ export default function HeroSection() {
       setCurrentFeature((prev) => (prev + 1) % features.length)
     }, 2000)
     return () => clearInterval(interval)
-  }, [])
+  }, [features.length])
 
   return (
     <section className="relative overflow-hidden py-20 md:py-32">
@@ -37,12 +37,12 @@ export default function HeroSection() {
               contributions.
             </p>
             <div className="flex flex-wrap gap-4">
-                <Link href="/login">
-                    <Button size="lg" className="bg-purple-600 hover:bg-purple-700">
-                        Get Started
-                        <ArrowRight className="ml-2 h-5 w-5" />
-                    </Button>
-                </Link>
+              <Link href="/login">
+                <Button size="lg" className="bg-purple-600 hover:bg-purple-700">
+                  Get Started
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              </Link>
               <Button size="lg" variant="outline" className="border-purple-600 text-purple-400 hover:bg-purple-950/50">
                 Explore Features
               </Button>

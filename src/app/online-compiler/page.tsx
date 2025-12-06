@@ -71,7 +71,7 @@ export default function OnlineCompilerPage() {
             </div>
 
             <section className="mt-20 max-w-4xl text-left prose prose-invert">
-                <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-zinc-200 to-zinc-400">Why Use AptiCode's Online Compiler?</h2>
+                <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-zinc-200 to-zinc-400">Why Use AptiCode&apos;s Online Compiler?</h2>
                 <div className="grid md:grid-cols-2 gap-8 mt-8">
                     <div className="bg-zinc-900/30 p-6 rounded-lg border border-zinc-800/50">
                         <h3 className="text-xl font-semibold text-purple-400 mb-2">⚡ Instant Execution</h3>

@@ -3,6 +3,7 @@
 // Using react-resizable-panels directly
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import Editor, { Monaco } from "@monaco-editor/react";
+import { editor, IDisposable } from "monaco-editor";
 import React, { useState, useRef, useEffect } from "react";
 import { executeCode } from "../../code/apiCalls";
 import { Loader2, Play, Menu, Maximize2, Minimize2, X, ChevronRight } from "lucide-react";
@@ -53,7 +54,7 @@ const CompilerEditor: React.FC<CompilerEditorProps> = ({ language }) => {
     const [fullScreenMode, setFullScreenMode] = useState<'none' | 'editor' | 'io'>('none');
 
     const monacoRef = useRef<Monaco | null>(null);
-    const disposableRef = useRef<any>(null);
+    const disposableRef = useRef<IDisposable | null>(null);
     const pathname = usePathname();
 
     // --- Effects ---
@@ -80,9 +81,9 @@ const CompilerEditor: React.FC<CompilerEditorProps> = ({ language }) => {
             console.error('Failed to register completion provider:', err);
         }
         return () => { if (disposableRef.current) disposableRef.current.dispose(); };
-    }, [language, autocomplete, monacoRef.current]);
+    }, [language, autocomplete]);
 
-    const handleEditorDidMount = (editor: any, monaco: Monaco) => {
+    const handleEditorDidMount = (editor: editor.IStandaloneCodeEditor, monaco: Monaco) => {
         monacoRef.current = monaco;
     };
 
