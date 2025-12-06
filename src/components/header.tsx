@@ -185,6 +185,13 @@ const Header = () => {
           </Link>
           <Link
             className="text-sm font-medium hover:underline underline-offset-4"
+            href="/online-compiler"
+            onClick={() => setIsSheetOpen(false)}
+          >
+            CompilZone
+          </Link>
+          <Link
+            className="text-sm font-medium hover:underline underline-offset-4"
             href="/about-us"
             onClick={() => setIsSheetOpen(false)}
           >
