@@ -14,17 +14,23 @@ interface ISubmissionResultProps {
 function Submissions({ submissions, testCaseVariableNames, aiFeedback }: Readonly<ISubmissionResultProps>) {
     const [selectedSubmission, setSelectedSubmission] = useState<number>(0)
     const [isResultModalOpen, setIsResultModalOpen] = useState<boolean>(false)
-    function checkStatus(){
-        let status: SubmissionStatus;
-        if (submissions[selectedSubmission]?.totalTestCases && submissions[selectedSubmission]?.passedTestCases === submissions[selectedSubmission]?.totalTestCases) {
-            status = "accepted"
-        } else if (submissions[selectedSubmission]?.failedCase) {
-            status = "wrong_answer"
+
+    function getStatus(submission: SubmissionResultProps): SubmissionStatus {
+        if (!submission) return "runtime_error"; // Default fallback
+        if (submission.status === "Accepted") return "accepted";
+        if (submission.status === "Wrong Answer") return "wrong_answer";
+        if (submission.status === "Runtime Error") return "runtime_error";
+
+        // Fallback for old data or if status is missing
+        if (submission.totalTestCases && submission.passedTestCases === submission.totalTestCases) {
+            return "accepted"
+        } else if (submission.failedCase) {
+            return "wrong_answer"
         } else {
-            status = "runtime_error"
+            return "runtime_error"
         }
-        return status
     }
+
     return (
         <ScrollArea className="h-[calc(100vh-120px)]">
             <Table className='px-4'>
@@ -33,20 +39,25 @@ function Submissions({ submissions, testCaseVariableNames, aiFeedback }: Readonl
                         <TableHead>#</TableHead>
                         <TableHead>Status</TableHead>
                         <TableHead>Language</TableHead>
+                        <TableHead>Date</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     {submissions?.map((submission, index) => (
-                        <TableRow key={index+1} onClick={() => {setSelectedSubmission(index); setIsResultModalOpen(true)}}>
+                        <TableRow key={index + 1} onClick={() => { setSelectedSubmission(index); setIsResultModalOpen(true) }}>
                             <TableCell>{index + 1}</TableCell>
                             <TableCell>
-                                {submission.passedTestCases === submission.totalTestCases ?
+                                {getStatus(submission) === "accepted" ?
                                     <div className='text-green-500'>Accepted</div>
                                     :
-                                    <div className='text-red-500'>Wrong Answer</div>
+                                    getStatus(submission) === "runtime_error" ?
+                                        <div className='text-red-500'>Runtime Error</div>
+                                        :
+                                        <div className='text-red-500'>Wrong Answer</div>
                                 }
                             </TableCell>
                             <TableCell>{submission.language}</TableCell>
+                            <TableCell>{submission.createdAt ? new Date(submission.createdAt).toLocaleString() : "-"}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
@@ -56,10 +67,10 @@ function Submissions({ submissions, testCaseVariableNames, aiFeedback }: Readonl
                     <DialogHeader>
                         <DialogTitle>Submission Result</DialogTitle>
                     </DialogHeader>
-                    {submissions && (
+                    {submissions && submissions.length > 0 && (
                         <SubmissionResult
-                            status={checkStatus()}
-                            passedTestCases={submissions[selectedSubmission]?.passedTestCases??0}
+                            status={getStatus(submissions[selectedSubmission])}
+                            passedTestCases={submissions[selectedSubmission]?.passedTestCases ?? 0}
                             totalTestCases={submissions[selectedSubmission]?.totalTestCases}
                             // runtimeMs={submissionResult.runtimeMs}
                             // memoryMb={submissionResult.memoryMb}
@@ -68,7 +79,7 @@ function Submissions({ submissions, testCaseVariableNames, aiFeedback }: Readonl
                             code={submissions[selectedSubmission]?.code}
                             message={submissions[selectedSubmission]?.message}
                             failedCase={submissions[selectedSubmission]?.failedCase}
-                            testCaseVariableNames = {testCaseVariableNames}
+                            testCaseVariableNames={testCaseVariableNames}
                             aiFeedback={aiFeedback}
                             type="code"
                         />

@@ -36,7 +36,7 @@ const matchesPattern = (pathname: string, pattern: string) => {
   return regex.test(pathname)
 }
 
-const urls = ["/code/*/*", "/apti-zone/*/*/test", "/tests/exam/*"]
+const urls = ["/code/*/*", "/apti-zone/*/*/test", "/tests/exam/*", "/online-compiler/*"]
 
 const isExcludedPath = (pathname: string) => {
   for (const url of urls) {

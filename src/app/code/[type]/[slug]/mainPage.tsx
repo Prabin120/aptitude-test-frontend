@@ -62,7 +62,7 @@ export default function CodingPlatformPage(parameters: Readonly<{ slug: string, 
             userStatus: response.userStatus,
             donatedBy: response.donatedBy,
         };
-        questionRes.description = await getQuestionDescription(response.slug)
+        // questionRes.description = await getQuestionDescription(response.slug)
         setQuestion(questionRes)
         return questionRes
     }

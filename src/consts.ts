@@ -1,6 +1,6 @@
 
-export const apiEntryPoint = process.env.NEXT_PUBLIC_API_ENDPOINT ?? "https://apticode.in"
-export const codeCompileApiEntryPoint = process.env.NEXT_PUBLIC_CODE_COMPILER_ENDPOINT ?? "https://apticode.in"
+export const apiEntryPoint = process.env.NEXT_PUBLIC_API_ENDPOINT ?? "http://localhost:8080"
+export const codeCompileApiEntryPoint = "http://localhost:8080"
 
 // auth
 export const loginEndpoint = '/p/api/v1/auth/login'   // post
@@ -39,6 +39,7 @@ export const getQuestionCompanies = "/s/questions/companies"  //
 export const getOwnedQuestion = "/s/questions/owned-question"
 export const verifyUserUploadedCode = "/s/code/verify-code"
 export const updateQuestionStatus = "/s/questions/update-question-status"
+export const codeExecute = "/s/code/execute"
 
 // apti question
 export const addAptiQuestionEndpoint = '/p/api/v1/aptitude/questions'   // post

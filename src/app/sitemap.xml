@@ -83,5 +83,35 @@
   <priority>0.64</priority>
 </url>
 
+<url>
+  <loc>https://www.apticode.in/online-compiler</loc>
+  <lastmod>2025-12-06T18:35:00+00:00</lastmod>
+  <priority>0.90</priority>
+</url>
+<url>
+  <loc>https://www.apticode.in/online-compiler/python</loc>
+  <lastmod>2025-12-06T18:35:00+00:00</lastmod>
+  <priority>0.90</priority>
+</url>
+<url>
+  <loc>https://www.apticode.in/online-compiler/java</loc>
+  <lastmod>2025-12-06T18:35:00+00:00</lastmod>
+  <priority>0.90</priority>
+</url>
+<url>
+  <loc>https://www.apticode.in/online-compiler/cpp</loc>
+  <lastmod>2025-12-06T18:35:00+00:00</lastmod>
+  <priority>0.90</priority>
+</url>
+<url>
+  <loc>https://www.apticode.in/online-compiler/c</loc>
+  <lastmod>2025-12-06T18:35:00+00:00</lastmod>
+  <priority>0.90</priority>
+</url>
+<url>
+  <loc>https://www.apticode.in/online-compiler/go</loc>
+  <lastmod>2025-12-06T18:35:00+00:00</lastmod>
+  <priority>0.90</priority>
+</url>
 
 </urlset>

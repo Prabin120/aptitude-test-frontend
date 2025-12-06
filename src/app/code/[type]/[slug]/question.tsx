@@ -12,19 +12,40 @@ interface QuestionPageProps {
 }
 
 const CodeQuestion: React.FC<QuestionPageProps> = ({ data, type }) => {
-    console.log(data);
+    const [descriptionContent, setDescriptionContent] = React.useState<string>(data.description);
+
+    React.useEffect(() => {
+        const fetchDescription = async () => {
+            if (data.description && (data.description.startsWith('http') || data.description.startsWith('/'))) {
+                try {
+                    const response = await fetch(data.description);
+                    if (response.ok) {
+                        const text = await response.text();
+                        setDescriptionContent(text);
+                    }
+                } catch (error) {
+                    console.error("Failed to fetch description:", error);
+                }
+            } else {
+                setDescriptionContent(data.description);
+            }
+        };
+
+        fetchDescription();
+    }, [data.description]);
+
     return (
         <Card>
             <CardHeader>
                 <div className="flex justify-between items-center">
                     <CardTitle>{data?.questionNo}. {data?.title}</CardTitle>
-                    { type !== "exam" &&
+                    {type !== "exam" &&
                         <div className='flex space-x-4 items-center'>
-                            {data?.userStatus === "solved"?
-                                <span className='flex space-x-2 text-green-600 text-sm'><CircleCheck size={16}/> Solved</span>
-                            :
-                            data?.userStatus === "attempted" &&
-                                <span className='flex space-x-2 text-yellow-600 text-sm'><BrainCircuit size={16}/> Attempted</span>
+                            {data?.userStatus === "solved" ?
+                                <span className='flex space-x-2 text-green-600 text-sm'><CircleCheck size={16} /> Solved</span>
+                                :
+                                data?.userStatus === "attempted" &&
+                                <span className='flex space-x-2 text-yellow-600 text-sm'><BrainCircuit size={16} /> Attempted</span>
                             }
                             <Badge>{data?.difficulty}</Badge>
                         </div>
@@ -33,9 +54,9 @@ const CodeQuestion: React.FC<QuestionPageProps> = ({ data, type }) => {
             </CardHeader>
             <CardContent>
                 <ScrollArea className="h-[calc(100vh-200px)]">
-                    <div 
+                    <div
                         className="prose dark:prose-invert max-w-none p-4 border rounded-md"
-                        dangerouslySetInnerHTML={{ __html: data.description }}
+                        dangerouslySetInnerHTML={{ __html: descriptionContent }}
                     />
                     <h3 className="text-lg font-bold mt-6 mb-2">Tags</h3>
                     {data?.tags ? data.tags.map((tag) => (

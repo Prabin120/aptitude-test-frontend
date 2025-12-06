@@ -46,13 +46,14 @@ interface TestCase {
 type SubmissionStatus = "accepted" | "runtime_error" | "wrong_answer"
 
 interface SubmissionResultProps {
-    status: SubmissionStatus
+    status?: SubmissionStatus | string
     passedTestCases?: number
     totalTestCases?: number
     code?: string
     message: string
     language?: string
     testCaseVariableNames: string
+    createdAt?: string
     failedCase?: {
         input: string
         actualOutput: string

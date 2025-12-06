@@ -5,7 +5,8 @@ import {
 	codeQuestion,
 	codeQuestions,
 	codeRunCode,
-	codeSubmitCode
+	codeSubmitCode,
+	codeExecute
 } from "@/consts";
 import { checkRefresh } from "@/utils/apiCall";
 
@@ -196,6 +197,32 @@ const getAiFeedback = async (code: string, langauge: string, question: string, p
 	return response;
 };
 
+const executeCode = async (
+	code: string,
+	language: string,
+	input: string = ""
+) => {
+	const data = {
+		code,
+		language,
+		input,
+	};
+	const response = await handlePostMethod(codeExecute, data);
+	if (response instanceof Response) {
+		try {
+			const res = await response.json();
+			if (response.status === 200 || response.status === 201) {
+				return res.data;
+			} else {
+				return res.message;
+			}
+		} catch (e) {
+			return "Invalid response from server";
+		}
+	}
+	return "Server error";
+};
+
 export {
 	runTest,
 	submitCodeAPI,
@@ -207,4 +234,5 @@ export {
 	handlePostMethod,
 	getAihint,
 	getAiFeedback,
+	executeCode,
 };
