@@ -327,6 +327,11 @@ const Header = () => {
                     AptiZone
                   </Button>
                 </Link>
+                <Link href="/online-compiler" onClick={() => setIsSheetOpen(false)}>
+                  <Button className="w-full justify-start" variant="ghost">
+                    CompilZone
+                  </Button>
+                </Link>
                 <Link href="/about-us" onClick={() => setIsSheetOpen(false)}>
                   <Button className="w-full justify-start" variant="ghost">
                     About
