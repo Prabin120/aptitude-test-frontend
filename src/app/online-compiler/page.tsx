@@ -45,7 +45,7 @@ export default function OnlineCompilerPage() {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-[calc(100vh-64px)] p-8 text-center bg-black text-white">
+        <div className="flex flex-col items-center justify-center p-8 text-center bg-black text-white">
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
