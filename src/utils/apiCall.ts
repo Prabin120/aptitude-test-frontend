@@ -3,7 +3,7 @@ import { ErrorResponse } from "./commonFunction";
 
 type ApiResponse = Response;
 
-export const checkRefresh = async() => await fetch(apiEntryPoint + refreshToken, {
+export const checkRefresh = async () => await fetch(apiEntryPoint + refreshToken, {
     method: "GET",
     credentials: "include",
 });
@@ -73,4 +73,23 @@ const handlePutMethod = async (endpoint: string, data: object): Promise<ApiRespo
     }
 };
 
-export { handlePostMethod, handleGetMethod, handlePutMethod };
+const handleDeleteMethod = async (endpoint: string): Promise<ApiResponse | ErrorResponse> => {
+    try {
+        const response = await fetch(apiEntryPoint + endpoint, {
+            method: "DELETE",
+            credentials: "include",
+        });
+        if (response.status === 401 || response.status === 403) {
+            const refreshValid = await checkRefresh();
+            if (refreshValid.status === 200) {
+                return handleDeleteMethod(endpoint);
+            }
+        }
+        return response;
+    } catch (err) {
+        console.error("Error during delete:", err);
+        return { message: "Server error, please try again later.", status: 500 };
+    }
+};
+
+export { handlePostMethod, handleGetMethod, handlePutMethod, handleDeleteMethod };

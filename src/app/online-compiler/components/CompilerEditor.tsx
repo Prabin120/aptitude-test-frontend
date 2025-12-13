@@ -5,7 +5,7 @@ import Editor, { Monaco } from "@monaco-editor/react";
 import { editor, IDisposable } from "monaco-editor";
 import React, { useState, useRef, useEffect, useMemo } from "react";
 import { executeCode, aiGenerateCode, aiImproveCode } from "../api";
-import { Loader2, Play, Menu, Maximize2, Minimize2, X, ChevronRight, Sparkles, Wand2, User, LogOut, AlertTriangle } from "lucide-react";
+import { Loader2, Play, Menu, Maximize2, Minimize2, X, ChevronRight, Sparkles, Wand2, User, LogOut, AlertTriangle, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { registerPythonCompletion } from "../utils/pythonIntellisense";
 import { registerCppCompletion } from "../utils/cppIntellisense";
@@ -14,11 +14,7 @@ import { registerJavaCompletion } from "../utils/javaIntellisense";
 import { registerGoCompletion } from "../utils/goIntellisense";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useAppSelector, useAppDispatch } from "@/redux/store";
-import { setAuthState } from "@/redux/auth/authSlice";
-import { setUserState, userInitialState } from "@/redux/user/userSlice";
-import { handleGetMethod } from "@/utils/apiCall";
-import { logoutEndpoint } from "@/consts";
+import { useAppSelector } from "@/redux/store";
 import {
     Dialog,
     DialogContent,
@@ -33,6 +29,7 @@ import {
     SheetHeader,
     SheetTitle,
 } from "@/components/ui/sheet";
+import SettingsModal from "./SettingsModal";
 
 interface CompilerEditorProps {
     language: string;
@@ -90,7 +87,7 @@ const CompilerEditor: React.FC<CompilerEditorProps> = ({ language }) => {
     const pathname = usePathname();
 
     // Redux auth
-    const dispatch = useAppDispatch();
+    // const dispatch = useAppDispatch();
     const isAuthenticated = useAppSelector((state) => state.auth.authState);
     const userDetail = useAppSelector((state) => state.user);
 
@@ -109,10 +106,25 @@ const CompilerEditor: React.FC<CompilerEditorProps> = ({ language }) => {
             } catch (e) {
                 console.error('Failed to parse saved code:', e);
             }
-            // Clear after restoring
-            localStorage.removeItem(COMPILER_STORAGE_KEY);
+            // Clear after restoring - REMOVED to support persistent auto-save
+            // localStorage.removeItem(COMPILER_STORAGE_KEY);
         }
     }, [language]);
+
+    // Auto-save code to localStorage
+    useEffect(() => {
+        if (!isMounted) return;
+
+        const timeoutId = setTimeout(() => {
+            localStorage.setItem(COMPILER_STORAGE_KEY, JSON.stringify({
+                code,
+                input,
+                language,
+            }));
+        }, 2000); // Auto-save after 2 seconds of inactivity
+
+        return () => clearTimeout(timeoutId);
+    }, [code, input, language, isMounted]);
 
     useEffect(() => {
         if (!monacoRef.current || !autocomplete) {
@@ -139,9 +151,47 @@ const CompilerEditor: React.FC<CompilerEditorProps> = ({ language }) => {
         return () => { if (disposableRef.current) disposableRef.current.dispose(); };
     }, [language, autocomplete]);
 
+    const getBackendLanguage = (lang: string) => lang === "python" ? "py" : lang;
+
+    const handleDownload = () => {
+        const extensionMap: { [key: string]: string } = {
+            python: 'py',
+            cpp: 'cpp',
+            c: 'c',
+            java: 'java',
+            go: 'go'
+        };
+        const ext = extensionMap[language] || 'txt';
+        const blob = new Blob([code], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `Main.${ext}`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+    };
+
     const handleEditorDidMount = (editorInstance: editor.IStandaloneCodeEditor, monaco: Monaco) => {
         monacoRef.current = monaco;
         editorRef.current = editorInstance;
+
+        // Register custom actions and keybindings
+        editorInstance.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyR, () => {
+            handleRun();
+        });
+
+        editorInstance.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, () => {
+            handleDownload();
+        });
+
+        editorInstance.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyMod.Alt | monaco.KeyCode.KeyF, () => {
+            import("sonner").then(({ toast }) => {
+                toast.info("Formatting is not supported for this language in the online editor yet.");
+            });
+        });
+
 
         editorInstance.onDidChangeCursorSelection((e) => {
             const selection = e.selection;
@@ -159,8 +209,6 @@ const CompilerEditor: React.FC<CompilerEditorProps> = ({ language }) => {
             }
         });
     };
-
-    const getBackendLanguage = (lang: string) => lang === "python" ? "py" : lang;
 
     const handleRun = async () => {
         setLoading(true);
@@ -184,13 +232,6 @@ const CompilerEditor: React.FC<CompilerEditorProps> = ({ language }) => {
 
     const handleEditorChange = (value: string | undefined) => {
         setCode(value || "");
-    };
-
-    const handleLogout = async () => {
-        dispatch(setUserState(userInitialState));
-        dispatch(setAuthState(false));
-        await handleGetMethod(logoutEndpoint);
-        setShowProfileSheet(false);
     };
 
     // Check if response indicates auth error (401/403)
@@ -460,7 +501,7 @@ const CompilerEditor: React.FC<CompilerEditorProps> = ({ language }) => {
                     </div>
                     <DialogTitle className="text-xl font-bold text-white">Daily Quota Exceeded</DialogTitle>
                     <DialogDescription className="text-zinc-400">
-                        You have used all your AI calls for today. Your quota will reset tomorrow.
+                        You have used all your AI calls for today. Your quota will reset tomorrow. If you want to use more AI calls, click on Read More.
                     </DialogDescription>
                 </DialogHeader>
                 <DialogFooter className="flex gap-3 sm:justify-center">
@@ -505,13 +546,12 @@ const CompilerEditor: React.FC<CompilerEditorProps> = ({ language }) => {
                             <span>View Profile</span>
                         </button>
                     </Link>
-                    <button
-                        onClick={handleLogout}
-                        className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-zinc-300 hover:bg-zinc-800 transition-colors text-left"
-                    >
-                        <LogOut className="w-4 h-4" />
-                        <span>Logout</span>
-                    </button>
+                    <Link href="/logout">
+                        <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-zinc-300 hover:bg-zinc-800 transition-colors text-left">
+                            <LogOut className="w-4 h-4" />
+                            <span>Logout</span>
+                        </button>
+                    </Link>
                 </div>
             </SheetContent>
         </Sheet>
@@ -547,11 +587,21 @@ const CompilerEditor: React.FC<CompilerEditorProps> = ({ language }) => {
                         <span className="font-serif font-thin">&lt;AptiCode/&gt;</span>.
                     </span>
                 </Link>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 relative group">
                     <RunButton />
+                    {/* Tooltip */}
+                    <span className="absolute left-9 top-14 -translate-y-1/2 bg-zinc-900 text-white text-xs p-2  rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50 pointer-events-none border border-zinc-800">
+                        CTRL + R
+                    </span>
                 </div>
                 <div className="flex items-center gap-4">
                     <AutocompleteToggle />
+                    {/* Settings Button will go here */}
+                    <SettingsModal>
+                        <button className="text-zinc-400 hover:text-zinc-100 transition-colors p-1">
+                            <Settings className="w-5 h-5" />
+                        </button>
+                    </SettingsModal>
                     <ProfileOrLogin />
                 </div>
             </div>
@@ -588,7 +638,15 @@ const CompilerEditor: React.FC<CompilerEditorProps> = ({ language }) => {
                     </div>
                     <div>
                         <div className="text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-3">Settings</div>
-                        <AutocompleteToggle />
+                        <div className="flex flex-col gap-4">
+                            <AutocompleteToggle />
+                            <SettingsModal>
+                                <button className="flex items-center gap-2 text-zinc-400 hover:text-zinc-200" onClick={() => { }}>
+                                    <Settings className="w-4 h-4" />
+                                    <span className="text-sm">More Settings</span>
+                                </button>
+                            </SettingsModal>
+                        </div>
                     </div>
                     <div>
                         <div className="text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-3">Languages</div>

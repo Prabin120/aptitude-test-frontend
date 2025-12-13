@@ -19,6 +19,7 @@ import { lowlight } from 'lowlight';
 import { cn } from '@/lib/utils';
 import Toolbar from './toolbar';
 import './styles.css';
+import { Textarea } from '@/components/ui/textarea';
 
 // Import common languages for syntax highlighting
 import 'highlight.js/styles/atom-one-dark.css';
@@ -167,6 +168,8 @@ const ResizableImageExtension = Image.extend({
 });
 
 
+
+
 interface RichTextEditorProps {
     value: string;
     onChange: (value: string) => void;
@@ -182,11 +185,13 @@ const RichTextEditor = ({
 }: RichTextEditorProps) => {
     const [isFocused, setIsFocused] = useState(false);
     const [isFullscreen, setIsFullscreen] = useState(false);
+    const [isSourceMode, setIsSourceMode] = useState(false); // New state for Source Mode
 
     const editor = useEditor({
+        // ... (configuration remains the same)
         extensions: [
             StarterKit.configure({
-                codeBlock: false, // Disable the default code block to use our custom one
+                codeBlock: false,
             }),
             Placeholder.configure({
                 placeholder,
@@ -244,11 +249,13 @@ const RichTextEditor = ({
         },
     });
 
+    // Update editor content when value changes externally (only if NOT in source mode to avoid conflict)
     useEffect(() => {
-        if (editor && value !== editor.getHTML()) {
-          editor.commands.setContent(value || '')
+        if (editor && value !== editor.getHTML() && !isSourceMode) {
+            editor.commands.setContent(value || '')
         }
-      }, [value, editor])  // <-- This is the critical fix
+    }, [value, editor, isSourceMode])
+
 
     // Handle file upload
     const handleImageUpload = useCallback(async (file: File) => {
@@ -268,6 +275,14 @@ const RichTextEditor = ({
         setIsFullscreen(!isFullscreen);
     };
 
+    const toggleSourceMode = () => {
+        if (isSourceMode) {
+            // Switching back to Rich Text: Update editor with current HTML value
+            editor?.commands.setContent(value);
+        }
+        setIsSourceMode(!isSourceMode);
+    };
+
     if (!editor) {
         return null;
     }
@@ -284,68 +299,85 @@ const RichTextEditor = ({
                 onImageUpload={handleImageUpload}
                 isFullscreen={isFullscreen}
                 onToggleFullscreen={toggleFullscreen}
+                isSourceMode={isSourceMode}
+                onToggleSourceMode={toggleSourceMode}
             />
 
             {editor && (
-                <BubbleMenu
-                    editor={editor}
-                    tippyOptions={{ duration: 150 }}
-                    className="bg-popover text-popover-foreground rounded-md shadow-md overflow-hidden border border-border flex"
-                >
-                    <Toggle
-                        size="sm"
-                        pressed={editor.isActive('bold')}
-                        onPressedChange={() => editor.chain().focus().toggleBold().run()}
-                        className="rounded-none px-3"
-                        aria-label="Bold"
+                <div className={cn(isSourceMode && "hidden")}>
+                    <BubbleMenu
+                        editor={editor}
+                        tippyOptions={{ duration: 150 }}
+                        className="bg-popover text-popover-foreground rounded-md shadow-md overflow-hidden border border-border flex"
                     >
-                        <span className="font-bold">B</span>
-                    </Toggle>
-                    <Toggle
-                        size="sm"
-                        pressed={editor.isActive('italic')}
-                        onPressedChange={() => editor.chain().focus().toggleItalic().run()}
-                        className="rounded-none px-3"
-                        aria-label="Italic"
-                    >
-                        <span className="italic">I</span>
-                    </Toggle>
-                    <Toggle
-                        size="sm"
-                        pressed={editor.isActive('link')}
-                        onPressedChange={() => {
-                            const url = window.prompt('URL')
-                            if (url) {
-                                editor.chain().focus().setLink({ href: url }).run()
-                            } else {
-                                editor.chain().focus().unsetLink().run()
-                            }
-                        }}
-                        className="rounded-none px-3"
-                        aria-label="Link"
-                    >
-                        <span className="underline">Link</span>
-                    </Toggle>
-                    <Toggle
-                        size="sm"
-                        pressed={editor.isActive('highlight')}
-                        onPressedChange={() => {
-                            if (editor.can().toggleMark('highlight')) {
-                                editor.chain().focus().toggleMark('highlight').run();
-                            }
-                        }}
-                        className="rounded-none px-3"
-                        aria-label="Highlight"
-                    >
-                        <span className="bg-yellow-200 text-black px-1">H</span>
-                    </Toggle>
-                </BubbleMenu>
+                        <Toggle
+                            size="sm"
+                            pressed={editor.isActive('bold')}
+                            onPressedChange={() => editor.chain().focus().toggleBold().run()}
+                            className="rounded-none px-3"
+                            aria-label="Bold"
+                        >
+                            <span className="font-bold">B</span>
+                        </Toggle>
+                        <Toggle
+                            size="sm"
+                            pressed={editor.isActive('italic')}
+                            onPressedChange={() => editor.chain().focus().toggleItalic().run()}
+                            className="rounded-none px-3"
+                            aria-label="Italic"
+                        >
+                            <span className="italic">I</span>
+                        </Toggle>
+                        <Toggle
+                            size="sm"
+                            pressed={editor.isActive('link')}
+                            onPressedChange={() => {
+                                const url = window.prompt('URL')
+                                if (url) {
+                                    editor.chain().focus().setLink({ href: url }).run()
+                                } else {
+                                    editor.chain().focus().unsetLink().run()
+                                }
+                            }}
+                            className="rounded-none px-3"
+                            aria-label="Link"
+                        >
+                            <span className="underline">Link</span>
+                        </Toggle>
+                        <Toggle
+                            size="sm"
+                            pressed={editor.isActive('highlight')}
+                            onPressedChange={() => {
+                                if (editor.can().toggleMark('highlight')) {
+                                    editor.chain().focus().toggleMark('highlight').run();
+                                }
+                            }}
+                            className="rounded-none px-3"
+                            aria-label="Highlight"
+                        >
+                            <span className="bg-yellow-200 text-black px-1">H</span>
+                        </Toggle>
+                    </BubbleMenu>
+                </div>
             )}
 
             <div className={cn(
-                isFullscreen ? 'overflow-auto h-[calc(100vh-48px)]' : ''
+                isFullscreen ? 'overflow-auto h-[calc(100vh-48px)]' : 'min-h-[150px]',
+                'bg-background'
             )}>
-                <EditorContent editor={editor} />
+                <Textarea
+                    value={value}
+                    onChange={(e) => onChange(e.target.value)}
+                    className={cn(
+                        "w-full h-full min-h-[150px] font-mono text-sm p-4 border-0 rounded-none focus-visible:ring-0 resize-none bg-zinc-950 text-zinc-300",
+                        !isSourceMode && "hidden"
+                    )}
+                    spellCheck={false}
+                />
+
+                <div className={cn(isSourceMode && "hidden")}>
+                    <EditorContent editor={editor} />
+                </div>
             </div>
         </div>
     );

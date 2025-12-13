@@ -1,8 +1,11 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+import { Settings } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
+import SettingsModal from "./SettingsModal";
 
 const languages = [
     {
@@ -63,7 +66,7 @@ const Sidebar = () => {
     const pathname = usePathname();
 
     return (
-        <div className="hidden md:flex w-16 flex-col items-center py-4 bg-zinc-950 border-r border-zinc-800 h-full">
+        <div className="hidden md:flex w-16 flex-col items-center py-4 bg-zinc-950 border-r border-zinc-800 h-full justify-between">
             <div className="flex flex-col gap-6 mt-4">
                 {languages.map((lang) => {
                     // Extract the last segment of pathname for exact matching
@@ -75,8 +78,7 @@ const Sidebar = () => {
                             href={`/online-compiler/${lang.id}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className={`p-3 rounded-lg transition-all duration-200 group relative ${isActive ? "bg-zinc-800 text-white" : "text-zinc-500 hover:bg-zinc-900"
-                                }`}
+                            className={`p-3 rounded-lg transition-all duration-200 group relative ${isActive ? "bg-zinc-800 text-white" : "text-zinc-500 hover:bg-zinc-900"}`}
                         >
                             <div className={`${isActive ? lang.color : "group-hover:" + lang.color} transition-colors`}>
                                 {lang.icon}
@@ -94,6 +96,17 @@ const Sidebar = () => {
                         </Link>
                     )
                 })}
+            </div>
+            <div>
+                <SettingsModal>
+                    <Button variant={"ghost"} className={`group relative`}>
+                        <Settings size={24} />
+                        {/* Tooltip */}
+                        <span className="absolute left-14 top-1/2 -translate-y-1/2 bg-zinc-900 text-white text-xs p-2  rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50 pointer-events-none border border-zinc-800">
+                            Settings
+                        </span>
+                    </Button>
+                </SettingsModal>
             </div>
         </div>
     );

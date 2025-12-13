@@ -47,9 +47,11 @@ interface ToolbarProps {
     onImageUpload: (file: File) => void;
     isFullscreen: boolean;
     onToggleFullscreen: () => void;
+    isSourceMode: boolean;
+    onToggleSourceMode: () => void;
 }
 
-const Toolbar = ({ editor, onImageUpload, isFullscreen, onToggleFullscreen }: ToolbarProps) => {
+const Toolbar = ({ editor, onImageUpload, isFullscreen, onToggleFullscreen, isSourceMode, onToggleSourceMode }: ToolbarProps) => {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [rows, setRows] = useState<number>(3);
     const [cols, setCols] = useState<number>(3);
@@ -434,6 +436,22 @@ const Toolbar = ({ editor, onImageUpload, isFullscreen, onToggleFullscreen }: To
                 >
                     <Redo className="h-4 w-4" />
                 </Button>
+            </div>
+
+            <Separator orientation="vertical" className="h-6" />
+
+            {/* Source Code Toggle */}
+            <div className="flex">
+                <Toggle
+                    size="sm"
+                    pressed={isSourceMode}
+                    onPressedChange={onToggleSourceMode}
+                    aria-label="Toggle Source Code"
+                    className="gap-2"
+                >
+                    <Code className="h-4 w-4" />
+                    <span className="text-xs font-mono">HTML</span>
+                </Toggle>
             </div>
 
             {/* Fullscreen toggle */}

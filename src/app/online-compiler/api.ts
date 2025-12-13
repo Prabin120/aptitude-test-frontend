@@ -2,11 +2,27 @@ import Error from "next/error";
 import { handlePostMethod } from "../code/apiCalls";
 import { aiGenerateEndpoint, aiImproveEndpoint, codeExecute } from "@/consts";
 
+const apticode_gemini_key = "apticode_gemini_key";
+
+export const setAIApiKey = (apiKey: string) => {
+    localStorage.setItem(apticode_gemini_key, apiKey);
+}
+
+export const getAIApiKey = () => {
+    return localStorage.getItem(apticode_gemini_key);
+}
+
+export const removeAIApiKey = () => {
+    localStorage.removeItem(apticode_gemini_key);
+}
+
 // AI Generate Code - uses dedicated generate endpoint
 export const aiGenerateCode = async (language: string, prompt: string) => {
+    const apiKey = getAIApiKey();
     const data = {
         language: language,
         prompt: prompt,
+        apiKey: apiKey,
     }
     const response = await handlePostMethod(aiGenerateEndpoint, data);
     if (response instanceof Response) {
@@ -18,9 +34,11 @@ export const aiGenerateCode = async (language: string, prompt: string) => {
 
 // AI Improve Code - uses dedicated improve endpoint
 export const aiImproveCode = async (language: string, code: string) => {
+    const apiKey = getAIApiKey();
     const data = {
         language: language,
         code: code,
+        apiKey: apiKey,
     }
     const response = await handlePostMethod(aiImproveEndpoint, data);
     if (response instanceof Response) {

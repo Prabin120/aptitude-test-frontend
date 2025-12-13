@@ -105,3 +105,12 @@ export const rewardDashboard = '/p/api/v1/reward/dashboard'
 export const rewardHistory = '/p/api/v1/reward/history'
 export const createRewardOrder = '/p/api/v1/reward/create-order'
 export const verifyRewardCoins = '/p/api/v1/reward/verify-payment'
+
+// Blog
+export const getBlogsEndpoint = '/p/api/v1/blog'  // GET all published blogs
+export const getBlogEndpoint = '/p/api/v1/blog'  // GET single blog by slug
+export const createBlogEndpoint = '/p/api/v1/blog'  // POST create blog
+export const updateBlogEndpoint = '/p/api/v1/blog'  // PUT update blog
+export const deleteBlogEndpoint = '/p/api/v1/blog'  // DELETE blog
+export const getAdminBlogsEndpoint = '/p/api/v1/blog/admin/all'  // GET all blogs for admin
+export const getAdminBlogEndpoint = '/p/api/v1/blog/admin'  // GET single blog for admin

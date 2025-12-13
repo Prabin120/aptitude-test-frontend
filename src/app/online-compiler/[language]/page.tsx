@@ -1,6 +1,8 @@
 import { Metadata } from 'next';
 import CompilerEditor from '../components/CompilerEditor';
 
+// Page for specific language compiler
+
 interface Props {
     params: {
         language: string;
