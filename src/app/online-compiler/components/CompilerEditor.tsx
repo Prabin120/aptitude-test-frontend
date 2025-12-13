@@ -49,12 +49,12 @@ const COMPILER_STORAGE_KEY = 'apticode_compiler_draft';
 const CompilerEditor: React.FC<CompilerEditorProps> = ({ language }) => {
     const getDefaultCode = (lang: string): string => {
         switch (lang) {
-            case 'python': return 'print("AptiCode is best")';
-            case 'cpp': return '#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << "AptiCode is best" << endl;\n    return 0;\n}';
-            case 'c': return '#include <stdio.h>\n\nint main() {\n    printf("AptiCode is best\\n");\n    return 0;\n}';
-            case 'java': return 'public class Main {\n    public static void main(String[] args) {\n        System.out.println("AptiCode is best");\n    }\n}';
-            case 'go': return 'package main\n\nimport "fmt"\n\nfunc main() {\n    fmt.Println("AptiCode is best")\n}';
-            default: return '// Write your code here';
+            case 'python': return '# Tip: Select lines to use AI Generate/Improve features\n\nprint("AptiCode is best")';
+            case 'cpp': return '// Tip: Select lines to use AI Generate/Improve features\n\n#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << "AptiCode is best" << endl;\n    return 0;\n}';
+            case 'c': return '// Tip: Select lines to use AI Generate/Improve features\n\n#include <stdio.h>\n\nint main() {\n    printf("AptiCode is best\\n");\n    return 0;\n}';
+            case 'java': return '// Tip: Select lines to use AI Generate/Improve features\n\npublic class Main {\n    public static void main(String[] args) {\n        System.out.println("AptiCode is best");\n    }\n}';
+            case 'go': return '// Tip: Select lines to use AI Generate/Improve features\n\npackage main\n\nimport "fmt"\n\nfunc main() {\n    fmt.Println("AptiCode is best")\n}';
+            default: return '// Tip: Select lines to use AI Generate/Improve features\n// Write your code here';
         }
     };
 
