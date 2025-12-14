@@ -84,7 +84,7 @@ export default function WithdrawForm() {
             <div className="flex items-center space-x-2 rounded-md border border-gray-700 p-3 cursor-pointer hover:bg-gray-800/50">
               <RadioGroupItem value="card" id="card" />
               <Label htmlFor="card" className="flex items-center cursor-pointer">
-                <CreditCard className="h-4 w-4 mr-2 text-purple-400" />
+                <CreditCard className="h-4 w-4 mr-2 text-primary" />
                 Credit Card
               </Label>
             </div>

@@ -138,7 +138,7 @@ export default function PracticeSection() {
                 {codingProblems.map((problem, index) => (
                   <div
                     key={index}
-                    className="bg-gray-900 border border-gray-800 rounded-lg p-5 hover:border-purple-700 transition-colors"
+                    className="bg-gray-900 border border-gray-800 rounded-lg p-5 hover:border-primary transition-colors"
                   >
                     <div className="flex justify-between items-start mb-4">
                       <h3 className="font-medium text-lg">{problem.title}</h3>
@@ -167,7 +167,7 @@ export default function PracticeSection() {
                 ))}
               </div>
               <div className="text-center">
-                <Button asChild className="bg-blue-600 hover:bg-blue-700">
+                <Button asChild className="bg-secondary hover:bg-secondary/90">
                   <Link href="/code/problems">
                     Explore All Coding Problems <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
@@ -187,7 +187,7 @@ export default function PracticeSection() {
                 {quantProblems.map((problem, index) => (
                   <div
                     key={index}
-                    className="bg-gray-900 border border-gray-800 rounded-lg p-5 hover:border-purple-700 transition-colors"
+                    className="bg-gray-900 border border-gray-800 rounded-lg p-5 hover:border-primary transition-colors"
                   >
                     <div className="flex justify-between items-start mb-4">
                       <h3 className="font-medium text-lg">{problem.title}</h3>
@@ -216,7 +216,7 @@ export default function PracticeSection() {
                 ))}
               </div>
               <div className="text-center">
-                <Button asChild className="bg-purple-600 hover:bg-purple-700">
+                <Button asChild className="bg-primary hover:bg-primary/90 text-primary-text">
                   <Link href="/apti-zone">
                     Explore All Quantitative Problems <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
@@ -236,7 +236,7 @@ export default function PracticeSection() {
                 {aptitudeProblems.map((problem, index) => (
                   <div
                     key={index}
-                    className="bg-gray-900 border border-gray-800 rounded-lg p-5 hover:border-purple-700 transition-colors"
+                    className="bg-gray-900 border border-gray-800 rounded-lg p-5 hover:border-primary transition-colors"
                   >
                     <div className="flex justify-between items-start mb-4">
                       <h3 className="font-medium text-lg">{problem.title}</h3>
@@ -265,7 +265,7 @@ export default function PracticeSection() {
                 ))}
               </div>
               <div className="text-center">
-                <Button asChild className="bg-green-600 hover:bg-green-700">
+                <Button asChild className="bg-primary hover:bg-primary/90 text-primary-text">
                   <Link href="/apti-zone">
                     Explore All Aptitude Problems <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>

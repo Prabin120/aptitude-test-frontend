@@ -71,7 +71,7 @@ export default function RewardsOverview({ overview, setOverview }: { overview: I
             <Link href="/admin">
               <Button variant={"secondary"} type="button">Contribute to Earn</Button>
             </Link>
-            <Button onClick={() => setIsModalOpen(true)} className="bg-purple-600 hover:bg-purple-700 text-white">Add Coins</Button>
+            <Button onClick={() => setIsModalOpen(true)} className="bg-primary hover:bg-primary/90 text-primary-text">Add Coins</Button>
           </div>
         </CardTitle>
         <CardDescription>Track your earnings and balance</CardDescription>

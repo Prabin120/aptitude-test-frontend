@@ -40,29 +40,29 @@ function CodeHeader({ runCode, submitCode, loading, type, time }: Readonly<Heade
 
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
-          if (event.ctrlKey && event.key === 'r') {
-            event.preventDefault()
-            if (authenticate) {
-              runCode()
-            } else {
-              alert("Please login first")
+            if (event.ctrlKey && event.key === 'r') {
+                event.preventDefault()
+                if (authenticate) {
+                    runCode()
+                } else {
+                    alert("Please login first")
+                }
+            } else if (event.ctrlKey && event.key === 's') {
+                event.preventDefault()
+                if (authenticate) {
+                    submitCode()
+                } else {
+                    alert("Please login first")
+                }
             }
-          } else if (event.ctrlKey && event.key === 's') {
-            event.preventDefault()
-            if (authenticate) {
-              submitCode()
-            } else {
-              alert("Please login first")
-            }
-          }
         }
-    
+
         window.addEventListener('keydown', handleKeyDown)
-    
+
         return () => {
-          window.removeEventListener('keydown', handleKeyDown)
+            window.removeEventListener('keydown', handleKeyDown)
         }
-      }, [authenticate, runCode, submitCode])
+    }, [authenticate, runCode, submitCode])
 
     useEffect(() => {
         if (type === "exam") {
@@ -118,7 +118,7 @@ function CodeHeader({ runCode, submitCode, loading, type, time }: Readonly<Heade
                                 </div>
                             </div>
                             <nav className="space-y-2">
-                                <Link href={"/profile/" + userDetail.username +"/code"}>
+                                <Link href={"/profile/" + userDetail.username + "/code"}>
                                     <Button className="w-full justify-start" variant="ghost">
                                         <User className="mr-2 h-4 w-4" />
                                         View Profile
@@ -155,7 +155,7 @@ function CodeHeader({ runCode, submitCode, loading, type, time }: Readonly<Heade
                 <div className="flex items-center space-x-2">
                     <Tooltip>
                         <TooltipTrigger asChild>
-                            <Button onClick={() => authenticate ? runCode() : alert("Please login first")} disabled={loading} size="sm">
+                            <Button className="text-primary-text" onClick={() => authenticate ? runCode() : alert("Please login first")} disabled={loading} size="sm">
                                 {loading ? <CircleLoading color="bg-neutral-50" /> : <><Play className="mr-2 h-4 w-4" />Run</>}
                             </Button>
                         </TooltipTrigger>

@@ -9,7 +9,7 @@ import Link from "next/link"
 export default function HeroSection() {
   const [currentFeature, setCurrentFeature] = useState(0)
   const features = ["Code", "Compete", "Contribute", "Earn"]
-  const colors = ["text-blue-400", "text-purple-400", "text-green-400", "text-yellow-400"]
+  const colors = ["text-blue-400", "text-primary", "text-green-400", "text-yellow-400"]
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -21,9 +21,9 @@ export default function HeroSection() {
   return (
     <section className="relative overflow-hidden py-20 md:py-32">
       {/* Background elements */}
-      {/* <div className="absolute inset-0 bg-gradient-to-b from-purple-900/20 to-black"></div>
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-500 to-transparent"></div>
-      <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-900/30 rounded-full blur-3xl"></div>
+      {/* <div className="absolute inset-0 bg-gradient-to-b fromtext-primary-900/20 to-black"></div>
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent viatext-primary-500 to-transparent"></div>
+      <div className="absolute -top-40 -right-40 w-80 h-80 bgtext-primary-900/30 rounded-full blur-3xl"></div>
       <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-900/30 rounded-full blur-3xl"></div> */}
 
       <div className="container mx-auto px-4 relative z-10">
@@ -38,12 +38,12 @@ export default function HeroSection() {
             </p>
             <div className="flex flex-wrap gap-4">
               <Link href="/login">
-                <Button size="lg" className="bg-purple-600 hover:bg-purple-700">
+                <Button size="lg" className="bg-primary hover:bg-primary/80 text-primary-text font-normal">
                   Get Started
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
-              <Button size="lg" variant="outline" className="border-purple-600 text-purple-400 hover:bg-purple-950/50">
+              <Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary/50">
                 Explore Features
               </Button>
             </div>
@@ -54,11 +54,11 @@ export default function HeroSection() {
                 <span className="text-gray-300">100+ Challenges</span>
               </div>
               <div className="flex items-center gap-2">
-                <Brain className="h-5 w-5 text-purple-400" />
+                <Brain className="h-5 w-5 text-primary" />
                 <span className="text-gray-300">Aptitude Tests</span>
               </div>
               <div className="flex items-center gap-2">
-                <Trophy className="h-5 w-5 text-yellow-400" />
+                <Trophy className="h-5 w-5 text-purple-400" />
                 <span className="text-gray-300">Win Prizes</span>
               </div>
               <div className="flex items-center gap-2">
@@ -74,8 +74,8 @@ export default function HeroSection() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="relative"
           >
-            <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg blur opacity-75"></div>
-            <div className="relative bg-black rounded-lg p-6 border border-purple-800/50">
+            <div className="absolute -inset-0.5 bg-gradient-to-r from-primary to-blue-600 rounded-lg blur opacity-75"></div>
+            <div className="relative bg-black rounded-lg p-6 border text-primary/50">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
                   <div className="h-3 w-3 rounded-full bg-red-500"></div>
@@ -87,14 +87,14 @@ export default function HeroSection() {
               <div className="font-mono text-sm bg-black/80 p-4 rounded border border-gray-800 space-y-2">
                 <div className="text-gray-500">{`// Solve the challenge`}</div>
                 <div>
-                  <span className="text-purple-400">function</span>{" "}
+                  <span className="text-primary">function</span>{" "}
                   <span className="text-blue-400">findMaxSubarraySum</span>
                   <span className="text-gray-300">(</span>
                   <span className="text-orange-300">arr</span>
                   <span className="text-gray-300">) {`{`}</span>
                 </div>
                 <div className="pl-4">
-                  <span className="text-purple-400">let</span> <span className="text-blue-300">maxSoFar</span>
+                  <span className="text-primary">let</span> <span className="text-blue-300">maxSoFar</span>
                   <span className="text-gray-300"> = </span>
                   <span className="text-orange-300">arr</span>
                   <span className="text-gray-300">[</span>
@@ -102,7 +102,7 @@ export default function HeroSection() {
                   <span className="text-gray-300">];</span>
                 </div>
                 <div className="pl-4">
-                  <span className="text-purple-400">let</span> <span className="text-blue-300">maxEndingHere</span>
+                  <span className="text-primary">let</span> <span className="text-blue-300">maxEndingHere</span>
                   <span className="text-gray-300"> = </span>
                   <span className="text-orange-300">arr</span>
                   <span className="text-gray-300">[</span>
@@ -118,7 +118,7 @@ export default function HeroSection() {
                 <div className="text-sm text-gray-400">
                   Difficulty: <span className="text-yellow-500">Medium</span>
                 </div>
-                <Button size="sm" className="bg-purple-600 hover:bg-purple-700">
+                <Button size="sm" className="bg-primary hover:bg-primary/80 text-primary-text">
                   Submit Solution
                 </Button>
               </div>

@@ -72,7 +72,7 @@ export default function BlogsPage() {
         <div className="min-h-screen bg-gradient-to-b from-zinc-950 to-zinc-900">
             {/* Hero Section */}
             <div className="relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-900/20 via-transparent to-blue-900/20" />
+                <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-transparent to-blue-900/20" />
                 <div className="container mx-auto py-16 px-4 relative">
                     <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
                         AptiCode Blog
@@ -89,10 +89,10 @@ export default function BlogsPage() {
                     <>
                         {featuredBlogs.map((post) => (
                             <Link href={`/blogs/${post.slug}`} key={post._id} className="block mb-8">
-                                <Card className="bg-gradient-to-r from-purple-900/30 to-blue-900/30 border-purple-700/50 hover:border-purple-500/70 transition-all group">
+                                <Card className="bg-gradient-to-r from-primary/30 to-blue-900/30 border-primary/50 hover:border-primary/70 transition-all group">
                                     <CardHeader>
                                         <div className="flex items-center gap-2 mb-2">
-                                            <Badge variant="secondary" className="bg-purple-600/20 text-purple-400 border-purple-500/30">
+                                            <Badge variant="secondary" className="bg-primary/20 text-primary border-primary/30">
                                                 <Sparkles className="w-3 h-3 mr-1" />
                                                 Featured
                                             </Badge>
@@ -100,7 +100,7 @@ export default function BlogsPage() {
                                                 {post.category}
                                             </Badge>
                                         </div>
-                                        <CardTitle className="text-2xl md:text-3xl text-white group-hover:text-purple-300 transition-colors">
+                                        <CardTitle className="text-2xl md:text-3xl text-white group-hover:text-primary transition-colors">
                                             {post.title}
                                         </CardTitle>
                                     </CardHeader>
@@ -125,7 +125,7 @@ export default function BlogsPage() {
                                                 ))}
                                             </div>
                                         )}
-                                        <div className="flex items-center gap-2 text-purple-400 group-hover:gap-3 transition-all">
+                                        <div className="flex items-center gap-2 text-primary group-hover:gap-3 transition-all">
                                             Read article
                                             <ArrowRight className="w-4 h-4" />
                                         </div>
@@ -148,7 +148,7 @@ export default function BlogsPage() {
                                             <Badge variant="outline" className="w-fit text-zinc-400 border-zinc-700 mb-2">
                                                 {post.category}
                                             </Badge>
-                                            <CardTitle className="text-lg text-white group-hover:text-purple-300 transition-colors">
+                                            <CardTitle className="text-lg text-white group-hover:text-primary transition-colors">
                                                 {post.title}
                                             </CardTitle>
                                         </CardHeader>

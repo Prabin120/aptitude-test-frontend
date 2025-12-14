@@ -1,6 +1,5 @@
 "use client"
 
-import Sidebar from './components/Sidebar';
 import ReduxProvider from '@/redux/redux-provider';
 
 export default function CompilerLayout({
@@ -10,11 +9,7 @@ export default function CompilerLayout({
 }) {
     return (
         <ReduxProvider>
-            <div className="flex h-[100vh] overflow-hidden bg-black text-white">
-                {/* Sidebar - Fixed width */}
-                <Sidebar />
-
-                {/* Main Content - Flex grow */}
+            <div className="flex bg-black text-white">
                 <div className="flex-1 flex flex-col min-w-0">
                     {children}
                 </div>

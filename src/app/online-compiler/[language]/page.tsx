@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import CompilerEditor from '../components/CompilerEditor';
+import Sidebar from '../components/Sidebar';
 
 // Page for specific language compiler
 
@@ -36,7 +37,7 @@ export function generateMetadata({ params }: Props): Metadata {
     };
 }
 
-const supportedLanguages = ['python', 'cpp', 'c', 'java', 'go', 'js'];
+const supportedLanguages = ['python', 'cpp', 'c', 'java', 'go', 'js', 'javascript'];
 
 export default function LanguageCompilerPage({ params }: Props) {
     const { language } = params;
@@ -68,12 +69,15 @@ export default function LanguageCompilerPage({ params }: Props) {
     }
 
     return (
-        <div className="min-h-screen">
+        <div className="min-h-screen h-[100vh] overflow-hidden">
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
             />
-            <CompilerEditor language={language} />
+            <div className="flex h-full">
+                <Sidebar />
+                <CompilerEditor language={language} />
+            </div>
         </div>
     );
 }

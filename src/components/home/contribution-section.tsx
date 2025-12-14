@@ -9,7 +9,7 @@ import Link from "next/link"
 export default function ContributeSection() {
   const steps = [
     {
-      icon: <Edit className="h-6 w-6 text-purple-400" />,
+      icon: <Edit className="h-6 w-6 text-primary" />,
       title: "Create a Question",
       description: "Design a challenging problem with clear instructions and test cases.",
     },
@@ -27,7 +27,7 @@ export default function ContributeSection() {
 
   return (
     <section className="py-20 relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-black via-purple-950/10 to-black"></div>
+      <div className="absolute inset-0 bg-gradient-to-b from-black via-primary/10 to-black"></div>
       <div className="container mx-auto px-4 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <motion.div
@@ -37,9 +37,9 @@ export default function ContributeSection() {
             viewport={{ once: true }}
           >
             <div className="relative">
-              <div className="absolute -inset-0.5 bg-gradient-to-r from-yellow-600 to-purple-600 rounded-lg blur opacity-75"></div>
-              <Card className="relative bg-black border-purple-800/50 overflow-hidden">
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-yellow-500 to-purple-500"></div>
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-yellow-600 to-primary rounded-lg blur opacity-75"></div>
+              <Card className="relative bg-black border-primary/50 overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-yellow-500 to-primary"></div>
                 <CardContent className="p-6">
                   <div className="flex items-center gap-3 mb-6">
                     <div className="bg-yellow-900/30 p-2 rounded-full">
@@ -52,7 +52,7 @@ export default function ContributeSection() {
                     <div className="bg-gray-900/50 rounded-lg p-4 border border-gray-800">
                       <div className="flex justify-between items-center mb-2">
                         <span className="font-medium">Your Contributions</span>
-                        <span className="text-purple-400">7 approved</span>
+                        <span className="text-primary">7 approved</span>
                       </div>
                       <div className="flex justify-between items-center mb-2">
                         <span className="font-medium">Current Balance</span>
@@ -117,7 +117,7 @@ export default function ContributeSection() {
                       ))}
                     </div>
 
-                    <Button asChild className="w-full bg-yellow-600 hover:bg-yellow-700">
+                    <Button asChild className="w-full bg-secondary hover:bg-secondary/90">
                       <Link href="/rewards">
                         View All Rewards <ArrowRight className="ml-2 h-4 w-4" />
                       </Link>
@@ -165,7 +165,7 @@ export default function ContributeSection() {
               </p>
             </div>
 
-            <Button asChild className="bg-purple-600 hover:bg-purple-700">
+            <Button asChild className="bg-primary hover:bg-primary/80 text-primary-text">
               <Link href="/contribute">
                 Start Contributing Now <ArrowRight className="ml-2 h-4 w-4" />
               </Link>

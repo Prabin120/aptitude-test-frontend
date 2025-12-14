@@ -24,16 +24,16 @@ export default function ContributionHero() {
       <div className="grid md:grid-cols-2 gap-8 items-center relative z-10">
         <div>
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-            <h1 className="text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600 mb-4">
+            <h1 className="text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-pink-600 mb-4">
               Contribute & Earn
             </h1>
             <p className="text-xl text-gray-300 mb-6">
               Share your coding expertise, help others learn, and earn rewards for your contributions.
             </p>
             <div className="flex items-center gap-4 mb-8">
-                <Link href="/admin">
-                    <Button className="bg-purple-600 hover:bg-purple-700">Start Contributing</Button>
-                </Link>
+              <Link href="/admin">
+                <Button className="bg-primary hover:bg-primary/90 text-primary-text">Start Contributing</Button>
+              </Link>
             </div>
             <div className="flex items-center gap-2 text-gray-400">
               <Star className="h-5 w-5 text-yellow-500" />
@@ -43,12 +43,12 @@ export default function ContributionHero() {
         </div>
 
         <div className="relative">
-          <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg blur opacity-75"></div>
-          <div className="relative bg-black rounded-lg p-6 border border-purple-800/50">
+          <div className="absolute -inset-0.5 bg-gradient-to-r from-primary to-pink-600 rounded-lg blur opacity-75"></div>
+          <div className="relative bg-black rounded-lg p-6 border border-primary/50">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
-                <Code className="h-5 w-5 text-purple-400" />
-                <span className="font-mono text-purple-300">contribution.js</span>
+                <Code className="h-5 w-5 text-primary" />
+                <span className="font-mono text-primary/80">contribution.js</span>
               </div>
               <div className="flex items-center gap-2">
                 <Coins className="h-5 w-5 text-yellow-500" />
@@ -61,13 +61,13 @@ export default function ContributionHero() {
             <div className="font-mono text-sm bg-black/80 p-4 rounded border border-gray-800 space-y-2">
               <div className="text-gray-500">${`// Your contribution`}</div>
               <div>
-                <span className="text-purple-400">function</span> <span className="text-blue-400">solveChallenge</span>
+                <span className="text-primary">function</span> <span className="text-blue-400">solveChallenge</span>
                 <span className="text-gray-300">(</span>
                 <span className="text-orange-300">input</span>
                 <span className="text-gray-300">) {`{`}</span>
               </div>
               <div className="pl-4">
-                <span className="text-purple-400">const</span> <span className="text-blue-300">result</span>
+                <span className="text-primary">const</span> <span className="text-blue-300">result</span>
                 <span className="text-gray-300"> = </span>
                 <span className="text-orange-300">input</span>
                 <span className="text-gray-300">.</span>
@@ -81,7 +81,7 @@ export default function ContributionHero() {
                 <span className="text-gray-300">);</span>
               </div>
               <div className="pl-4">
-                <span className="text-purple-400">return</span> <span className="text-blue-300">result</span>
+                <span className="text-primary">return</span> <span className="text-blue-300">result</span>
                 <span className="text-gray-300">;</span>
               </div>
               <div>

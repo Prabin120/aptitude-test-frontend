@@ -74,13 +74,13 @@ export default function EarningsChart() {
 
     // Draw data line
     ctx.beginPath()
-    ctx.strokeStyle = "rgba(168, 85, 247, 0.8)" // Purple
+    ctx.strokeStyle = "hsl(48, 81%, 56%)" // Primary Yellow
     ctx.lineWidth = 3
 
     // Create gradient for area under the line
     const gradient = ctx.createLinearGradient(0, padding, 0, padding + chartHeight)
-    gradient.addColorStop(0, "rgba(168, 85, 247, 0.3)")
-    gradient.addColorStop(1, "rgba(168, 85, 247, 0)")
+    gradient.addColorStop(0, "hsla(48, 81%, 56%, 0.3)")
+    gradient.addColorStop(1, "hsla(48, 81%, 56%, 0)")
 
     // Draw line
     for (let i = 0; i < data.length; i++) {
@@ -109,7 +109,7 @@ export default function EarningsChart() {
 
       ctx.beginPath()
       ctx.arc(x, y, 5, 0, Math.PI * 2)
-      ctx.fillStyle = "#a855f7" // Purple
+      ctx.fillStyle = "hsl(48, 81%, 56%)" // Primary Yellow
       ctx.fill()
       ctx.strokeStyle = "#000"
       ctx.lineWidth = 2

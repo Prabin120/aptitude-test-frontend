@@ -14,18 +14,18 @@ export default function FeaturesSection() {
       color: "from-blue-600 to-cyan-600",
     },
     {
-      icon: <Users className="h-10 w-10 text-purple-400" />,
+      icon: <Users className="h-10 w-10 text-primary" />,
       title: "Group Tests",
       description:
         "Create custom tests and invite friends or colleagues to participate. Perfect for study groups and team building.",
-      color: "from-purple-600 to-pink-600",
+      color: "from-primary to-pink-600",
     },
     {
-      icon: <Trophy className="h-10 w-10 text-yellow-400" />,
+      icon: <Trophy className="h-10 w-10 text-purple-400" />,
       title: "Global Competitions",
       description:
         "Participate in platform-wide competitions, test your skills against others, and win exciting prizes.",
-      color: "from-yellow-600 to-orange-600",
+      color: "from-purple-600 to-orange-600",
     },
     {
       icon: <Coins className="h-10 w-10 text-green-400" />,

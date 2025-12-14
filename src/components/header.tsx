@@ -16,6 +16,7 @@ import { checkTokenValidation, codeCompileApiEntryPoint, logoutEndpoint } from "
 import { checkAuthorization } from "@/utils/authorization"
 import styles from "@/styles/header.module.css"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import LogoFull from "./logo"
 
 const getAutheticationDetail = async () => {
   const response = await fetch(codeCompileApiEntryPoint + checkTokenValidation, {
@@ -124,14 +125,12 @@ const Header = () => {
   return (
     <header className="container lg:px-6 h-14 flex items-center">
       <Link className="flex items-center justify-center" href="/">
-        <span className="font-bold text-lg">
-          <span className="font-serif font-thin">&lt;AptiCode/&gt;</span>.
-        </span>
+        <LogoFull />
       </Link>
       {!isMobile && (
         <nav className={styles.desktopNav}>
           <Link
-            className="text-md font-medium hover:underline underline-offset-4 animate-pulse text-orange-400"
+            className="text-md font-medium hover:underline underline-offset-4 animate-pulse text-primary"
             href="/contribute"
             onClick={() => setIsSheetOpen(false)}
           >

@@ -7,7 +7,7 @@ import { Card, CardContent } from "@/components/ui/card"
 export default function ContributionProcess() {
   const steps = [
     {
-      icon: <Edit className="h-8 w-8 text-purple-400" />,
+      icon: <Edit className="h-8 w-8 text-primary" />,
       title: "Create",
       description: "Draft your coding challenge with clear instructions and test cases.",
     },
@@ -43,7 +43,7 @@ export default function ContributionProcess() {
       </div>
 
       <div className="relative">
-        <div className="absolute left-1/2 -translate-x-1/2 h-full w-1 bg-gradient-to-b from-purple-600 to-pink-600 hidden md:block"></div>
+        <div className="absolute left-1/2 -translate-x-1/2 h-full w-1 bg-gradient-to-b from-primary to-pink-600 hidden md:block"></div>
 
         <div className="space-y-12 relative">
           {steps.map((step, index) => (

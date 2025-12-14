@@ -7,8 +7,8 @@ import Link from "next/link"
 export default function CtaSection() {
   return (
     <section className="py-20 relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-black to-purple-950/30"></div>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(120,50,255,0.4)_0%,transparent_40%)]"></div>
+      <div className="absolute inset-0 bg-gradient-to-b from-black to-primary/30"></div>
+      {/* <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(120,50,255,0.4)_0%,transparent_40%)]"></div> */}
 
       <div className="container mx-auto px-4 relative z-10">
         <motion.div
@@ -24,13 +24,13 @@ export default function CtaSection() {
             contributions.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button size="lg" className="bg-purple-600 hover:bg-purple-700 text-lg px-8">
+            <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-text text-lg px-8">
               <Link href="/login">Get Started</Link>
             </Button>
             <Button
               size="lg"
               variant="outline"
-              className="border-purple-600 text-purple-400 hover:bg-purple-950/50 text-lg px-8"
+              className="border-primary text-primary hover:bg-primary/10 text-lg px-8"
             >
               <Link href="/about-us">Learn More</Link>
             </Button>

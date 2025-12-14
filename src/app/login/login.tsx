@@ -162,11 +162,11 @@ export function LoginForm() {
                             )}
                         />
                         {loading ? (
-                            <Button type="submit" className="w-full" disabled>
+                            <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-primary-text" disabled>
                                 <CircleLoading color="bg-neutral-50" />
                             </Button>
                         ) : (
-                            <Button type="submit" className="w-full">
+                            <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-primary-text">
                                 Login
                             </Button>
                         )}

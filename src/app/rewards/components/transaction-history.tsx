@@ -9,7 +9,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge"
 import { IHistory } from "../schema"
 
-export default function TransactionHistory({ history, filter, setFilter }: { history: IHistory, filter:string, setFilter: (val: string) => void}) {
+export default function TransactionHistory({ history, filter, setFilter }: { history: IHistory, filter: string, setFilter: (val: string) => void }) {
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
       <Card className="">
@@ -19,18 +19,18 @@ export default function TransactionHistory({ history, filter, setFilter }: { his
             <CardDescription>View all your earnings and withdrawals</CardDescription>
           </div>
           <div className="w-40">
-                <Select value={filter} onValueChange={setFilter}>
-                  <SelectTrigger className="bg-gray-800 border-gray-700">
-                    <Filter className="h-4 w-4 mr-2 text-gray-500" />
-                    <SelectValue placeholder="Filter" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Transactions</SelectItem>
-                    <SelectItem value="earning">Earnings</SelectItem>
-                    <SelectItem value="withdrawal">Withdrawals</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+            <Select value={filter} onValueChange={setFilter}>
+              <SelectTrigger className="bg-gray-800 border-gray-700">
+                <Filter className="h-4 w-4 mr-2 text-gray-500" />
+                <SelectValue placeholder="Filter" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Transactions</SelectItem>
+                <SelectItem value="earning">Earnings</SelectItem>
+                <SelectItem value="withdrawal">Withdrawals</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </CardHeader>
         <CardContent>
           <div className="rounded-md border border-gray-800 overflow-hidden">
@@ -56,11 +56,11 @@ export default function TransactionHistory({ history, filter, setFilter }: { his
                           {transaction.type === "earning" ? (
                             <ArrowUpRight className="h-4 w-4 text-green-500 mr-1" />
                           ) : (
-                            <ArrowDownLeft className="h-4 w-4 text-purple-500 mr-1" />
+                            <ArrowDownLeft className="h-4 w-4 text-primary mr-1" />
                           )}
                           <div className="flex items-center">
                             <Coins className="h-3 w-3 text-yellow-500 mr-1" />
-                            <span className={transaction.type === "earning" ? "text-green-500" : "text-purple-500"}>
+                            <span className={transaction.type === "earning" ? "text-green-500" : "text-primary"}>
                               {transaction.type === "earning" ? "+" : "-"}
                               {transaction.amount}
                             </span>
@@ -71,12 +71,11 @@ export default function TransactionHistory({ history, filter, setFilter }: { his
                         <Badge
                           variant="outline"
                           className={`
-                            ${
-                              transaction.status === "completed"
-                                ? "border-green-800 text-green-500 bg-green-900/20"
-                                : transaction.status === "pending"
-                                  ? "border-yellow-800 text-yellow-500 bg-yellow-900/20"
-                                  : "border-red-800 text-red-500 bg-red-900/20"
+                            ${transaction.status === "completed"
+                              ? "border-green-800 text-green-500 bg-green-900/20"
+                              : transaction.status === "pending"
+                                ? "border-yellow-800 text-yellow-500 bg-yellow-900/20"
+                                : "border-red-800 text-red-500 bg-red-900/20"
                             }
                           `}
                         >

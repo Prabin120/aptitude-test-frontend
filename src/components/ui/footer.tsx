@@ -2,7 +2,8 @@
 import React from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Github, Twitter, Linkedin, Heart } from 'lucide-react'
+import { Twitter, Linkedin, Heart } from 'lucide-react'
+import LogoFull from '../logo'
 
 const Footer = () => {
 
@@ -35,23 +36,21 @@ const Footer = () => {
           {/* Brand Column */}
           <div className="flex flex-col space-y-4">
             <Link href="/" className="flex items-center space-x-2">
-              <span className="font-bold text-lg">
-                <span className="font-serif font-thin">&lt;AptiCode/&gt;</span>.
-              </span>
+              <LogoFull />
             </Link>
             <p className="text-sm leading-relaxed">
               The ultimate platform for developers to practice, compete, and grow. Join our community of passionate coders today.
             </p>
             <div className="flex space-x-4 pt-2">
-              <Link href="https://github.com/apticode" className="hover:text-purple-400 transition-colors">
+              {/* <Link href="https://github.com/apticode" className="hover:text-primary transition-colors">
                 <Github className="h-5 w-5" />
                 <span className="sr-only">GitHub</span>
-              </Link>
-              <Link href="https://twitter.com/apticode" className="hover:text-purple-400 transition-colors">
+              </Link> */}
+              <Link href="https://twitter.com/apticode" className="hover:text-primary transition-colors">
                 <Twitter className="h-5 w-5" />
                 <span className="sr-only">Twitter</span>
               </Link>
-              <Link href="https://linkedin.com/company/apticode" className="hover:text-purple-400 transition-colors">
+              <Link href="https://linkedin.com/company/apticode" className="hover:text-primary transition-colors">
                 <Linkedin className="h-5 w-5" />
                 <span className="sr-only">LinkedIn</span>
               </Link>
@@ -62,10 +61,10 @@ const Footer = () => {
           <div className="flex flex-col space-y-4">
             <h3 className="text-sm font-semibold text-zinc-100 uppercase tracking-wider">Platform</h3>
             <div className="flex flex-col space-y-2 text-sm">
-              <Link href="/code/problems" className="hover:text-purple-400 transition-colors">Problems</Link>
-              <Link href="/online-compiler" className="hover:text-purple-400 transition-colors">Compiler</Link>
-              <Link href="/apti-zone" className="hover:text-purple-400 transition-colors">Aptitude Tests</Link>
-              <Link href="/group-test" className="hover:text-purple-400 transition-colors">Contests</Link>
+              <Link href="/code/problems" className="hover:text-primary transition-colors">Problems</Link>
+              <Link href="/online-compiler" className="hover:text-primary transition-colors">Compiler</Link>
+              <Link href="/apti-zone" className="hover:text-primary transition-colors">Aptitude Tests</Link>
+              <Link href="/group-test" className="hover:text-primary transition-colors">Contests</Link>
             </div>
           </div>
 
@@ -73,10 +72,10 @@ const Footer = () => {
           <div className="flex flex-col space-y-4">
             <h3 className="text-sm font-semibold text-zinc-100 uppercase tracking-wider">Company</h3>
             <div className="flex flex-col space-y-2 text-sm">
-              <Link href="/about-us" className="hover:text-purple-400 transition-colors">About Us</Link>
-              <Link href="/contact-us" className="hover:text-purple-400 transition-colors">Contact</Link>
-              <Link href="/rewards" className="hover:text-purple-400 transition-colors">Rewards</Link>
-              <Link href="/contribute" className="hover:text-purple-400 transition-colors">Contribute</Link>
+              <Link href="/about-us" className="hover:text-primary transition-colors">About Us</Link>
+              <Link href="/contact-us" className="hover:text-primary transition-colors">Contact</Link>
+              <Link href="/rewards" className="hover:text-primary transition-colors">Rewards</Link>
+              <Link href="/contribute" className="hover:text-primary transition-colors">Contribute</Link>
             </div>
           </div>
 
@@ -84,10 +83,10 @@ const Footer = () => {
           <div className="flex flex-col space-y-4">
             <h3 className="text-sm font-semibold text-zinc-100 uppercase tracking-wider">Legal</h3>
             <div className="flex flex-col space-y-2 text-sm">
-              <Link href="/terms-and-conditions" className="hover:text-purple-400 transition-colors">Terms of Service</Link>
-              <Link href="/privacy-policy" className="hover:text-purple-400 transition-colors">Privacy Policy</Link>
-              <Link href="/shipping-policy" className="hover:text-purple-400 transition-colors">Shipping Policy</Link>
-              <Link href="/cancelation-and-refunds" className="hover:text-purple-400 transition-colors">Refund Policy</Link>
+              <Link href="/terms-and-conditions" className="hover:text-primary transition-colors">Terms of Service</Link>
+              <Link href="/privacy-policy" className="hover:text-primary transition-colors">Privacy Policy</Link>
+              <Link href="/shipping-policy" className="hover:text-primary transition-colors">Shipping Policy</Link>
+              <Link href="/cancelation-and-refunds" className="hover:text-primary transition-colors">Refund Policy</Link>
             </div>
           </div>
         </div>

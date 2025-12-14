@@ -30,6 +30,7 @@ import {
     SheetTitle,
 } from "@/components/ui/sheet";
 import SettingsModal from "./SettingsModal";
+import LogoFull from "@/components/logo";
 
 interface CompilerEditorProps {
     language: string;
@@ -37,6 +38,7 @@ interface CompilerEditorProps {
 
 const languages = [
     { id: 'python', name: 'Python' },
+    { id: 'javascript', name: 'JavaScript' },
     { id: 'cpp', name: 'C++' },
     { id: 'c', name: 'C' },
     { id: 'java', name: 'Java' },
@@ -50,6 +52,7 @@ const CompilerEditor: React.FC<CompilerEditorProps> = ({ language }) => {
     const getDefaultCode = (lang: string): string => {
         switch (lang) {
             case 'python': return '# Tip: Select lines to use AI Generate/Improve features\n\nprint("AptiCode is best")';
+            case 'javascript': return '// Tip: Select lines to use AI Generate/Improve features\n\nconsole.log("AptiCode is best");';
             case 'cpp': return '// Tip: Select lines to use AI Generate/Improve features\n\n#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << "AptiCode is best" << endl;\n    return 0;\n}';
             case 'c': return '// Tip: Select lines to use AI Generate/Improve features\n\n#include <stdio.h>\n\nint main() {\n    printf("AptiCode is best\\n");\n    return 0;\n}';
             case 'java': return '// Tip: Select lines to use AI Generate/Improve features\n\npublic class Main {\n    public static void main(String[] args) {\n        System.out.println("AptiCode is best");\n    }\n}';
@@ -151,11 +154,16 @@ const CompilerEditor: React.FC<CompilerEditorProps> = ({ language }) => {
         return () => { if (disposableRef.current) disposableRef.current.dispose(); };
     }, [language, autocomplete]);
 
-    const getBackendLanguage = (lang: string) => lang === "python" ? "py" : lang;
+    const getBackendLanguage = (lang: string) => {
+        if (lang === "python") return "py";
+        if (lang === "javascript") return "js";
+        return lang;
+    };
 
     const handleDownload = () => {
         const extensionMap: { [key: string]: string } = {
             python: 'py',
+            javascript: 'js',
             cpp: 'cpp',
             c: 'c',
             java: 'java',
@@ -338,6 +346,7 @@ const CompilerEditor: React.FC<CompilerEditorProps> = ({ language }) => {
                             switch (lang) {
                                 case 'python':
                                     return '# ';
+                                case 'javascript':
                                 case 'java':
                                 case 'cpp':
                                 case 'c':
@@ -383,7 +392,7 @@ const CompilerEditor: React.FC<CompilerEditorProps> = ({ language }) => {
         <button
             onClick={handleRun}
             disabled={loading}
-            className="bg-[rgb(147,51,234)] hover:bg-[rgb(126,34,206)] text-white px-4 md:px-6 py-1.5 rounded-sm flex items-center gap-2 font-medium transition-all hover:scale-105 active:scale-95 disabled:opacity-50 shadow-lg shadow-purple-900/20 text-sm md:text-base whitespace-nowrap"
+            className="bg-primary hover:bg-primary/90 text-primary-text px-4 md:px-6 py-1.5 rounded-sm flex items-center gap-2 font-medium transition-all hover:scale-105 active:scale-95 disabled:opacity-50 shadow-lg shadow-primary/20 text-sm md:text-base whitespace-nowrap"
         >
             {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Play className="w-4 h-4 fill-current" />}
             <span className="hidden md:inline">Run Code</span>
@@ -397,7 +406,7 @@ const CompilerEditor: React.FC<CompilerEditorProps> = ({ language }) => {
                 type="checkbox"
                 checked={autocomplete}
                 onChange={(e) => setAutocomplete(e.target.checked)}
-                className="w-4 h-4 accent-purple-600 rounded"
+                className="w-4 h-4 accent-primary rounded"
             />
             <span className="text-sm">Autocomplete</span>
         </label>
@@ -410,7 +419,7 @@ const CompilerEditor: React.FC<CompilerEditorProps> = ({ language }) => {
                 <button
                     onClick={handleGenerateCode}
                     disabled={generating !== null}
-                    className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white px-3 py-1.5 rounded-sm flex items-center gap-1.5 text-xs font-medium transition-all hover:scale-105 active:scale-95 disabled:opacity-50 shadow-lg"
+                    className="bg-gradient-to-r from-primary to-pink-600 hover:from-primary/80 hover:to-pink-500 text-white px-3 py-1.5 rounded-sm flex items-center gap-1.5 text-xs font-medium transition-all hover:scale-105 active:scale-95 disabled:opacity-50 shadow-lg"
                 >
                     {generating === 'generate' ? <Loader2 className="w-3 h-3 animate-spin" /> : <Sparkles className="w-3 h-3" />}
                     <span>Generate</span>
@@ -433,7 +442,7 @@ const CompilerEditor: React.FC<CompilerEditorProps> = ({ language }) => {
             return (
                 <button
                     onClick={() => setShowProfileSheet(true)}
-                    className="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center text-white text-sm font-medium hover:bg-purple-500 transition-colors overflow-hidden"
+                    className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-primary-text text-sm font-medium hover:bg-primary/90 transition-colors overflow-hidden"
                 >
                     {userDetail.image ? (
                         <img src={userDetail.image} alt={userDetail.name} className="w-full h-full object-cover" />
@@ -466,8 +475,8 @@ const CompilerEditor: React.FC<CompilerEditorProps> = ({ language }) => {
         <Dialog open={showLoginPopup} onOpenChange={setShowLoginPopup}>
             <DialogContent className="bg-zinc-900 border-zinc-800 max-w-sm">
                 <DialogHeader className="text-center sm:text-center">
-                    <div className="w-16 h-16 bg-purple-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <User className="w-8 h-8 text-purple-400" />
+                    <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <User className="w-8 h-8 text-primary" />
                     </div>
                     <DialogTitle className="text-xl font-bold text-white">Login Required</DialogTitle>
                     <DialogDescription className="text-zinc-400">
@@ -482,7 +491,7 @@ const CompilerEditor: React.FC<CompilerEditorProps> = ({ language }) => {
                         Cancel
                     </button>
                     <Link href="/login" className="flex-1" onClick={saveCodeBeforeLogin}>
-                        <button className="w-full px-4 py-2.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-medium transition-colors">
+                        <button className="w-full px-4 py-2.5 rounded-lg bg-primary hover:bg-primary/90 text-primary-text font-medium transition-colors">
                             Login
                         </button>
                     </Link>
@@ -527,7 +536,7 @@ const CompilerEditor: React.FC<CompilerEditorProps> = ({ language }) => {
                     <SheetTitle className="text-white">Profile</SheetTitle>
                 </SheetHeader>
                 <div className="flex items-center gap-3 mt-6 mb-6">
-                    <div className="w-14 h-14 rounded-full bg-purple-600 flex items-center justify-center text-white text-xl font-medium overflow-hidden">
+                    <div className="w-14 h-14 rounded-full bg-primary flex items-center justify-center text-primary-text text-xl font-medium overflow-hidden">
                         {userDetail.image ? (
                             <img src={userDetail.image} alt={userDetail.name} className="w-full h-full object-cover" />
                         ) : (
@@ -583,9 +592,7 @@ const CompilerEditor: React.FC<CompilerEditorProps> = ({ language }) => {
             {/* Desktop Header */}
             <div className="hidden md:flex justify-between items-center px-4 py-2 border-b border-zinc-800 bg-zinc-950 shrink-0 h-14">
                 <Link className="flex items-center justify-center" href="/">
-                    <span className="font-bold text-lg">
-                        <span className="font-serif font-thin">&lt;AptiCode/&gt;</span>.
-                    </span>
+                    <LogoFull />
                 </Link>
                 <div className="flex items-center gap-3 relative group">
                     <RunButton />
@@ -597,11 +604,11 @@ const CompilerEditor: React.FC<CompilerEditorProps> = ({ language }) => {
                 <div className="flex items-center gap-4">
                     <AutocompleteToggle />
                     {/* Settings Button will go here */}
-                    <SettingsModal>
+                    {/* <SettingsModal>
                         <button className="text-zinc-400 hover:text-zinc-100 transition-colors p-1">
                             <Settings className="w-5 h-5" />
                         </button>
-                    </SettingsModal>
+                    </SettingsModal> */}
                     <ProfileOrLogin />
                 </div>
             </div>
@@ -609,9 +616,7 @@ const CompilerEditor: React.FC<CompilerEditorProps> = ({ language }) => {
             {/* Mobile Header */}
             <div className="flex md:hidden justify-between items-center px-4 py-2 border-b border-zinc-800 bg-zinc-950 shrink-0 h-14 z-20">
                 <Link className="flex items-center justify-center" href="/">
-                    <span className="font-bold text-lg">
-                        <span className="font-serif font-thin">&lt;AptiCode/&gt;</span>.
-                    </span>
+                    <LogoFull />
                 </Link>
                 <div className="flex items-center gap-2">
                     <AiActionButtons />
@@ -659,7 +664,7 @@ const CompilerEditor: React.FC<CompilerEditorProps> = ({ language }) => {
                                     className={cn(
                                         "px-3 py-2 rounded-md text-sm transition-colors flex items-center justify-between",
                                         pathname?.includes(`/online-compiler/${lang.id}`)
-                                            ? "bg-purple-900/20 text-purple-400 border border-purple-900/50"
+                                            ? "bg-primary/20 text-primary border border-primary/50"
                                             : "text-zinc-400 hover:bg-zinc-900 hover:text-zinc-200"
                                     )}
                                 >
@@ -681,7 +686,7 @@ const CompilerEditor: React.FC<CompilerEditorProps> = ({ language }) => {
                                 <div className="px-4 min-h-[40px] py-1 text-xs font-semibold text-zinc-400 uppercase tracking-wider bg-zinc-900/50 border-b border-zinc-800 flex justify-between items-center">
                                     <span>{language} Editor</span>
                                     {selectedText && (
-                                        <span className="text-purple-400 text-[10px] font-normal flex items-center gap-4 normal-case">
+                                        <span className="text-primary text-[10px] font-normal flex items-center gap-4 normal-case">
                                             <AiActionButtons />
                                             {selectionRange?.startLine === selectionRange?.endLine
                                                 ? `Line ${selectionRange?.startLine} selected`
@@ -699,7 +704,7 @@ const CompilerEditor: React.FC<CompilerEditorProps> = ({ language }) => {
                                     options={editorOptions}
                                 />
                             </Panel>
-                            <PanelResizeHandle className="h-2 bg-zinc-900 hover:bg-purple-500/50 transition-colors cursor-row-resize flex items-center justify-center">
+                            <PanelResizeHandle className="h-2 bg-zinc-900 hover:bg-primary/50 transition-colors cursor-row-resize flex items-center justify-center">
                                 <div className="w-12 h-1 bg-zinc-700 rounded-full" />
                             </PanelResizeHandle>
                             <Panel defaultSize={20} minSize={10} className="flex flex-col border-t border-zinc-800">
@@ -713,7 +718,7 @@ const CompilerEditor: React.FC<CompilerEditorProps> = ({ language }) => {
                             </Panel>
                         </PanelGroup>
                     </Panel>
-                    <PanelResizeHandle className="w-2 bg-zinc-900 hover:bg-purple-500/50 transition-colors cursor-col-resize flex items-center justify-center">
+                    <PanelResizeHandle className="w-2 bg-zinc-900 hover:bg-primary/50 transition-colors cursor-col-resize flex items-center justify-center">
                         <div className="h-12 w-1 bg-zinc-700 rounded-full" />
                     </PanelResizeHandle>
                     <Panel defaultSize={50} minSize={30} className="flex flex-col">
@@ -762,10 +767,10 @@ const CompilerEditor: React.FC<CompilerEditorProps> = ({ language }) => {
                 )}>
                     <div className="flex items-center justify-between border-b border-zinc-800 bg-zinc-950 shrink-0">
                         <div className="flex">
-                            <button onClick={() => setActiveTab('input')} className={cn("px-4 py-3 text-sm font-medium border-b-2 transition-colors", activeTab === 'input' ? "border-purple-500 text-purple-400" : "border-transparent text-zinc-500")}>Input</button>
-                            <button onClick={() => setActiveTab('output')} className={cn("px-4 py-3 text-sm font-medium border-b-2 transition-colors relative", activeTab === 'output' ? "border-purple-500 text-purple-400" : "border-transparent text-zinc-500")}>
+                            <button onClick={() => setActiveTab('input')} className={cn("px-4 py-3 text-sm font-medium border-b-2 transition-colors", activeTab === 'input' ? "border-primary text-primary" : "border-transparent text-zinc-500")}>Input</button>
+                            <button onClick={() => setActiveTab('output')} className={cn("px-4 py-3 text-sm font-medium border-b-2 transition-colors relative", activeTab === 'output' ? "border-primary text-primary" : "border-transparent text-zinc-500")}>
                                 Output
-                                {loading && <span className="absolute top-2 right-2 w-1.5 h-1.5 bg-purple-500/50 rounded-full animate-pulse" />}
+                                {loading && <span className="absolute top-2 right-2 w-1.5 h-1.5 bg-primary/50 rounded-full animate-pulse" />}
                             </button>
                         </div>
                         <button onClick={() => setFullScreenMode(fullScreenMode === 'io' ? 'none' : 'io')} className="p-3 text-zinc-400 hover:text-white">

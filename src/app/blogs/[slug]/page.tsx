@@ -90,7 +90,7 @@ export default function BlogPage() {
                     </p>
                     <Link
                         href="/blogs"
-                        className="inline-flex items-center gap-2 text-purple-400 hover:text-purple-300"
+                        className="inline-flex items-center gap-2 text-primary hover:text-primary/80"
                     >
                         <ArrowLeft className="w-4 h-4" />
                         Back to all blogs
@@ -116,11 +116,11 @@ export default function BlogPage() {
             {/* Header */}
             <header className="container mx-auto px-4 pb-8 max-w-4xl">
                 <div className="flex items-center gap-2 mb-4">
-                    <Badge variant="outline" className="text-purple-400 border-purple-500/50">
+                    <Badge variant="outline" className="text-primary border-primary/50">
                         {blog.category}
                     </Badge>
                     {blog.featured && (
-                        <Badge className="bg-purple-600/20 text-purple-400 border-purple-500/30">
+                        <Badge className="bg-primary/20 text-primary border-primary/30">
                             Featured
                         </Badge>
                     )}
@@ -161,13 +161,13 @@ export default function BlogPage() {
                             className="prose prose-lg prose-invert max-w-none
                 prose-headings:text-white prose-headings:font-bold
                 prose-p:text-zinc-300 prose-p:leading-relaxed
-                prose-a:text-purple-400 prose-a:no-underline hover:prose-a:underline
+                prose-a:text-primary prose-a:no-underline hover:prose-a:underline
                 prose-strong:text-white
-                prose-code:bg-zinc-800 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-purple-300
+                prose-code:bg-zinc-800 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-primary
                 prose-pre:bg-zinc-950 prose-pre:border prose-pre:border-zinc-800
                 prose-ul:text-zinc-300 prose-ol:text-zinc-300
-                prose-li:marker:text-purple-400
-                prose-blockquote:border-purple-500 prose-blockquote:text-zinc-400
+                prose-li:marker:text-primary
+                prose-blockquote:border-primary prose-blockquote:text-zinc-400
                 prose-img:rounded-lg prose-img:border prose-img:border-zinc-800
                 prose-hr:border-zinc-700"
                             dangerouslySetInnerHTML={{ __html: blog.content }}
@@ -178,13 +178,13 @@ export default function BlogPage() {
 
             {/* Footer CTA */}
             <div className="container mx-auto px-4 pb-16 max-w-4xl">
-                <Card className="bg-gradient-to-r from-purple-900/30 to-blue-900/30 border-purple-700/50">
+                <Card className="bg-gradient-to-r from-primary/30 to-blue-900/30 border-primary/50">
                     <CardContent className="py-8 text-center">
                         <h2 className="text-xl font-bold text-white mb-2">Enjoyed this post?</h2>
                         <p className="text-zinc-400 mb-4">Check out more tutorials and guides</p>
                         <Link
                             href="/blogs"
-                            className="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-500 text-white px-6 py-2 rounded-lg transition-colors"
+                            className="inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-text px-6 py-2 rounded-lg transition-colors"
                         >
                             Browse all posts
                         </Link>

@@ -32,7 +32,7 @@ export default function TestimonialsSection() {
 
   return (
     <section className="py-20 relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-black via-purple-950/10 to-black"></div>
+      <div className="absolute inset-0 bg-gradient-to-b from-black via-primary/10 to-black"></div>
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
           <motion.h2
@@ -66,7 +66,7 @@ export default function TestimonialsSection() {
             >
               <Card className="bg-gray-900 border-gray-800 h-full">
                 <CardContent className="p-6">
-                  <Quote className="h-8 w-8 text-purple-400 mb-4 opacity-50" />
+                  <Quote className="h-8 w-8 text-primary mb-4 opacity-50" />
                   <p className="text-gray-300 mb-6">{testimonial.quote}</p>
                   <div className="flex items-center gap-3">
                     <Avatar>

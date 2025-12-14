@@ -47,7 +47,7 @@ const CodeQuestion: React.FC<QuestionPageProps> = ({ data, type }) => {
                                 data?.userStatus === "attempted" &&
                                 <span className='flex space-x-2 text-yellow-600 text-sm'><BrainCircuit size={16} /> Attempted</span>
                             }
-                            <Badge>{data?.difficulty}</Badge>
+                            <Badge className="text-primary-text">{data?.difficulty}</Badge>
                         </div>
                     }
                 </div>
@@ -61,7 +61,7 @@ const CodeQuestion: React.FC<QuestionPageProps> = ({ data, type }) => {
                     <h3 className="text-lg font-bold mt-6 mb-2">Tags</h3>
                     {data?.tags ? data.tags.map((tag) => (
                         <React.Fragment key={tag}>
-                            <Badge>{tag}</Badge>
+                            <Badge className="text-primary-text">{tag}</Badge>
                             <small className='pr-2'></small>
                         </React.Fragment>
                     )) : ""}

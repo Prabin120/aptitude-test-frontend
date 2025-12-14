@@ -20,7 +20,7 @@ const RecentActivity = ({ activities, viewMode }: RecentActivityProps) => {
         if (activity.type === "solved") return <Check className="h-5 w-5 text-green-400" />;
         if (activity.type === "contest") return <Trophy className="h-5 w-5 text-yellow-400" />;
         if (activity.type === "comment") return <MessageSquare className="h-5 w-5 text-blue-400" />;
-        if (activity.type === "mcq") return <FileQuestion className="h-5 w-5 text-purple-400" />;
+        if (activity.type === "mcq") return <FileQuestion className="h-5 w-5 text-primary" />;
         return <Code className="h-5 w-5 text-primary" />;
     };
 

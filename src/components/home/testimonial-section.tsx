@@ -10,7 +10,7 @@ import Link from "next/link"
 export default function TestsSection() {
   return (
     <section className="py-20 relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-black via-purple-950/20 to-black"></div>
+      {/* <div className="absolute inset-0 bg-gradient-to-b from-black via-primary/20 to-black"></div> */}
       <div className="container mx-auto px-4 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <motion.div
@@ -33,8 +33,8 @@ export default function TestsSection() {
               <TabsContent value="group" className="space-y-4">
                 <div className="space-y-4">
                   <div className="flex items-start gap-4">
-                    <div className="bg-purple-900/30 p-2 rounded-full">
-                      <Users className="h-6 w-6 text-purple-400" />
+                    <div className="bg-primary/30 p-2 rounded-full">
+                      <Users className="h-6 w-6 text-primary" />
                     </div>
                     <div>
                       <h3 className="text-lg font-medium mb-1">Create Custom Tests</h3>
@@ -44,8 +44,8 @@ export default function TestsSection() {
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
-                    <div className="bg-purple-900/30 p-2 rounded-full">
-                      <Clock className="h-6 w-6 text-purple-400" />
+                    <div className="bg-primary/30 p-2 rounded-full">
+                      <Clock className="h-6 w-6 text-primary" />
                     </div>
                     <div>
                       <h3 className="text-lg font-medium mb-1">Real-time Results</h3>
@@ -55,8 +55,8 @@ export default function TestsSection() {
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
-                    <div className="bg-purple-900/30 p-2 rounded-full">
-                      <Calendar className="h-6 w-6 text-purple-400" />
+                    <div className="bg-primary/30 p-2 rounded-full">
+                      <Calendar className="h-6 w-6 text-primary" />
                     </div>
                     <div>
                       <h3 className="text-lg font-medium mb-1">Schedule Tests</h3>
@@ -66,7 +66,7 @@ export default function TestsSection() {
                     </div>
                   </div>
                 </div>
-                <Button asChild className="mt-6">
+                <Button asChild className="mt-6 bg-primary hover:bg-primary/90 text-primary-text">
                   <Link href="/group-test">
                     Create a Group Test <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
@@ -124,13 +124,13 @@ export default function TestsSection() {
             viewport={{ once: true }}
           >
             <div className="relative">
-              <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg blur opacity-75"></div>
-              <Card className="relative bg-black border-purple-800/50">
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-primary to-blue-600 rounded-lg blur opacity-75"></div>
+              <Card className="relative bg-black border-primary/50">
                 <CardContent className="p-0">
                   <div className="bg-gray-900/50 p-4 border-b border-gray-800">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <Users className="h-5 w-5 text-purple-400" />
+                        <Users className="h-5 w-5 text-primary" />
                         <h3 className="font-medium">Algorithm Challenge</h3>
                       </div>
                       <div className="text-sm text-gray-400">8 participants</div>
@@ -149,23 +149,21 @@ export default function TestsSection() {
                           ].map((participant, index) => (
                             <div
                               key={index}
-                              className={`flex items-center justify-between p-3 rounded-lg ${
-                                index === 0
-                                  ? "bg-yellow-900/20 border border-yellow-800/50"
-                                  : "bg-gray-800/30 border border-gray-700/50"
-                              }`}
+                              className={`flex items-center justify-between p-3 rounded-lg ${index === 0
+                                ? "bg-yellow-900/20 border border-yellow-800/50"
+                                : "bg-gray-800/30 border border-gray-700/50"
+                                }`}
                             >
                               <div className="flex items-center gap-3">
                                 <div
-                                  className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${
-                                    index === 0
-                                      ? "bg-yellow-500 text-black"
-                                      : index === 1
-                                        ? "bg-gray-400 text-black"
-                                        : index === 2
-                                          ? "bg-amber-700 text-white"
-                                          : "bg-gray-700 text-white"
-                                  }`}
+                                  className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${index === 0
+                                    ? "bg-yellow-500 text-black"
+                                    : index === 1
+                                      ? "bg-gray-400 text-black"
+                                      : index === 2
+                                        ? "bg-amber-700 text-white"
+                                        : "bg-gray-700 text-white"
+                                    }`}
                                 >
                                   {index + 1}
                                 </div>
@@ -186,7 +184,7 @@ export default function TestsSection() {
                           <div className="text-sm text-gray-400">Time Remaining</div>
                           <div className="text-xl font-mono">00:45:22</div>
                         </div>
-                        <Button className="bg-purple-600 hover:bg-purple-700">View Details</Button>
+                        <Button className="bg-primary hover:bg-primary/90 text-primary-text">View Details</Button>
                       </div>
                     </div>
                   </div>

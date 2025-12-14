@@ -62,7 +62,7 @@ export default function RewardsTiers() {
             <span className="text-sm text-gray-400">Progress to Gold</span>
           </div>
           <Progress value={72.5} className="h-2 bg-gray-800">
-            <div className="h-full bg-gradient-to-r from-purple-600 to-pink-600 rounded-full" />
+            <div className="h-full bg-gradient-to-r from-primary to-pink-600 rounded-full" />
           </Progress>
           <div className="flex justify-between mt-1 text-xs text-gray-400">
             <span>1,450 coins</span>
@@ -79,15 +79,14 @@ export default function RewardsTiers() {
               transition={{ duration: 0.3, delay: index * 0.1 }}
             >
               <div
-                className={`p-3 rounded-lg border ${
-                  tier.current ? "bg-gray-800/70 border-purple-700" : "bg-gray-800/30 border-gray-700"
-                }`}
+                className={`p-3 rounded-lg border ${tier.current ? "bg-gray-800/70 border-primary" : "bg-gray-800/30 border-gray-700"
+                  }`}
               >
                 <div className="flex items-center gap-2 mb-2">
                   {tier.icon}
                   <span className="font-medium">{tier.name}</span>
                   {tier.current && (
-                    <span className="ml-auto text-xs bg-purple-900/50 text-purple-300 px-2 py-0.5 rounded-full">
+                    <span className="ml-auto text-xs bg-primary/50 text-primary px-2 py-0.5 rounded-full">
                       Current
                     </span>
                   )}

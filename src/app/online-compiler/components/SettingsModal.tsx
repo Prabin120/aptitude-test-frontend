@@ -84,14 +84,14 @@ const SettingsModal = ({ children }: SettingsModalProps) => {
                                                 onChange={(e) => setApiKey(e.target.value)}
                                                 type="password"
                                                 placeholder="AI..."
-                                                className="bg-zinc-900 border-zinc-700 focus-visible:ring-purple-500"
+                                                className="bg-zinc-900 border-zinc-700 focus-visible:ring-primary"
                                             />
-                                            <Button onClick={handleSaveApiKey} className="bg-purple-600 hover:bg-purple-700 text-white">
+                                            <Button onClick={handleSaveApiKey} className="bg-primary hover:bg-primary/90 text-primary-text">
                                                 Save
                                             </Button>
                                         </div>
                                         <p className="text-xs text-zinc-500">
-                                            Your API key is stored locally in your browser. We will not store your API key anywhere. Read our <Link href="/privacy-policy" className="text-purple-400 hover:text-purple-300 underline underline-offset-4">Privacy Policy</Link> for more details.
+                                            Your API key is stored locally in your browser. We will not store your API key anywhere. Read our <Link href="/privacy-policy" className="text-primary hover:text-primary/80 underline underline-offset-4">Privacy Policy</Link> for more details.
                                         </p>
                                     </div>
 
@@ -102,7 +102,7 @@ const SettingsModal = ({ children }: SettingsModalProps) => {
                                         </p> */}
                                         <Link
                                             href="/blogs/how-to-use-unlimited-ai-without-premium"
-                                            className="text-sm text-purple-400 hover:text-purple-300 underline underline-offset-4"
+                                            className="text-sm text-primary hover:text-primary/80 underline underline-offset-4"
                                             target="_blank"
                                             rel="noopener noreferrer"
                                         >

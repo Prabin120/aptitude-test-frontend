@@ -113,7 +113,7 @@ export default function AdminBlogsPage() {
                     <p className="text-zinc-400">Manage all blog posts and tutorials</p>
                 </div>
                 <Link href="/admin/blogs/add-blog">
-                    <Button className="bg-purple-600 hover:bg-purple-500 text-white">
+                    <Button className="bg-primary hover:bg-primary/90 text-primary-text">
                         <Plus className="w-4 h-4 mr-2" />
                         Create New Blog
                     </Button>

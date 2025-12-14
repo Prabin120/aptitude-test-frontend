@@ -6,7 +6,7 @@ import { Users, Code, Award, BookOpen } from "lucide-react"
 export default function StatisticsSection() {
   const stats = [
     {
-      icon: <Users className="h-8 w-8 text-purple-400" />,
+      icon: <Users className="h-8 w-8 text-primary" />,
       value: "50,000+",
       label: "Active Users",
     },

@@ -12,7 +12,7 @@ export default function ContributionBenefits() {
       description: "Get 30 coins for each approved contribution that you can redeem for real rewards.",
     },
     {
-      icon: <Brain className="h-10 w-10 text-purple-400" />,
+      icon: <Brain className="h-10 w-10 text-primary" />,
       title: "Improve Skills",
       description: "Sharpen your coding skills by creating and reviewing challenging problems.",
     },

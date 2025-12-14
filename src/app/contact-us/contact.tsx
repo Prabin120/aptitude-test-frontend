@@ -173,7 +173,7 @@ export default function ContactPage() {
                                     )}
                                 />
                                 {isFeedbackSubmitted ?
-                                    <Button type="button" className="w-full" disabled>
+                                    <Button type="button" className="w-full bg-primary hover:bg-primary/90 text-primary-text" disabled>
                                         {error ?
                                             error
                                             :
@@ -181,7 +181,7 @@ export default function ContactPage() {
                                         }
                                     </Button>
                                     :
-                                    <Button type="submit" className="w-full" disabled={isSubmitting}>
+                                    <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-primary-text" disabled={isSubmitting}>
                                         {isSubmitting && (
                                             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                                         )}
