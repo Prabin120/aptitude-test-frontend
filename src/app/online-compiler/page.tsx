@@ -2,20 +2,24 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-    title: 'Best Online Code Compiler - Run Python, Java, C++, Go & C on Mobile | AptiCode',
-    description: 'Free online code compiler and IDE to run Python, Java, C++, C, and Go code online. Mobile-friendly, fast execution, intelligent autocomplete, and syntax highlighting. Best online code editor for students and developers.',
-    keywords: ['online compiler', 'online code editor', 'python online compiler', 'java online compiler', 'run code online', 'online ide', 'c++ online compiler', 'free code editor', 'mobile code editor', 'mobile friendly compiler', 'responsive ide', 'programming on phone', 'android code editor', 'ios code editor'],
+    title: 'AI-Powered Online Code Compiler - Run Python, Java, C++, Go & C | AptiCode',
+    description: 'Free AI-enabled online code compiler and IDE. Run Python, Java, C++, C, and Go code with intelligent autocomplete and AI assistance. Best mobile-friendly coding platform for placement prep.',
+    keywords: [
+        'online compiler', 'ai code editor', 'python online compiler', 'java online compiler',
+        'c++ online compiler', 'run code online', 'online ide', 'mobile code editor',
+        'placement preparation', 'coding interview practice', 'free compiler'
+    ],
     openGraph: {
-        title: 'Best Mobile-Friendly Online Code Compiler | AptiCode',
-        description: 'Run Python, Java, C++, C, and Go code instantly in your browser on any device. Mobile-optimized IDE with intelligent autocomplete.',
+        title: 'Best AI-Powered Online Code Compiler | AptiCode',
+        description: 'Run Python, Java, C++, C, and Go code instantly. Mobile-optimized IDE with AI autocomplete and code improvement.',
         type: 'website',
         url: 'https://apticode.in/online-compiler',
         siteName: 'AptiCode Online Compiler',
     },
     twitter: {
         card: "summary_large_image",
-        title: "Mobile-Friendly Online Compiler | AptiCode",
-        description: "Code on the go! Run Python, Java, C++, and more on your mobile device with full IntelliSense.",
+        title: "AI-Powered Mobile Compiler | AptiCode",
+        description: "Code on the go! Run Python, Java, C++, and more with full AI assistance.",
     }
 };
 

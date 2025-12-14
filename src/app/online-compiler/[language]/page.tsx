@@ -26,13 +26,22 @@ const getLanguageName = (slug: string) => {
 export function generateMetadata({ params }: Props): Metadata {
     const languageName = getLanguageName(params.language);
     return {
-        title: `Online ${languageName} Compiler - Run ${languageName} Code Online | AptiCode`,
-        description: `Best free online ${languageName} compiler and IDE. Write, compile, and execute ${languageName} code instantly in your browser with intelligent autocomplete and syntax highlighting.`,
-        keywords: [`online ${languageName.toLowerCase()} compiler`, `run ${languageName.toLowerCase()} code online`, `${languageName.toLowerCase()} online editor`, `online ${languageName.toLowerCase()} ide`, 'free code compiler'],
+        title: `AI-Powered Online ${languageName} Compiler - Run ${languageName} on Mobile | AptiCode`,
+        description: `Best AI-enabled online ${languageName} compiler and IDE. Write, debug, and execute ${languageName} code with intelligent autocomplete. Perfect for placement prep and competitive programming.`,
+        keywords: [
+            `online ${languageName.toLowerCase()} compiler`,
+            `ai ${languageName.toLowerCase()} coding`,
+            `run ${languageName.toLowerCase()} online`,
+            `mobile ${languageName.toLowerCase()} ide`,
+            `placement preparation ${languageName}`,
+            `interview practice ${languageName}`,
+            'free online compiler'
+        ],
         openGraph: {
-            title: `Online ${languageName} Compiler - Fast & Free | AptiCode`,
-            description: `Run ${languageName} code instantly in your browser. Free online IDE with intelligent autocomplete.`,
+            title: `AI-Powered Online ${languageName} Compiler | AptiCode`,
+            description: `Run ${languageName} code instantly with AI assistance. Mobile-optimized IDE for placement preparation and learning.`,
             type: 'website',
+            url: `https://apticode.in/online-compiler/${params.language}`,
         }
     };
 }
