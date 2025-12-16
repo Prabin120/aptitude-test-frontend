@@ -1,13 +1,13 @@
 import { codeCompileApiEntryPoint, codeQuestion, getOwnedQuestion, getQuestionCompanies, getQuestionTags, verifyUserUploadedCode } from "@/consts"
 import { TagItem } from "./_components/combobox-with-tags"
-import { handleGetMethod, handlePostMethod, handlePutMethod } from "@/app/code/apiCalls";
+import { handleGetMethod, handlePostMethod, handlePutMethod } from "@/app/coding/apiCalls";
 
 export const getOwnedQuestionBySlug = async (slug: string) => {
     const response = await handleGetMethod(getOwnedQuestion + `?slug=${slug}`);
     if (response instanceof Response) {
         const res = await response.json();
         if (response.status === 200 || response.status === 201) {
-            res.data = {...res.data, ...res.testcases};
+            res.data = { ...res.data, ...res.testcases };
             return res.data;
         } else {
             return res.message;
@@ -47,8 +47,8 @@ export const updateQuestion = async (slug: string, data: object) => {
 //     return "Server error, please try again later.";
 // };
 
-export const verifyCode = async (code: string, language: string, testCases: {input: string, output: string}[]) => {
-    const response = await handlePostMethod(verifyUserUploadedCode, {code, language, testCases});
+export const verifyCode = async (code: string, language: string, testCases: { input: string, output: string }[]) => {
+    const response = await handlePostMethod(verifyUserUploadedCode, { code, language, testCases });
     if (response instanceof Response) {
         return response.json();
     }

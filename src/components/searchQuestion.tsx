@@ -5,8 +5,8 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Search, Plus } from "lucide-react"
-import { getAllAptiQuestions } from "@/app/apti-zone/apicalls"
-import { getAllQuestions } from "@/app/code/apiCalls"
+import { getAllAptiQuestions } from "@/app/aptitude/apicalls"
+import { getAllQuestions } from "@/app/coding/apiCalls"
 
 interface Question {
     _id: string

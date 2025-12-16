@@ -9,7 +9,8 @@ import { useSearchParams } from 'next/navigation'
 const AllQuestionsPage = (context: Readonly<{ params: Params }>) => {
     const { type, tag } = context.params
     const searchParams = useSearchParams()
-    const search = searchParams.get("search")??""
+    const search = searchParams.get("search") ?? ""
+
     return (
         <ReduxProvider>
             <ProblemListPage type={type} tag={tag} search={search} />

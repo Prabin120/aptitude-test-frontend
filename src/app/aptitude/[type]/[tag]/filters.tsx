@@ -19,7 +19,7 @@ const QuestionsFilters = ({ type, tag }: { type: string, tag: string }) => {
   return (
     <div className="flex justify-between mb-6 p-4 items-center">
       <h2>{`${type}/${decodeURIComponent(tag).replace(/%20/g, ' ')}`}</h2>
-      <Button onClick={handleStartTest} variant="default">
+      <Button onClick={handleStartTest} variant="default" className='text-primary-text'>
         Start Test
       </Button>
     </div>

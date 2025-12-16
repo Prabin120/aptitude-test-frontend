@@ -69,9 +69,8 @@ export default function AptitudeListingPage() {
     return (
         <div className="container mx-auto py-8">
             <div className="flex justify-between items-center mb-8 flex-col sm:flex-row">
-                <h1 className="font-bold text-lg sm:text-2xl md:text-3xl">Aptitude and Reasoning Preparation</h1>
                 <Button className="bg-primary hover:bg-primary/90 text-background">
-                    <Link href="/apti-zone/all-questions">See all Questions</Link>
+                    <Link href="/aptitude/all-questions">See all Questions</Link>
                 </Button>
             </div>
 

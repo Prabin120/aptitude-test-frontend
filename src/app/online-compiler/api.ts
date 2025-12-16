@@ -1,5 +1,5 @@
 import Error from "next/error";
-import { handlePostMethod } from "../code/apiCalls";
+import { handlePostMethod } from "../coding/apiCalls";
 import { aiGenerateEndpoint, aiImproveEndpoint, codeExecute } from "@/consts";
 
 const apticode_gemini_key = "apticode_gemini_key";

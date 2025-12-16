@@ -10,22 +10,21 @@ import { checkAuthorization } from "@/utils/authorization"
 import { useAppDispatch } from "@/redux/store"
 import { useRouter, useSearchParams } from "next/navigation"
 
-export default function ProblemListPage({search}: Readonly<{ type: string, tag: string, search: string }>) {
+export default function ProblemListPage({ search }: Readonly<{ type: string, tag: string, search: string }>) {
     const [problems, setProblems] = useState<Problem[]>()
     const [searchQuery, setSearchQuery] = useState<FilterQuestionProps>({ title: "", type: "" })
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState("")
-    const [page, setPage] = useState(1)
+    const searchParams = useSearchParams()
+    const currentPage = Number(searchParams.get('page')) || 1
     const [totalPages, setTotalPages] = useState(1)
     const dispatch = useAppDispatch();
     const router = useRouter();
-    const searchParams = useSearchParams()
-    const querySearch = searchParams.get('search') ?? "";
     const errorDetect = (error: string) => {
-        return error ?(
+        return error ? (
             <div className="text-red-500">{error}</div>
         ) : (
-            <QuestionTable data={problems} currentPage={page} totalPages={totalPages} onPageChange={setPage} />
+            <QuestionTable data={problems} currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
         )
     }
 
@@ -45,8 +44,14 @@ export default function ProblemListPage({search}: Readonly<{ type: string, tag: 
     };
 
     useEffect(() => {
-        fetchQuestions(page);
-    }, [querySearch]); // Add `page` to dependency array
+        fetchQuestions(currentPage);
+    }, [searchParams]); // Fetch questions when URL params change
+
+    const handlePageChange = (newPage: number) => {
+        const params = new URLSearchParams(searchParams.toString())
+        params.set('page', newPage.toString())
+        router.push(`?${params.toString()}`)
+    }
 
     const handleSearchButton = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -63,7 +68,7 @@ export default function ProblemListPage({search}: Readonly<{ type: string, tag: 
                     </div>
                 </div>
                 {loading ?
-                    <div>Loading questions...</div> : 
+                    <div>Loading questions...</div> :
                     errorDetect(error)
                 }
             </div>

@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils"
 import { Progress } from "@/components/ui/progress"
 import { useRouter } from "next/navigation"
 import Loading from "@/app/loading"
-import { getAptiQuestionByTag, getGroupTest } from "@/app/apti-zone/apicalls"
+import { getAptiQuestionByTag, getGroupTest } from "@/app/aptitude/apicalls"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { CheckCircle2, XCircle } from "lucide-react"
 import { useAppDispatch, useAppSelector } from "@/redux/store"
@@ -42,7 +42,7 @@ export default function TestPage({ type, tag, time }: Readonly<{ type: string, t
     const aptitudeQuestions = useAppSelector(state => state.aptitude.questions);
 
     useEffect(() => {
-        if(type === "exam" || type === "group-test"){
+        if (type === "exam" || type === "group-test") {
             setExamType(true)
         }
         if (aptitudeQuestions && aptitudeQuestions.length > 0) {
@@ -91,15 +91,15 @@ export default function TestPage({ type, tag, time }: Readonly<{ type: string, t
     useEffect(() => {
         (async () => {
             try {
-                if(type === "group-test"){
+                if (type === "group-test") {
                     const response = await getGroupTest(tag)
-                    setMockQuestions(response??[]);
-                } else{
+                    setMockQuestions(response ?? []);
+                } else {
                     const response = await getAptiQuestionByTag(type, tag, 1, 30);
                     if (type === "exam") {
-                        setMockQuestions(response.aptiQuestions??[]);
+                        setMockQuestions(response.aptiQuestions ?? []);
                     } else {
-                        setMockQuestions(response.data??[]);
+                        setMockQuestions(response.data ?? []);
                     }
                 }
                 setRemainingQuestions(0);  // Updated to use response data
@@ -161,7 +161,7 @@ export default function TestPage({ type, tag, time }: Readonly<{ type: string, t
                     {!isTestEnded && !examType ? (
                         <Button variant="destructive" onClick={handleEndTest}>End Test</Button>
                     ) : (
-                        <Button className="px-6" onClick={() => examType ? router.back() : router.replace("/thank-you")}>Back</Button>
+                        <Button className="px-6 text-primary-text" onClick={() => examType ? router.back() : router.replace("/thank-you")}>Back</Button>
                     )
                     }
                 </div>
@@ -172,7 +172,7 @@ export default function TestPage({ type, tag, time }: Readonly<{ type: string, t
                     <ScrollArea className="h-[calc(100vh-10rem)] p-4">
                         {mockQuestions.map((question, index) => (
                             <Button
-                                key={index+1}
+                                key={index + 1}
                                 variant="ghost"
                                 className={cn(
                                     "w-full justify-start mb-2",

@@ -63,7 +63,7 @@ function QuestionsList({ slug }: Readonly<{ type: string, slug: string }>) {
         calculateTimeLeft(); // Start the loop
         return () => cancelAnimationFrame(animationFrame); // Clean up on unmount
     }, [timeLeft]);
-    
+
 
     const { data, isLoading, isError, error } = useExamQuestions(slug)
 
@@ -150,7 +150,7 @@ function QuestionsList({ slug }: Readonly<{ type: string, slug: string }>) {
                                     {index + 1}.
                                 </TableCell>
                                 <TableCell>
-                                    <Link href={`/apti-zone/exam/${slug}/test/` + "?time=" + timeLeft}>
+                                    <Link href={`/aptitude/exam/${slug}/test/` + "?time=" + timeLeft}>
                                         {problem.title}
                                     </Link>
                                 </TableCell>
@@ -190,7 +190,7 @@ function QuestionsList({ slug }: Readonly<{ type: string, slug: string }>) {
                                         ?
                                         problem.title
                                         :
-                                        <Link href={`/code/exam/${problem.slug}` + "?time=" + timeLeft}>
+                                        <Link href={`/coding/exam/${problem.slug}` + "?time=" + timeLeft}>
                                             {problem.title}
                                         </Link>
                                     }

@@ -30,9 +30,9 @@ export default function ThankYouPage() {
           </CardContent>
           <CardFooter className="flex justify-center">
             <Link href={"/"}>
-            <Button >
-              Go to Home
-            </Button>
+              <Button className="text-primary-text">
+                Go to Home
+              </Button>
             </Link>
           </CardFooter>
         </Card>

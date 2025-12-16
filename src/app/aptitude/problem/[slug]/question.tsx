@@ -96,10 +96,10 @@ export default function AptitudeQuestionPage({ slug }: Readonly<{ slug: string }
             }
             <Card className="max-w-2xl mx-auto">
                 <CardHeader>
-                    <CardTitle className="text-2xl">
+                    <CardTitle className="text-2xl text-white/80">
                         Question {question?.questionNo}: {question?.title}
                     </CardTitle>
-                    <div className="flex flex-wrap gap-2 mt-2">
+                    <div className="flex flex-wrap gap-2 mt-2 text-white/80">
                         {question?.companies.map(company => (
                             <Badge key={company} variant="secondary">{company}</Badge>
                         ))}
@@ -107,12 +107,12 @@ export default function AptitudeQuestionPage({ slug }: Readonly<{ slug: string }
                             <Badge key={category} variant="outline">{category}</Badge>
                         ))}
                         {question?.topics.map(topic => (
-                            <Badge key={topic}>{topic}</Badge>
+                            <Badge className="font-normal text-primary-text" key={topic}>{topic}</Badge>
                         ))}
                     </div>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                    <p className="text-lg">{question?.description}</p>
+                    <p className="text-lg text-white/80">{question?.description}</p>
                     {question?.type === "MCQ" ? (
                         <RadioGroup
                             onValueChange={(value) => handleAnswerChange(value)}
@@ -180,7 +180,7 @@ export default function AptitudeQuestionPage({ slug }: Readonly<{ slug: string }
                 </CardContent>
                 <CardFooter className="flex justify-between">
                     <div className="space-x-2">
-                        <Button onClick={handleSubmit} disabled={selectedAnswers.length === 0 || isSubmitted}>
+                        <Button className="text-primary-text" onClick={handleSubmit} disabled={selectedAnswers.length === 0 || isSubmitted}>
                             Submit Answer
                         </Button>
                         <Button onClick={handleShowAnswer} disabled={attemptCount === 0 || showAnswer} variant="secondary">

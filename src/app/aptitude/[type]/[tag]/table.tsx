@@ -2,6 +2,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import React from 'react'
 import { QuestionTableProps } from '../../commonInterface';
 import PaginationComponent from '@/components/pagination';
+import Link from 'next/link';
 
 const QuestionTable: React.FC<QuestionTableProps> = ({ data, totalPages, currentPage, onPageChange }) => {
     return (
@@ -19,14 +20,16 @@ const QuestionTable: React.FC<QuestionTableProps> = ({ data, totalPages, current
                 </TableHeader>
                 <TableBody>
                     {data?.map((problem) => (
-                        <TableRow key={problem.questionNo} >
+                        <TableRow key={problem.questionNo}>
                             <TableCell className='text-center'>
                                 {/* <Badge variant="outline" className="bg-green-100 text-green-800"> */}
                                 {problem.questionNo}.
                                 {/* </Badge> */}
                             </TableCell>
                             <TableCell>
-                                {problem.title}
+                                <Link href={`/aptitude/problem/${problem.slug}`} >
+                                    {problem.title}
+                                </Link>
                             </TableCell>
                             <TableCell>
                                 <div className={problem.type === "MCQ" ? "text-yellow-600" : "text-orange-700"}>{problem.type}</div>

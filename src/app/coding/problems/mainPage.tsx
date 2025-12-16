@@ -58,7 +58,7 @@ export default function ProblemListPage() {
             searchParams += `&search=${searchQuery.title}`
         }
         setSearch(searchParams)
-        router.replace("/code/problems" + searchParams)
+        router.replace("/coding/problems" + searchParams)
     }
 
     return (

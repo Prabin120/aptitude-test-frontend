@@ -147,7 +147,7 @@ function QuestionsList({ testIdn }: Readonly<{ testIdn: string }>) {
                                     {index + 1}.
                                 </TableCell>
                                 <TableCell>
-                                    <Link href={`/apti-zone/group-test/${testId}/test/` + "?time=" + timeLeft}>
+                                    <Link href={`/aptitude/group-test/${testId}/test/` + "?time=" + timeLeft}>
                                         {problem.title}
                                     </Link>
                                 </TableCell>
@@ -187,7 +187,7 @@ function QuestionsList({ testIdn }: Readonly<{ testIdn: string }>) {
                                         ?
                                         problem.title
                                         :
-                                        <Link href={`/code/exam/${problem.slug}` + "?time=" + timeLeft}>
+                                        <Link href={`/coding/exam/${problem.slug}` + "?time=" + timeLeft}>
                                             {problem.title}
                                         </Link>
                                     }

@@ -1,6 +1,7 @@
 import { MetadataRoute } from 'next'
+import { getBlogsEndpoint, getAptiQuestionTagEndpoint, apiEntryPoint } from '@/consts'
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const baseUrl = 'https://apticode.in'
 
     const routes = [
@@ -8,9 +9,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
         '/login',
         '/signup',
         '/forgot-password',
-        '/code/problems',
+        '/coding/problems',
         '/online-compiler',
-        '/apti-zone',
+        '/aptitude',
         '/rewards',
         '/contribute',
         '/group-test',
@@ -46,5 +47,50 @@ export default function sitemap(): MetadataRoute.Sitemap {
         priority: 0.9,
     }))
 
-    return [...staticPages, ...compilerPages]
+    // Fetch Blogs
+    let blogPages: MetadataRoute.Sitemap = []
+    try {
+        const blogsRes = await fetch(`${apiEntryPoint}${getBlogsEndpoint}`, { next: { revalidate: 3600 } })
+        const blogsData = await blogsRes.json()
+        if (blogsData?.data) {
+            blogPages = blogsData.data.map((blog: { slug: string; updatedAt?: string; publishedAt: string }) => ({
+                url: `${baseUrl}/blogs/${encodeURIComponent(blog.slug)}`,
+                lastModified: new Date(blog.updatedAt || blog.publishedAt),
+                priority: 0.7,
+            }))
+        }
+    } catch (e) {
+        console.error("Failed to fetch blogs for sitemap", e)
+    }
+
+    // Fetch Apti Tags
+    let aptiPages: MetadataRoute.Sitemap = []
+    try {
+        const aptiRes = await fetch(`${apiEntryPoint}${getAptiQuestionTagEndpoint}`, { next: { revalidate: 3600 } })
+        const aptiData = await aptiRes.json()
+        if (aptiData) {
+            const { topics, categories, companies } = aptiData
+
+            const topicPages = (topics || []).map((t: { value: string }) => ({
+                url: `${baseUrl}/aptitude/topic/${encodeURIComponent(t.value)}`,
+                lastModified: new Date(),
+                priority: 0.6
+            }))
+            const categoryPages = (categories || []).map((t: { value: string }) => ({
+                url: `${baseUrl}/aptitude/category/${encodeURIComponent(t.value)}`,
+                lastModified: new Date(),
+                priority: 0.6
+            }))
+            const companyPages = (companies || []).map((t: { value: string }) => ({
+                url: `${baseUrl}/aptitude/company/${encodeURIComponent(t.value)}`,
+                lastModified: new Date(),
+                priority: 0.6
+            }))
+            aptiPages = [...topicPages, ...categoryPages, ...companyPages]
+        }
+    } catch (e) {
+        console.error("Failed to fetch apti tags for sitemap", e)
+    }
+
+    return [...staticPages, ...compilerPages, ...blogPages, ...aptiPages]
 }

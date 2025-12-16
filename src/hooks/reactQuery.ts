@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
 import { getTestsEndpoint, groupTestSingle, validAdminAccess, validCreatorAccess } from '@/consts'
 import { handleGetMethod } from '@/utils/apiCall'
-import { getAllQuestions, getQuestionBySlug } from '@/app/code/apiCalls'
+import { getAllQuestions, getQuestionBySlug } from '@/app/coding/apiCalls'
 import { IAptiQuestion, ICodingQuestion } from '@/app/group-test/[testId]/questionsList'
 
 interface ExamQuestionsResponse {
-    data:{
+    data: {
         _id: string
         apti_list: IAptiQuestion[]
         code_list: ICodingQuestion[]
@@ -44,7 +44,7 @@ export const useGroupTestQuestions = (testId: string) => {
 }
 const checkAdminAccess = async () => {
     const response = await handleGetMethod(validAdminAccess)
-    if (response.status === 200){
+    if (response.status === 200) {
         return true
     }
     return false
@@ -52,7 +52,7 @@ const checkAdminAccess = async () => {
 
 const checkCreatorAccess = async () => {
     const response = await handleGetMethod(validCreatorAccess)
-    if (response.status === 200){
+    if (response.status === 200) {
         return true
     }
     return false

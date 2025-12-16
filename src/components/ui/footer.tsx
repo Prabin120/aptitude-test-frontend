@@ -12,7 +12,7 @@ const Footer = () => {
     return regex.test(pathname)
   }
 
-  const urls = ["/code/*/*", "/apti-zone/*/*/test", "/tests/exam/*", "/online-compiler/*"]
+  const urls = ["/coding/*/*", "/aptitude/*/*/test", "/tests/exam/*", "/online-compiler/*"]
 
   const isExcludedPath = (pathname: string) => {
     for (const url of urls) {
@@ -61,9 +61,9 @@ const Footer = () => {
           <div className="flex flex-col space-y-4">
             <h3 className="text-sm font-semibold text-zinc-100 uppercase tracking-wider">Platform</h3>
             <div className="flex flex-col space-y-2 text-sm">
-              <Link href="/code/problems" className="hover:text-primary transition-colors">Problems</Link>
+              <Link href="/coding/problems" className="hover:text-primary transition-colors">Problems</Link>
               <Link href="/online-compiler" className="hover:text-primary transition-colors">Compiler</Link>
-              <Link href="/apti-zone" className="hover:text-primary transition-colors">Aptitude Tests</Link>
+              <Link href="/aptitude" className="hover:text-primary transition-colors">Aptitude Tests</Link>
               <Link href="/group-test" className="hover:text-primary transition-colors">Contests</Link>
             </div>
           </div>

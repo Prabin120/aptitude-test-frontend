@@ -37,7 +37,7 @@ const matchesPattern = (pathname: string, pattern: string) => {
   return regex.test(pathname)
 }
 
-const urls = ["/code/*/*", "/apti-zone/*/*/test", "/tests/exam/*", "/online-compiler/*"]
+const urls = ["/coding/*/*", "/aptitude/*/*/test", "/tests/exam/*", "/online-compiler/*"]
 
 const isExcludedPath = (pathname: string) => {
   for (const url of urls) {
@@ -170,14 +170,14 @@ const Header = () => {
 
           <Link
             className="text-sm font-medium hover:underline underline-offset-4"
-            href="/code/problems"
+            href="/coding/problems"
             onClick={() => setIsSheetOpen(false)}
           >
             CodeZone
           </Link>
           <Link
             className="text-sm font-medium hover:underline underline-offset-4"
-            href="/apti-zone"
+            href="/aptitude"
             onClick={() => setIsSheetOpen(false)}
           >
             AptiZone
@@ -316,14 +316,14 @@ const Header = () => {
                     Group Test
                   </Button>
                 </Link>
-                <Link href="/code/problems" onClick={() => setIsSheetOpen(false)}>
+                <Link href="/coding/problems" onClick={() => setIsSheetOpen(false)}>
                   <Button className="w-full justify-start" variant="ghost">
-                    CodeZone
+                    Coding
                   </Button>
                 </Link>
-                <Link href="/apti-zone" onClick={() => setIsSheetOpen(false)}>
+                <Link href="/aptitude" onClick={() => setIsSheetOpen(false)}>
                   <Button className="w-full justify-start" variant="ghost">
-                    AptiZone
+                    Aptitude
                   </Button>
                 </Link>
                 <Link href="/online-compiler" onClick={() => setIsSheetOpen(false)}>

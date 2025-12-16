@@ -168,7 +168,7 @@ export default function PracticeSection() {
               </div>
               <div className="text-center">
                 <Button asChild className="bg-secondary hover:bg-secondary/90">
-                  <Link href="/code/problems">
+                  <Link href="/coding/problems">
                     Explore All Coding Problems <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>
@@ -217,7 +217,7 @@ export default function PracticeSection() {
               </div>
               <div className="text-center">
                 <Button asChild className="bg-primary hover:bg-primary/90 text-primary-text">
-                  <Link href="/apti-zone">
+                  <Link href="/aptitude">
                     Explore All Quantitative Problems <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>
@@ -266,7 +266,7 @@ export default function PracticeSection() {
               </div>
               <div className="text-center">
                 <Button asChild className="bg-primary hover:bg-primary/90 text-primary-text">
-                  <Link href="/apti-zone">
+                  <Link href="/aptitude">
                     Explore All Aptitude Problems <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>
