@@ -53,6 +53,7 @@ export const getAptiQuestionByTopicEndpoint = '/p/api/v1/aptitude/questions/topi
 export const getAptiQuestionByCompanyEndpoint = '/p/api/v1/aptitude/questions/company'   // post
 export const addAptiQuestionTagEndpoint = '/p/api/v1/aptitude/question-tag'   // post
 export const getAptiQuestionTagEndpoint = '/p/api/v1/aptitude/question-tag'   // get
+export const getAptiQuestionByTypeTagEndpoint = (type: string) => '/p/api/v1/aptitude/question-tag/' + type   // post
 export const getAptiQuestionsLikeEndpoint = '/p/api/v1/aptitude/questions/like'   // get
 export const getAdminAptiQuestionsEndpoint = '/p/api/v1/aptitude/questions/admin'   // get
 

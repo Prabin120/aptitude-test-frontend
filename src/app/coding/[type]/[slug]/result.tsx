@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Check, AlertTriangle, XCircle, Copy, Lightbulb } from 'lucide-react'
+import { Check, AlertTriangle, XCircle, Copy, Lightbulb, Clock } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -29,6 +29,8 @@ export default function SubmissionResult({
                 return "text-red-500"
             case "wrong_answer":
                 return "text-red-500"
+            case "time_limit_exceeded":
+                return "text-yellow-500"
             default:
                 return "text-gray-500"
         }
@@ -42,6 +44,8 @@ export default function SubmissionResult({
                 return <AlertTriangle className="h-5 w-5" />
             case "wrong_answer":
                 return <XCircle className="h-5 w-5" />
+            case "time_limit_exceeded":
+                return <Clock className="h-5 w-5" />
             default:
                 return <AlertTriangle className="h-5 w-5" />
         }
@@ -55,6 +59,8 @@ export default function SubmissionResult({
                 return "Runtime Error"
             case "wrong_answer":
                 return "Wrong Answer"
+            case "time_limit_exceeded":
+                return "Time Limit Exceeded"
             default:
                 return "Unknown Status"
         }
@@ -134,6 +140,33 @@ export default function SubmissionResult({
                                             </div>
                                         </div>
                                     </div>
+                                </div>
+                            )}
+                            {status === "time_limit_exceeded" && (
+                                <div className="space-y-4">
+                                    <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-4">
+                                        <h3 className="text-yellow-500 font-semibold mb-2">Execution Timed Out</h3>
+                                        <p className="text-yellow-500/80 text-sm">
+                                            Your solution took longer than the allowed time limit to execute.
+                                            This usually means your algorithm has a higher time complexity (e.g., O(n²) instead of O(n)).
+                                            Try optimizing your logic.
+                                        </p>
+                                    </div>
+                                    {failedCase && (
+                                        <div className="space-y-2">
+                                            <h3 className="text-lg font-semibold">Last Executed Input</h3>
+                                            <div className="bg-zinc-800/50 rounded-lg p-4">
+                                                <div className="font-mono text-sm">
+                                                    {Object.keys(structuredTestCases(failedCase.input, testCaseVariableNames)).map((key) => (
+                                                        <div key={key} className='bg-neutral-950 p-2 m-2 rounded'>
+                                                            <p>{key} = </p>
+                                                            <p>{JSON.stringify(structuredTestCases(failedCase.input, testCaseVariableNames)[key])}</p>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
                             )}
                             {status === "runtime_error" && message && (

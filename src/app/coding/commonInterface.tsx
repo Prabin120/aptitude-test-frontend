@@ -43,7 +43,7 @@ interface TestCase {
     passed?: boolean;
 }
 
-type SubmissionStatus = "accepted" | "runtime_error" | "wrong_answer"
+type SubmissionStatus = "accepted" | "runtime_error" | "wrong_answer" | "time_limit_exceeded"
 
 interface SubmissionResultProps {
     status?: SubmissionStatus | string

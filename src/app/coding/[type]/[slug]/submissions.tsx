@@ -20,6 +20,7 @@ function Submissions({ submissions, testCaseVariableNames, aiFeedback }: Readonl
         if (submission.status === "Accepted") return "accepted";
         if (submission.status === "Wrong Answer") return "wrong_answer";
         if (submission.status === "Runtime Error") return "runtime_error";
+        if (submission.status === "Time Limit Exceeded") return "time_limit_exceeded";
 
         // Fallback for old data or if status is missing
         if (submission.totalTestCases && submission.passedTestCases === submission.totalTestCases) {
@@ -53,7 +54,10 @@ function Submissions({ submissions, testCaseVariableNames, aiFeedback }: Readonl
                                     getStatus(submission) === "runtime_error" ?
                                         <div className='text-red-500'>Runtime Error</div>
                                         :
-                                        <div className='text-red-500'>Wrong Answer</div>
+                                        getStatus(submission) === "time_limit_exceeded" ?
+                                            <div className='text-yellow-500'>Time Limit Exceeded</div>
+                                            :
+                                            <div className='text-red-500'>Wrong Answer</div>
                                 }
                             </TableCell>
                             <TableCell>{submission.language}</TableCell>

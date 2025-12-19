@@ -1,21 +1,36 @@
-"use client"
-
-import ReduxProvider from '@/redux/redux-provider'
 import React from 'react'
-import ProblemListPage from './mainPage'
-import { Params } from 'next/dist/shared/lib/router/utils/route-matcher'
-import { useSearchParams } from 'next/navigation'
+import AllQuestionsClient from './AllQuestionsClient'
+import { Metadata } from 'next'
+import { apiEntryPoint, getAllAptiQuestionsEndpoint } from '@/consts'
 
-const AllQuestionsPage = (context: Readonly<{ params: Params }>) => {
-    const { type, tag } = context.params
-    const searchParams = useSearchParams()
-    const search = searchParams.get("search") ?? ""
-
-    return (
-        <ReduxProvider>
-            <ProblemListPage type={type} tag={tag} search={search} />
-        </ReduxProvider>
-    )
+export const metadata: Metadata = {
+    title: "All Questions | AptiCode",
+    description: "Practice all aptitude questions on AptiCode."
 }
 
-export default AllQuestionsPage
+// Server-side fetching
+async function getQuestions(page: number, search: string) {
+    try {
+        const res = await fetch(`${apiEntryPoint}${getAllAptiQuestionsEndpoint}?page=${page}&search=${search}`, { next: { revalidate: 3600 } })
+        if (!res.ok) return null
+        return await res.json()
+    } catch (e) {
+        console.error("Error fetching questions", e)
+        return null
+    }
+}
+
+export default async function AllQuestionsPage({ searchParams }: { searchParams: { page?: string, search?: string } }) {
+    const page = Number(searchParams.page) || 1
+    const search = searchParams.search ?? ""
+
+    const data = await getQuestions(page, search)
+
+    return (
+        <AllQuestionsClient
+            initialProblems={data?.data}
+            initialTotalPages={data?.totalPages}
+            initialSearch={search}
+        />
+    )
+}
