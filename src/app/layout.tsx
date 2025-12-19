@@ -4,6 +4,8 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import MainHeader from "./header";
 import Footer from "@/components/ui/footer";
+import { AiProvider } from "@/context/AiContext";
+import AiAssistant from "@/components/ai-assistant/AiAssistant";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -111,12 +113,16 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify([jsonLd, softwareAppSchema]) }}
         />
-        <MainHeader />
-        <main className="min-h-[82vh]">
-          {children}
-        </main>
-        <Toaster />
-        <Footer />
+
+        <AiProvider>
+          <MainHeader />
+          <main className="min-h-[82vh]">
+            {children}
+          </main>
+          <Toaster />
+          <Footer />
+          <AiAssistant />
+        </AiProvider>
       </body>
     </html>
   );

@@ -318,12 +318,12 @@ const Header = () => {
                 </Link>
                 <Link href="/coding/problems" onClick={() => setIsSheetOpen(false)}>
                   <Button className="w-full justify-start" variant="ghost">
-                    Coding
+                    CodeZone
                   </Button>
                 </Link>
                 <Link href="/aptitude" onClick={() => setIsSheetOpen(false)}>
                   <Button className="w-full justify-start" variant="ghost">
-                    Aptitude
+                    AptiZone
                   </Button>
                 </Link>
                 <Link href="/online-compiler" onClick={() => setIsSheetOpen(false)}>
