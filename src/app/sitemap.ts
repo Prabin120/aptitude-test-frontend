@@ -1,5 +1,5 @@
 import { MetadataRoute } from 'next'
-import { getBlogsEndpoint, getAptiQuestionTagEndpoint, apiEntryPoint } from '@/consts'
+import { getBlogsEndpoint, getAptiQuestionTagEndpoint, apiEntryPoint, getAllAptiQuestionsEndpoint } from '@/consts'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const baseUrl = 'https://apticode.in'
@@ -92,5 +92,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         console.error("Failed to fetch apti tags for sitemap", e)
     }
 
-    return [...staticPages, ...compilerPages, ...blogPages, ...aptiPages]
+    // Fetch Apti Questions
+    let questionPages: MetadataRoute.Sitemap = []
+    try {
+        const questionsRes = await fetch(`${apiEntryPoint}${getAllAptiQuestionsEndpoint}?limit=10000`, { next: { revalidate: 3600 } })
+        const questionsData = await questionsRes.json()
+        if (questionsData?.data) {
+            questionPages = questionsData.data.map((q: { slug: string }) => ({
+                url: `${baseUrl}/aptitude/problem/${encodeURIComponent(q.slug)}`,
+                lastModified: new Date(),
+                priority: 0.8,
+            }))
+        }
+    } catch (e) {
+        console.error("Failed to fetch questions for sitemap", e)
+    }
+
+    return [...staticPages, ...compilerPages, ...blogPages, ...aptiPages, ...questionPages]
 }

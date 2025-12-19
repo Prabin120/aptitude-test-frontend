@@ -25,16 +25,23 @@ interface IQuestionData extends Problem {
     options: string[]
 }
 
-export default function AptitudeQuestionPage({ slug }: Readonly<{ slug: string }>) {
+interface AptitudeQuestionPageProps {
+    slug: string
+    initialQuestion: IQuestionData | null
+    prevSlug: string
+    nextSlug: string
+}
+
+export default function AptitudeQuestionPage({ slug, initialQuestion, prevSlug, nextSlug }: AptitudeQuestionPageProps) {
     const [selectedAnswers, setSelectedAnswers] = useState<number[]>([])
     const [isSubmitted, setIsSubmitted] = useState(false)
     const [attemptCount, setAttemptCount] = useState(0)
     const [showAnswer, setShowAnswer] = useState(false)
-    const [question, setQuestion] = useState<IQuestionData>()
-    const [previousQuestionSlug, setPreviousQuestionSlug] = useState<string>('')
-    const [nextQuestionSlug, setNextQuestionSlug] = useState<string>('')
+    const [question, setQuestion] = useState<IQuestionData | undefined>(initialQuestion || undefined)
+    const [previousQuestionSlug, setPreviousQuestionSlug] = useState<string>(prevSlug)
+    const [nextQuestionSlug, setNextQuestionSlug] = useState<string>(nextSlug)
     const [loading, setLoading] = useState(false)
-    const [error, setError] = useState("")
+    const [error, setError] = useState(initialQuestion ? "" : "Failed to load question.")
     const dispatch = useAppDispatch();
     const { setContextData } = useAiContext();
 
@@ -52,19 +59,30 @@ export default function AptitudeQuestionPage({ slug }: Readonly<{ slug: string }
         }
     }, [question, setContextData]);
 
+    // UseEffect for client-side authorization check or updates if slug changes dynamically (less likely with SSR navigation)
     useEffect(() => {
-        setLoading(true);
-        setError("");
-        (async () => {
-            const response = await getAptiQuestionBySlug(slug)
-            await checkAuthorization(response, dispatch);
-            setQuestion(response.question)
-            setPreviousQuestionSlug(response.prevQuestionSlug)
-            setNextQuestionSlug(response.nextQuestionSlug)
-        })()
-            .catch(e => setError("Failed to load question. Please try again." + e))
-            .finally(() => setLoading(false))
-    }, [slug, dispatch])
+        if (!initialQuestion) {
+            setLoading(true);
+            (async () => {
+                try {
+                    const response = await getAptiQuestionBySlug(slug)
+                    await checkAuthorization(response, dispatch);
+                    setQuestion(response.question)
+                    setPreviousQuestionSlug(response.prevQuestionSlug)
+                    setNextQuestionSlug(response.nextQuestionSlug)
+                    setError("")
+                } catch (e) {
+                    setError("Failed to load question. Please try again.")
+                } finally {
+                    setLoading(false)
+                }
+            })()
+        } else {
+            setQuestion(initialQuestion)
+            setPreviousQuestionSlug(prevSlug)
+            setNextQuestionSlug(nextSlug)
+        }
+    }, [slug, initialQuestion, prevSlug, nextSlug, dispatch])
 
     const handleAnswerChange = (answerIndexString: string) => {
         const answerIndex = Number(answerIndexString) + 1

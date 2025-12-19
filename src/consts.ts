@@ -56,6 +56,7 @@ export const getAptiQuestionTagEndpoint = '/p/api/v1/aptitude/question-tag'   //
 export const getAptiQuestionByTypeTagEndpoint = (type: string) => '/p/api/v1/aptitude/question-tag/' + type   // post
 export const getAptiQuestionsLikeEndpoint = '/p/api/v1/aptitude/questions/like'   // get
 export const getAdminAptiQuestionsEndpoint = '/p/api/v1/aptitude/questions/admin'   // get
+export const getAptiQuestionBySlugEndpoint = (slug: string) => '/p/api/v1/aptitude/question/' + slug
 
 // test
 export const getTestsEndpoint = '/p/api/v1/test'   // get
