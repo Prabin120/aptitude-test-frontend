@@ -1,4 +1,5 @@
 import React from 'react'
+export const dynamic = 'force-dynamic'
 import QuestionTypeClient from './QuestionTypeClient'
 import { apiEntryPoint, getAptiQuestionByTypeTagEndpoint } from '@/consts'
 import { Metadata } from 'next'

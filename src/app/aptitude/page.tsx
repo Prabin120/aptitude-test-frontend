@@ -1,4 +1,5 @@
 import React from 'react'
+export const dynamic = 'force-dynamic'
 import AptitudeListingClient from './AptitudeListingClient'
 import ReduxProvider from '@/redux/redux-provider'
 import { apiEntryPoint, getAptiQuestionTagEndpoint } from '@/consts'
