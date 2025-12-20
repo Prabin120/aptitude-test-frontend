@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: { params: { type: string } })
 async function getQuestionsByType(type: string, search: string) {
     try {
         const endpoint = getAptiQuestionByTypeTagEndpoint(type)
-        const res = await fetch(`${apiEntryPoint}${endpoint}?search=${search}`, { next: { revalidate: 3600 } })
+        const res = await fetch(`${apiEntryPoint}${endpoint}?search=${search}`, { cache: 'no-store' })
         if (!res.ok) return []
         const data = await res.json()
         return data.questions || []
@@ -30,14 +30,10 @@ export default async function QuestionTypePage({ params, searchParams }: { param
     const search = searchParams.search ?? ""
     const questions = await getQuestionsByType(type, search)
 
-    // Robust fallback: Filter on frontend server-side to handle potential backend issues
-    const filteredQuestions = (questions || [])
-        .filter((q: { value: string }) => q.value.toLowerCase().includes(search.toLowerCase()))
-
     return (
         <QuestionTypeClient
             type={type}
-            initialQuestions={filteredQuestions}
+            initialQuestions={questions}
             initialSearch={search}
         />
     )

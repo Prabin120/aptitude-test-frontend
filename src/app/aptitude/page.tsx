@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 async function getTags(search: string) {
   try {
-    const res = await fetch(`${apiEntryPoint}${getAptiQuestionTagEndpoint}?search=${search}`, { next: { revalidate: 3600 } })
+    const res = await fetch(`${apiEntryPoint}${getAptiQuestionTagEndpoint}?search=${search}`, { cache: 'no-store' })
     if (!res.ok) return { topics: [], categories: [], companies: [] }
     return await res.json()
   } catch (e) {

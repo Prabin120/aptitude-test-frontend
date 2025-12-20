@@ -40,21 +40,21 @@ interface QuestionTypeClientProps {
 }
 
 export default function QuestionTypeClient({ type, initialQuestions, initialSearch }: QuestionTypeClientProps) {
+    const [allQuestions] = useState<TestCard[]>(initialQuestions)
+    const [filteredQuestions, setFilteredQuestions] = useState<TestCard[]>(initialQuestions)
     const [search, setSearch] = useState(initialSearch || "")
     const router = useRouter()
 
     useEffect(() => {
-        setSearch(initialSearch || "")
-    }, [initialSearch])
+        const lowerSearch = search.toLowerCase()
+        const filtered = allQuestions.filter(q =>
+            q.value.toLowerCase().includes(lowerSearch)
+        )
+        setFilteredQuestions(filtered)
+    }, [search, allQuestions])
 
     const handleSearch = (searchVal: string) => {
-        setSearch(searchVal) // Update input immediately
-
-        // Debounce or trigger navigation
-        // For now, consistent with previous behavior: simple onChange updates state, we could add debounce here if needed
-        // But the previous implementation updated URL on every change? No, handleSearch was called on `onChange`. 
-        // We should probably rely on `onClick` or debounce for performance, but user wants 'working'.
-
+        setSearch(searchVal)
         const params = new URLSearchParams(window.location.search)
         if (searchVal) {
             params.set('search', searchVal)
@@ -78,7 +78,7 @@ export default function QuestionTypeClient({ type, initialQuestions, initialSear
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                {initialQuestions.map((test) => (
+                {filteredQuestions.map((test) => (
                     <TestCardComponent key={test._id} test={test} type={type} />
                 ))}
             </div>
