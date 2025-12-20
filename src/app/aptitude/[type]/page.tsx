@@ -1,4 +1,5 @@
 import React from 'react'
+export const dynamic = 'force-dynamic'
 import QuestionTypeClient from './QuestionTypeClient'
 import { apiEntryPoint, getAptiQuestionByTypeTagEndpoint } from '@/consts'
 import { Metadata } from 'next'
@@ -29,10 +30,14 @@ export default async function QuestionTypePage({ params, searchParams }: { param
     const search = searchParams.search ?? ""
     const questions = await getQuestionsByType(type, search)
 
+    // Robust fallback: Filter on frontend server-side to handle potential backend issues
+    const filteredQuestions = (questions || [])
+        .filter((q: { value: string }) => q.value.toLowerCase().includes(search.toLowerCase()))
+
     return (
         <QuestionTypeClient
             type={type}
-            initialQuestions={questions}
+            initialQuestions={filteredQuestions}
             initialSearch={search}
         />
     )
