@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import Link from "next/link"
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -45,13 +45,8 @@ export default function QuestionTypeClient({ type, initialQuestions, initialSear
     const [search, setSearch] = useState(initialSearch || "")
     const router = useRouter()
 
-    useEffect(() => {
-        const lowerSearch = search.toLowerCase()
-        const filtered = allQuestions.filter(q =>
-            q.value.toLowerCase().includes(lowerSearch)
-        )
-        setFilteredQuestions(filtered)
-    }, [search, allQuestions])
+    // useEffect(() => {
+    // }, [allQuestions])
 
     const handleSearch = (searchVal: string) => {
         setSearch(searchVal)
@@ -61,6 +56,11 @@ export default function QuestionTypeClient({ type, initialQuestions, initialSear
         } else {
             params.delete('search')
         }
+        const lowerSearch = search.toLowerCase()
+        const filtered = allQuestions.filter(q =>
+            q.value.toLowerCase().includes(lowerSearch)
+        )
+        setFilteredQuestions(filtered)
         router.replace(`?${params.toString()}`, { scroll: false })
     }
 
@@ -71,8 +71,8 @@ export default function QuestionTypeClient({ type, initialQuestions, initialSear
                 <Search
                     placeholder={`Search...`}
                     value={search}
-                    onChange={(val) => handleSearch(val)}
-                    onClick={() => { }}
+                    onChange={(val) => setSearch(val)}
+                    onClick={() => { handleSearch(search) }}
                     className="flex-1 max-w-[200px] sm:max-w-sm"
                 />
             </div>

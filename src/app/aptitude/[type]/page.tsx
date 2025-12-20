@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: { params: { type: string } })
 async function getQuestionsByType(type: string, search: string) {
     try {
         const endpoint = getAptiQuestionByTypeTagEndpoint(type)
-        const res = await fetch(`${apiEntryPoint}${endpoint}?search=${search}`, { cache: 'no-store' })
+        const res = await fetch(`${apiEntryPoint}${endpoint}?search=${search}`, { next: { revalidate: 3600 } })
         if (!res.ok) return []
         const data = await res.json()
         return data.questions || []

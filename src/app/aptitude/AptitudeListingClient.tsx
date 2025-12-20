@@ -69,8 +69,8 @@ export default function AptitudeListingClient({ topics, categories, companies, i
                 <Search
                     placeholder="Search..."
                     value={search}
-                    onChange={(val) => handleSearch(val)}
-                    onClick={() => { }}
+                    onChange={(e) => { setSearch(() => e) }}
+                    onClick={() => handleSearch(search)}
                     className="flex-1 max-w-[200px] sm:max-w-sm"
                 />
             </div>
