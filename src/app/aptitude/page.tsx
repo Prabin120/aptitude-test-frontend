@@ -25,25 +25,12 @@ export default async function AptiZone({ searchParams }: { searchParams: { searc
   const search = searchParams.search ?? ""
   const { topics, categories, companies } = await getTags(search)
 
-  // Robust fallback: Filter and slice on frontend server-side to handle potential backend issues
-  const filteredTopics = (topics || [])
-    .filter((t: { value: string }) => t.value.toLowerCase().includes(search.toLowerCase()))
-    .slice(0, 6)
-
-  const filteredCategories = (categories || [])
-    .filter((t: { value: string }) => t.value.toLowerCase().includes(search.toLowerCase()))
-    .slice(0, 6)
-
-  const filteredCompanies = (companies || [])
-    .filter((t: { value: string }) => t.value.toLowerCase().includes(search.toLowerCase()))
-    .slice(0, 6)
-
   return (
     <ReduxProvider>
       <AptitudeListingClient
-        topics={filteredTopics}
-        categories={filteredCategories}
-        companies={filteredCompanies}
+        topics={topics || []}
+        categories={categories || []}
+        companies={companies || []}
         initialSearch={search}
       />
     </ReduxProvider>

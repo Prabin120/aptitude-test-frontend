@@ -40,17 +40,28 @@ interface QuestionTypeClientProps {
 }
 
 export default function QuestionTypeClient({ type, initialQuestions, initialSearch }: QuestionTypeClientProps) {
-    const [questions, setQuestions] = useState<TestCard[]>(initialQuestions)
     const [search, setSearch] = useState(initialSearch || "")
     const router = useRouter()
 
     useEffect(() => {
-        setQuestions(initialQuestions)
-    }, [initialQuestions])
+        setSearch(initialSearch || "")
+    }, [initialSearch])
 
     const handleSearch = (searchVal: string) => {
-        setSearch(searchVal)
-        router.push(`?search=${searchVal}`)
+        setSearch(searchVal) // Update input immediately
+
+        // Debounce or trigger navigation
+        // For now, consistent with previous behavior: simple onChange updates state, we could add debounce here if needed
+        // But the previous implementation updated URL on every change? No, handleSearch was called on `onChange`. 
+        // We should probably rely on `onClick` or debounce for performance, but user wants 'working'.
+
+        const params = new URLSearchParams(window.location.search)
+        if (searchVal) {
+            params.set('search', searchVal)
+        } else {
+            params.delete('search')
+        }
+        router.replace(`?${params.toString()}`, { scroll: false })
     }
 
     return (
@@ -60,14 +71,14 @@ export default function QuestionTypeClient({ type, initialQuestions, initialSear
                 <Search
                     placeholder={`Search...`}
                     value={search}
-                    onChange={setSearch}
-                    onClick={() => handleSearch(search)}
+                    onChange={(val) => handleSearch(val)}
+                    onClick={() => { }}
                     className="flex-1 max-w-[200px] sm:max-w-sm"
                 />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                {questions.map((test) => (
+                {initialQuestions.map((test) => (
                     <TestCardComponent key={test._id} test={test} type={type} />
                 ))}
             </div>

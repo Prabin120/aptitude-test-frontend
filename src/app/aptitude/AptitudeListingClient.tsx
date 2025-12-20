@@ -51,7 +51,13 @@ export default function AptitudeListingClient({ topics, categories, companies, i
 
     const handleSearch = (searchVal: string) => {
         setSearch(searchVal)
-        router.push(`?search=${searchVal}`)
+        const params = new URLSearchParams(window.location.search)
+        if (searchVal) {
+            params.set('search', searchVal)
+        } else {
+            params.delete('search')
+        }
+        router.replace(`?${params.toString()}`, { scroll: false })
     }
 
     return (
@@ -63,8 +69,8 @@ export default function AptitudeListingClient({ topics, categories, companies, i
                 <Search
                     placeholder="Search..."
                     value={search}
-                    onChange={setSearch}
-                    onClick={() => handleSearch(search)}
+                    onChange={(val) => handleSearch(val)}
+                    onClick={() => { }}
                     className="flex-1 max-w-[200px] sm:max-w-sm"
                 />
             </div>
