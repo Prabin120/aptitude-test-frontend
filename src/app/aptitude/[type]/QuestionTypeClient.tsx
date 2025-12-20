@@ -64,6 +64,17 @@ export default function QuestionTypeClient({ type, initialQuestions, initialSear
         router.replace(`?${params.toString()}`, { scroll: false })
     }
 
+    if (!allQuestions.length) {
+        return <div className="container mx-auto py-8">
+            <div className="flex justify-center items-center h-full">
+                <div className="text-center">
+                    <h2 className="text-2xl font-bold mb-2">No Questions Found</h2>
+                    <p className="text-gray-600">We couldn&apos;t find any questions matching your search criteria.</p>
+                </div>
+            </div>
+        </div>
+    }
+
     return (
         <div className="container mx-auto py-8">
             <div className="flex justify-between items-center mb-8 flex-row gap-2">
