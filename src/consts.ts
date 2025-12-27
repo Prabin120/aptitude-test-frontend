@@ -34,6 +34,7 @@ export const codeAihint = "/s/code/ai-hint"
 export const codeAiFeedback = "/s/code/ai-feedback"
 export const aiGenerateEndpoint = "/p/api/v1/ai/generate"
 export const aiImproveEndpoint = "/p/api/v1/ai/improve"
+export const aiFixErrorEndpoint = "/p/api/v1/ai/fix"
 export const getAdminCodeQuestions = "/s/questions/owned-questions"
 export const getQuestionsToReview = "/s/questions/to-review"
 export const getQuestionTags = "/s/questions/tags"  //getting question tags

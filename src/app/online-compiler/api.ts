@@ -1,6 +1,6 @@
 import Error from "next/error";
 import { handlePostMethod } from "../coding/apiCalls";
-import { aiGenerateEndpoint, aiImproveEndpoint, codeExecute } from "@/consts";
+import { aiGenerateEndpoint, aiImproveEndpoint, aiFixErrorEndpoint, codeExecute } from "@/consts";
 
 const apticode_gemini_key = "apticode_gemini_key";
 
@@ -47,6 +47,23 @@ export const aiImproveCode = async (language: string, code: string) => {
     }
     throw Error;
 };
+
+// AI Fix Error - uses dedicated fix endpoint
+export const aiFixError = async (language: string, code: string, error: string) => {
+    const apiKey = getAIApiKey();
+    const data = {
+        language: language,
+        code: code,
+        error: error,
+        apiKey: apiKey,
+    }
+    const response = await handlePostMethod(aiFixErrorEndpoint, data);
+    if (response instanceof Response) {
+        return response;
+    }
+    throw Error;
+};
+
 
 export const executeCode = async (
     code: string,

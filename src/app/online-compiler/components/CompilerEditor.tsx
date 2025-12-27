@@ -4,8 +4,8 @@ import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import Editor, { Monaco } from "@monaco-editor/react";
 import { editor, IDisposable } from "monaco-editor";
 import React, { useState, useRef, useEffect, useMemo } from "react";
-import { executeCode, aiGenerateCode, aiImproveCode } from "../api";
-import { Loader2, Play, Menu, Maximize2, Minimize2, X, ChevronRight, Sparkles, Wand2, User, LogOut, AlertTriangle, Settings } from "lucide-react";
+import { executeCode, aiGenerateCode, aiImproveCode, aiFixError } from "../api";
+import { Loader2, Play, Menu, Maximize2, Minimize2, X, ChevronRight, Sparkles, Wand2, User, LogOut, AlertTriangle, Settings, Wrench } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { registerPythonCompletion } from "../utils/pythonIntellisense";
 import { registerCppCompletion } from "../utils/cppIntellisense";
@@ -73,6 +73,7 @@ const CompilerEditor: React.FC<CompilerEditorProps> = ({ language }) => {
     const [selectedText, setSelectedText] = useState<string>("");
     const [selectionRange, setSelectionRange] = useState<{ startLine: number; endLine: number } | null>(null);
     const [generating, setGenerating] = useState<'generate' | 'improve' | null>(null);
+    const [fixingError, setFixingError] = useState<boolean>(false);
 
     // Popup states
     const [showLoginPopup, setShowLoginPopup] = useState(false);
@@ -387,6 +388,50 @@ const CompilerEditor: React.FC<CompilerEditorProps> = ({ language }) => {
             setGenerating(null);
         }
     };
+
+    // AI: Fix Error - fixes code compilation errors
+    const handleFixError = async () => {
+        if (!error || !code) return;
+        setFixingError(true);
+
+        try {
+            const res = await aiFixError(language, code, error);
+
+            // Check for auth error
+            if (isAuthError(res)) {
+                setShowLoginPopup(true);
+                return;
+            }
+
+            // Check for quota exceeded
+            if (isQuotaError(res)) {
+                setShowQuotaPopup(true);
+                return;
+            }
+
+            const resJson = await res.json();
+            const response = resJson.response;
+
+            if (response && typeof response === 'string' && !response.includes('not available')) {
+                // Replace the entire editor content with the fixed code
+                setCode(response);
+                // Clear the error
+                setError("");
+                // Show success message
+                import("sonner").then(({ toast }) => {
+                    toast.success("Code fixed successfully!");
+                });
+            } else {
+                setError("Could not fix the error. Please try again.");
+            }
+        } catch (e) {
+            console.error(e);
+            setError("AI Fix Error failed");
+        } finally {
+            setFixingError(false);
+        }
+    };
+
 
     const RunButton = () => (
         <button
@@ -724,7 +769,19 @@ const CompilerEditor: React.FC<CompilerEditorProps> = ({ language }) => {
                     <Panel defaultSize={50} minSize={30} className="flex flex-col">
                         <div className="flex justify-between items-center px-4 py-2 bg-zinc-900/50 border-b border-zinc-800">
                             <div className="text-xs font-semibold text-zinc-400 uppercase tracking-wider min-h-[20px]">Output</div>
-                            {error && <div className="text-xs font-bold text-red-500">Error</div>}
+                            {error && (
+                                <div className="flex items-center gap-2">
+                                    <button
+                                        onClick={handleFixError}
+                                        disabled={fixingError}
+                                        className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white px-3 py-1 rounded-sm flex items-center gap-1.5 text-xs font-medium transition-all hover:scale-105 active:scale-95 disabled:opacity-50 shadow-lg"
+                                    >
+                                        {fixingError ? <Loader2 className="w-3 h-3 animate-spin" /> : <Wrench className="w-3 h-3" />}
+                                        <span>Fix Error</span>
+                                    </button>
+                                    <div className="text-xs font-bold text-red-500">Error</div>
+                                </div>
+                            )}
                         </div>
                         <div className="flex-1 p-4 overflow-auto font-mono text-sm whitespace-pre-wrap bg-zinc-950">
                             {error ? <span className="text-red-400">{error}</span> : <span className={output ? "text-zinc-100" : "text-zinc-500 italic"}>{output || "Output will appear here..."}</span>}
@@ -782,7 +839,21 @@ const CompilerEditor: React.FC<CompilerEditorProps> = ({ language }) => {
                             <textarea className="flex-1 w-full bg-transparent text-zinc-100 p-2 resize-none focus:outline-none font-mono text-sm" placeholder="Enter input here..." value={input} onChange={(e) => setInput(e.target.value)} />
                         </div>
                         <div className={cn("absolute inset-0 flex flex-col p-2 overflow-auto bg-zinc-950", activeTab === 'output' ? "z-10" : "z-0 opacity-0 pointer-events-none")}>
-                            {error ? <span className="text-red-400 font-mono text-sm">{error}</span> : <span className={cn("font-mono text-sm whitespace-pre-wrap", output ? "text-zinc-100" : "text-zinc-500 italic")}>{output || "Output will appear here..."}</span>}
+                            {error ? (
+                                <div className="flex flex-col gap-2">
+                                    <span className="text-red-400 font-mono text-sm">{error}</span>
+                                    <button
+                                        onClick={handleFixError}
+                                        disabled={fixingError}
+                                        className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white px-4 py-2 rounded-sm flex items-center justify-center gap-2 text-sm font-medium transition-all hover:scale-105 active:scale-95 disabled:opacity-50 shadow-lg w-full"
+                                    >
+                                        {fixingError ? <Loader2 className="w-4 h-4 animate-spin" /> : <Wrench className="w-4 h-4" />}
+                                        <span>{fixingError ? 'Fixing...' : 'Fix Error with AI'}</span>
+                                    </button>
+                                </div>
+                            ) : (
+                                <span className={cn("font-mono text-sm whitespace-pre-wrap", output ? "text-zinc-100" : "text-zinc-500 italic")}>{output || "Output will appear here..."}</span>
+                            )}
                         </div>
                     </div>
                 </div>
