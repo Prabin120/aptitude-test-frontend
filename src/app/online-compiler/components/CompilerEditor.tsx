@@ -5,6 +5,8 @@ import Editor, { Monaco } from "@monaco-editor/react";
 import { editor, IDisposable } from "monaco-editor";
 import React, { useState, useRef, useEffect, useMemo } from "react";
 import { executeCode, aiGenerateCode, aiImproveCode, aiFixError } from "../api";
+import { handleGetMethod } from "@/utils/apiCall";
+import { logoutEndpoint } from "@/consts";
 import { Loader2, Play, Menu, Maximize2, Minimize2, X, ChevronRight, Sparkles, Wand2, User, LogOut, AlertTriangle, Settings, Wrench } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { registerPythonCompletion } from "../utils/pythonIntellisense";
@@ -13,8 +15,10 @@ import { registerCCompletion } from "../utils/cIntellisense";
 import { registerJavaCompletion } from "../utils/javaIntellisense";
 import { registerGoCompletion } from "../utils/goIntellisense";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useAppSelector } from "@/redux/store";
+import { usePathname, useRouter } from "next/navigation";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
+import { setAuthState } from "@/redux/auth/authSlice";
+import { setUserState, userInitialState } from "@/redux/user/userSlice";
 import {
     Dialog,
     DialogContent,
@@ -89,9 +93,10 @@ const CompilerEditor: React.FC<CompilerEditorProps> = ({ language }) => {
     const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
     const disposableRef = useRef<IDisposable | null>(null);
     const pathname = usePathname();
+    const router = useRouter();
 
     // Redux auth
-    // const dispatch = useAppDispatch();
+    const dispatch = useAppDispatch();
     const isAuthenticated = useAppSelector((state) => state.auth.authState);
     const userDetail = useAppSelector((state) => state.user);
 
@@ -399,12 +404,14 @@ const CompilerEditor: React.FC<CompilerEditorProps> = ({ language }) => {
 
             // Check for auth error
             if (isAuthError(res)) {
+                setFixingError(false);
                 setShowLoginPopup(true);
                 return;
             }
 
             // Check for quota exceeded
             if (isQuotaError(res)) {
+                setFixingError(false);
                 setShowQuotaPopup(true);
                 return;
             }
@@ -431,6 +438,7 @@ const CompilerEditor: React.FC<CompilerEditorProps> = ({ language }) => {
             setFixingError(false);
         }
     };
+
 
 
     const RunButton = () => (
@@ -504,6 +512,14 @@ const CompilerEditor: React.FC<CompilerEditorProps> = ({ language }) => {
                 </button>
             </Link>
         );
+    };
+
+    // Logout handler
+    const handleLogout = async () => {
+        dispatch(setUserState(userInitialState));
+        dispatch(setAuthState(false));
+        await handleGetMethod(logoutEndpoint);
+        router.push('/login');
     };
 
     // Save code to localStorage before redirecting to login
@@ -600,12 +616,10 @@ const CompilerEditor: React.FC<CompilerEditorProps> = ({ language }) => {
                             <span>View Profile</span>
                         </button>
                     </Link>
-                    <Link href="/logout">
-                        <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-zinc-300 hover:bg-zinc-800 transition-colors text-left">
-                            <LogOut className="w-4 h-4" />
-                            <span>Logout</span>
-                        </button>
-                    </Link>
+                    <button onClick={handleLogout} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-zinc-300 hover:bg-zinc-800 transition-colors text-left">
+                        <LogOut className="w-4 h-4" />
+                        <span>Logout</span>
+                    </button>
                 </div>
             </SheetContent>
         </Sheet>
