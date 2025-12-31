@@ -11,19 +11,19 @@ import { toast } from 'sonner'
 import { withCreatorAccess } from '@/components/withCreatorAccess'
 
 
-interface BlogPost {
+export interface BlogPost {
     _id: string
     slug: string
     title: string
     author: string
-    category: "Tutorial" | "Guide"
+    category: string
     tags: string[]
     featured: boolean
     content: string
     status: "draft" | "published"
-    createdAt?: string
-    updatedAt?: string
-    publishedAt?: string
+    createdAt: string
+    updatedAt: string
+    publishedAt: string
 }
 
 function EditBlogPage() {

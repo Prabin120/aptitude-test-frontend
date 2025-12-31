@@ -15,13 +15,6 @@ import {
     FormDescription,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -33,12 +26,13 @@ import { createBlogEndpoint, updateBlogEndpoint } from "@/consts"
 import { handlePutMethod } from "@/utils/apiCall"
 import RichTextEditor from "@/components/RichTextEditor"
 import { X, Save, Eye, Loader2 } from "lucide-react"
+import { BlogPost } from "../[slug]/page"
 
 const formSchema = z.object({
     title: z.string().min(1, "Title is required").max(200, "Title too long"),
     slug: z.string().min(1, "Slug is required").regex(/^[a-z0-9-]+$/, "Slug must be lowercase with hyphens only"),
     author: z.string().min(1, "Author is required"),
-    category: z.enum(["Tutorial", "Guide"]),
+    category: z.string().min(1, "Category is required"),
     tags: z.array(z.string()),
     featured: z.boolean(),
     content: z.string().min(1, "Content is required"),
@@ -46,18 +40,6 @@ const formSchema = z.object({
 })
 
 type FormValues = z.infer<typeof formSchema>
-
-interface BlogPost {
-    _id: string
-    slug: string
-    title: string
-    author: string
-    category: "Tutorial" | "Guide"
-    tags: string[]
-    featured: boolean
-    content: string
-    status: "draft" | "published"
-}
 
 interface BlogEditorProps {
     initialData?: BlogPost
@@ -76,7 +58,7 @@ export default function BlogEditor({ initialData, isEditMode = false }: BlogEdit
             title: initialData?.title || "",
             slug: initialData?.slug || "",
             author: initialData?.author || "",
-            category: initialData?.category || "Tutorial",
+            category: initialData?.category || "News",
             tags: initialData?.tags || [],
             featured: initialData?.featured || false,
             content: initialData?.content || "",
@@ -227,17 +209,9 @@ export default function BlogEditor({ initialData, isEditMode = false }: BlogEdit
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormLabel>Category</FormLabel>
-                                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                                <FormControl>
-                                                    <SelectTrigger>
-                                                        <SelectValue placeholder="Select category" />
-                                                    </SelectTrigger>
-                                                </FormControl>
-                                                <SelectContent>
-                                                    <SelectItem value="Tutorial">Tutorial</SelectItem>
-                                                    <SelectItem value="Guide">Guide</SelectItem>
-                                                </SelectContent>
-                                            </Select>
+                                            <FormControl>
+                                                <Input placeholder="Category name" {...field} />
+                                            </FormControl>
                                             <FormMessage />
                                         </FormItem>
                                     )}

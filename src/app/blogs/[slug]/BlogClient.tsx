@@ -4,19 +4,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { ArrowLeft, User, Tag, Calendar } from "lucide-react"
 import Link from "next/link"
-
-export interface BlogPost {
-    _id: string
-    slug: string
-    title: string
-    author: string
-    content: string
-    category: string
-    tags: string[]
-    featured: boolean
-    publishedAt: string
-    createdAt: string
-}
+import { BlogPost } from "@/app/admin/blogs/[slug]/page"
 
 interface BlogClientProps {
     blog: BlogPost | null
@@ -91,7 +79,7 @@ export default function BlogClient({ blog, error }: BlogClientProps) {
                     </span>
                     <span className="flex items-center gap-2">
                         <Calendar className="w-4 h-4" />
-                        {formatDate(blog.publishedAt)}
+                        {formatDate(blog.createdAt)}
                     </span>
                 </div>
 

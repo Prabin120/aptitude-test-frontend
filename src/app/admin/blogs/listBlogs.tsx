@@ -31,17 +31,8 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import { BlogPost } from './[slug]/page'
 
-interface BlogPost {
-    _id: string
-    slug: string
-    title: string
-    author: string
-    category: string
-    status: 'draft' | 'published'
-    createdAt: string
-    views?: number
-}
 
 // Ensure the page is wrapped with ReduxProvider if user selector is needed
 // However, ReduxProvider is usually at root layout or nearby. 

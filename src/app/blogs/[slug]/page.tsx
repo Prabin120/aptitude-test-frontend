@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
-import BlogClient, { BlogPost } from './BlogClient'
+import BlogClient from './BlogClient'
 import { getBlogEndpoint, apiEntryPoint } from '@/consts'
+import { BlogPost } from '@/app/admin/blogs/[slug]/page'
 
 async function getBlog(slug: string): Promise<BlogPost | null> {
     try {
