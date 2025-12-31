@@ -53,11 +53,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         const blogsRes = await fetch(`${apiEntryPoint}${getBlogsEndpoint}`, { next: { revalidate: 3600 } })
         const blogsData = await blogsRes.json()
         if (blogsData?.data) {
-            blogPages = blogsData.data.map((blog: { slug: string; updatedAt?: string; publishedAt: string }) => ({
-                url: `${baseUrl}/blogs/${encodeURIComponent(blog.slug)}`,
-                lastModified: new Date(blog.updatedAt || blog.publishedAt),
-                priority: 0.7,
-            }))
+            blogPages = blogsData.data.map((blog: { slug: string; updatedAt?: string; publishedAt: string }) => {
+                const lastMod = blog.updatedAt ? new Date(blog.updatedAt) : new Date(blog.publishedAt)
+                const isRecent = (new Date().getTime() - lastMod.getTime()) < (30 * 24 * 60 * 60 * 1000) // 30 days
+                return {
+                    url: `${baseUrl}/blogs/${encodeURIComponent(blog.slug)}`,
+                    lastModified: lastMod,
+                    priority: isRecent ? 0.8 : 0.7,
+                    changeFrequency: isRecent ? 'daily' : 'weekly',
+                }
+            })
         }
     } catch (e) {
         console.error("Failed to fetch blogs for sitemap", e)
