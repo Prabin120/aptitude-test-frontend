@@ -85,7 +85,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
         description: blog.content.replace(/<[^>]*>?/gm, '').substring(0, 160),
         image: imageUrl.startsWith('data:') ? 'https://apticode.in/og-image.png' : imageUrl,
         datePublished: blog.publishedAt,
-        dateModified: (blog as any).updatedAt || blog.publishedAt,
+        dateModified: blog.updatedAt || blog.publishedAt,
         author: [{
             '@type': 'Person',
             name: blog.author,
