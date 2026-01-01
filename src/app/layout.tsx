@@ -6,6 +6,7 @@ import MainHeader from "./header";
 import Footer from "@/components/ui/footer";
 import { AiProvider } from "@/context/AiContext";
 import AiAssistant from "@/components/ai-assistant/AiAssistant";
+import ReactQueryProvider from "./providers";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -114,15 +115,17 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify([jsonLd, softwareAppSchema]) }}
         />
 
-        <AiProvider>
-          <MainHeader />
-          <main className="min-h-[82vh]">
-            {children}
-          </main>
-          <Toaster />
-          <Footer />
-          <AiAssistant />
-        </AiProvider>
+        <ReactQueryProvider>
+          <AiProvider>
+            <MainHeader />
+            <main className="min-h-[82vh]">
+              {children}
+            </main>
+            <Toaster />
+            <Footer />
+            <AiAssistant />
+          </AiProvider>
+        </ReactQueryProvider>
       </body>
     </html>
   );
