@@ -1,5 +1,6 @@
 "use client"
 
+import { HeaderBackWithText } from '@/components/headerBackWithText'
 import { Button } from '@/components/ui/button'
 import { useAppSelector } from '@/redux/store'
 import { usePathname, useRouter } from 'next/navigation'
@@ -17,8 +18,8 @@ const QuestionsFilters = ({ type, tag }: { type: string, tag: string }) => {
     }
   }
   return (
-    <div className="flex justify-between mb-6 p-4 items-center">
-      <h2>{`${type}/${decodeURIComponent(tag).replace(/%20/g, ' ')}`}</h2>
+    <div className="flex justify-between py-4 items-center">
+      <HeaderBackWithText text={decodeURIComponent(tag).replace(/%20/g, ' ')} href={`/aptitude/${type}`} />
       <Button onClick={handleStartTest} variant="default" className='text-primary-text'>
         Start Test
       </Button>

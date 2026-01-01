@@ -1,5 +1,8 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
+import { cn } from '@/lib/utils';
+import { SiPython, SiJavascript, SiCplusplus, SiC, SiGo } from 'react-icons/si';
+import { FaJava } from 'react-icons/fa';
 
 export const metadata: Metadata = {
     title: 'AI-Powered Online Code Compiler - Run Python, Java, C++, Go & C | AptiCode',
@@ -24,12 +27,12 @@ export const metadata: Metadata = {
 };
 
 const languages = [
-    { id: 'python', name: 'Python', color: 'bg-yellow-500', description: 'Run Python code with full IntelliSense support. Best for data science and scripting.' },
-    { id: 'javascript', name: 'JavaScript', color: 'bg-yellow-400', description: 'Run JS on Node.js environment. Perfect for learning backend logical scripting.' },
-    { id: 'cpp', name: 'C++', color: 'bg-blue-500', description: 'Compile C++ code instantly. Perfect for competitive programming and learning algorithms.' },
-    { id: 'c', name: 'C', color: 'bg-blue-600', description: 'Fast C compiler with standard input support. Ideal for system programming basics.' },
-    { id: 'java', name: 'Java', color: 'bg-red-500', description: 'Online Java IDE with class support. Run object-oriented code seamlessly.' },
-    { id: 'go', name: 'Go', color: 'bg-cyan-500', description: 'Execute Go code with fast compilation. Great for learning concurrency and backend systems.' },
+    { id: 'python', name: 'Python', icon: SiPython, color: 'text-[#3776AB]', description: 'Run Python code with full IntelliSense support. Best for data science and scripting.' },
+    { id: 'javascript', name: 'JavaScript', icon: SiJavascript, color: 'text-[#F7DF1E]', description: 'Run JS on Node.js environment. Perfect for learning backend logical scripting.' },
+    { id: 'cpp', name: 'C++', icon: SiCplusplus, color: 'text-[#00599C]', description: 'Compile C++ code instantly. Perfect for competitive programming and learning algorithms.' },
+    { id: 'c', name: 'C', icon: SiC, color: 'text-[#A8B9CC]', description: 'Fast C compiler with standard input support. Ideal for system programming basics.' },
+    { id: 'java', name: 'Java', icon: FaJava, color: 'text-[#007396]', description: 'Online Java IDE with class support. Run object-oriented code seamlessly.' },
+    { id: 'go', name: 'Go', icon: SiGo, color: 'text-[#00ADD8]', description: 'Execute Go code with fast compilation. Great for learning concurrency and backend systems.' },
 ];
 
 export default function OnlineCompilerPage() {
@@ -73,7 +76,7 @@ export default function OnlineCompilerPage() {
                         href={`/online-compiler/${lang.id}`}
                         className="group flex flex-col items-center p-6 rounded-xl bg-zinc-900 border border-zinc-800 hover:border-primary/50 hover:bg-zinc-800/50 transition-all duration-300 hover:-translate-y-1"
                     >
-                        <div className={`w-12 h-12 rounded-full ${lang.color} mb-4 opacity-80 group-hover:opacity-100 transition-opacity shadow-[0_0_15px_rgba(0,0,0,0.5)] group-hover:shadow-[0_0_20px_hsl(var(--primary)/0.4)]`} />
+                        <lang.icon className={cn("w-12 h-12 mb-4 opacity-80 group-hover:opacity-100 transition-opacity drop-shadow-[0_0_8px_rgba(0,0,0,0.5)]", lang.color)} />
                         <span className="font-bold text-lg mb-2">{lang.name} Compiler</span>
                         <span className="text-xs text-zinc-500 group-hover:text-zinc-400 line-clamp-2 md:line-clamp-none hidden md:block px-2">
                             {lang.description}

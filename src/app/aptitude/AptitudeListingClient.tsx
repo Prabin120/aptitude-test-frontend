@@ -61,11 +61,12 @@ export default function AptitudeListingClient({ topics, categories, companies, i
     }
 
     return (
-        <div className="container mx-auto py-8">
-            <div className="flex justify-between items-center mb-8 flex-row gap-2">
-                <Button variant="link">
-                    <Link href="/aptitude/all-questions">All Questions</Link>
-                </Button>
+        <div className="container mx-auto py-5">
+            <div className="flex items-center justify-between">
+                <h1 className="text-2xl font-bold">Aptitude Questions</h1>
+                <Link className="text-primary hover:text-primary/80" href="/aptitude/all-questions">All Questions</Link>
+            </div>
+            <div className="flex justify-end my-5">
                 <Search
                     placeholder="Search..."
                     value={search}

@@ -4,9 +4,10 @@ import React, { useState } from "react"
 import Link from "next/link"
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { ArrowLeft, ListIcon as Category } from 'lucide-react'
+import { ListIcon as Category } from 'lucide-react'
 import { Search } from "@/components/ui/search"
 import { useRouter } from "next/navigation"
+import { HeaderBackWithText } from "@/components/headerBackWithText"
 
 interface TestCard {
     _id: string
@@ -76,9 +77,9 @@ export default function QuestionTypeClient({ type, initialQuestions, initialSear
     }
 
     return (
-        <div className="container mx-auto py-8">
-            <div className="flex justify-between items-center mb-8 flex-row gap-2">
-                <Link href="/aptitude" className="flex items-center gap-2 text-sm sm:text-base whitespace-nowrap"> <ArrowLeft className="h-4 w-4" /> Back</Link>
+        <div className="container mx-auto py-5">
+            <div className="flex justify-between items-center mb-2 flex-row gap-2">
+                <HeaderBackWithText text={type.charAt(0).toUpperCase() + type.slice(1)} href="/aptitude" />
                 <Search
                     placeholder={`Search...`}
                     value={search}

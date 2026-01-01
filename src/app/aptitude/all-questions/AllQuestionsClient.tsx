@@ -6,6 +6,7 @@ import ReduxProvider from "@/redux/redux-provider"
 import { FilterQuestionProps, Problem } from "../commonInterface"
 import QuestionTable from "./table"
 import { useRouter, useSearchParams } from "next/navigation"
+import { HeaderBackWithText } from "@/components/headerBackWithText"
 
 interface Props {
     initialProblems?: Problem[]
@@ -36,7 +37,8 @@ export default function AllQuestionsClient({ initialProblems, initialTotalPages,
     return (
         <ReduxProvider>
             <div className="container mx-auto">
-                <div className="sticky top-0 bg-neutral-950 z-50">
+                <div className="sticky top-0 bg-neutral-950 z-50 flex justify-between items-center my-5">
+                    <HeaderBackWithText text="All Questions" href="/aptitude" />
                     <div className="pt-3">
                         <QuestionsFilters searchQuery={searchQuery} setSearchQuery={setSearchQuery} handleSearchButton={handleSearchButton} />
                     </div>

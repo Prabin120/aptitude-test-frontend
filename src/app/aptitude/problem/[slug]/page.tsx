@@ -3,6 +3,7 @@ import ReduxProvider from '@/redux/redux-provider'
 import { Metadata } from 'next'
 import { apiEntryPoint, getAptiQuestionBySlugEndpoint } from '@/consts'
 import AptitudeQuestionPage from './QuestionClient'
+import { HeaderBackWithText } from '@/components/headerBackWithText'
 
 // Server-side fetching
 async function getQuestion(slug: string) {
@@ -71,6 +72,9 @@ export default async function QuestionPage({ params }: { params: { slug: string 
                         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
                     />
                 )}
+                <div className="mx-5">
+                    <HeaderBackWithText text={""} href="/aptitude/all-questions" />
+                </div>
                 <AptitudeQuestionPage
                     slug={slug}
                     initialQuestion={data?.question || null}

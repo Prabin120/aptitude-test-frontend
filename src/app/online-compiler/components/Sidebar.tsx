@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { Settings } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -13,38 +14,38 @@ const languages = [
     {
         id: "python",
         name: "Python",
-        icon: <SiPython className="w-6 h-6" />,
-        color: "text-blue-400 hover:text-blue-300",
+        icon: SiPython,
+        color: "text-[#3776AB]",
     },
     {
         id: "javascript",
         name: "JavaScript",
-        icon: <SiJavascript className="w-6 h-6" />,
-        color: "text-yellow-400 hover:text-yellow-300",
+        icon: SiJavascript,
+        color: "text-[#F7DF1E]",
     },
     {
         id: "java",
         name: "Java",
-        icon: <FaJava className="w-6 h-6" />,
-        color: "text-red-500 hover:text-red-400",
+        icon: FaJava,
+        color: "text-[#007396]",
     },
     {
         id: "cpp",
         name: "C++",
-        icon: <SiCplusplus className="w-6 h-6" />,
-        color: "text-blue-500 hover:text-blue-400",
+        icon: SiCplusplus,
+        color: "text-[#00599C]",
     },
     {
         id: "c",
         name: "C",
-        icon: <SiC className="w-6 h-6" />,
-        color: "text-blue-600 hover:text-blue-500",
+        icon: SiC,
+        color: "text-[#A8B9CC]",
     },
     {
         id: "go",
         name: "Go",
-        icon: <SiGo className="w-7 h-7" />,
-        color: "text-cyan-400 hover:text-cyan-300",
+        icon: SiGo,
+        color: "text-[#00ADD8]",
     },
 ];
 
@@ -66,8 +67,8 @@ const Sidebar = () => {
                             rel="noopener noreferrer"
                             className={`p-3 rounded-lg transition-all duration-200 group relative ${isActive ? "bg-zinc-800 text-white" : "text-zinc-500 hover:bg-zinc-900"}`}
                         >
-                            <div className={`${isActive ? lang.color : "group-hover:" + lang.color} transition-colors`}>
-                                {lang.icon}
+                            <div className={cn(isActive ? lang.color : "text-zinc-500 group-hover:" + lang.color, "transition-colors")}>
+                                <lang.icon className="w-6 h-6" />
                             </div>
 
                             {/* Tooltip */}

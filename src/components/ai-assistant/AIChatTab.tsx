@@ -110,7 +110,7 @@ export default function AIChatTab({ slug, domain, contextData, onSaveToNotes }: 
     // Flatten messages from history
     // Backend returns messages in DESC order (newest first), so we need to reverse
     const historyMessages: Message[] = data?.pages.flatMap(page =>
-        page.aiCalls.map((call: any) => [
+        page.aiCalls.map((call: { prompt: string, response: string }) => [
             { role: "user" as const, content: call.prompt },
             { role: "model" as const, content: call.response }
         ])
@@ -157,7 +157,7 @@ export default function AIChatTab({ slug, domain, contextData, onSaveToNotes }: 
 
             return data.response;
         },
-        onSuccess: (response) => {
+        onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['aiChat', slug, conversationId] });
             queryClient.invalidateQueries({ queryKey: ['aiConversations'] });
         },
@@ -236,7 +236,7 @@ export default function AIChatTab({ slug, domain, contextData, onSaveToNotes }: 
                                     No previous conversations found.
                                 </div>
                             ) : (
-                                conversations.map((conv: any) => (
+                                conversations.map((conv: { _id: string, lastUpdated: string, lastMessage: string, context: string, messageCount: number }) => (
                                     <button
                                         key={conv._id}
                                         onClick={() => loadConversation(conv._id)}

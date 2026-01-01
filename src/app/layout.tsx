@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
-import MainHeader from "./header";
+
 import Footer from "@/components/ui/footer";
 import { AiProvider } from "@/context/AiContext";
 import AiAssistant from "@/components/ai-assistant/AiAssistant";
@@ -77,6 +77,8 @@ export const metadata: Metadata = {
 
 import { CSPostHogProvider } from "./posthog-provider";
 
+import AppNavigation from "@/components/app-navigation";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -120,12 +122,11 @@ export default function RootLayout({
 
           <ReactQueryProvider>
             <AiProvider>
-              <MainHeader />
-              <main className="min-h-[82vh]">
+              <AppNavigation>
                 {children}
-              </main>
+                <Footer />
+              </AppNavigation>
               <Toaster />
-              <Footer />
               <AiAssistant />
             </AiProvider>
           </ReactQueryProvider>

@@ -72,7 +72,7 @@ export default function BlogsPage() {
         <div className="min-h-screen bg-gradient-to-b from-zinc-950 to-zinc-900">
             {/* Hero Section */}
             <div className="relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-transparent to-blue-900/20" />
+                <div className="absolute inset-0 " />
                 <div className="container mx-auto py-16 px-4 relative">
                     <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
                         AptiCode Blog
@@ -89,7 +89,7 @@ export default function BlogsPage() {
                     <>
                         {featuredBlogs.map((post) => (
                             <Link href={`/blogs/${post.slug}`} key={post._id} className="block mb-8">
-                                <Card className="bg-gradient-to-r from-primary/30 to-blue-900/30 border-primary/50 hover:border-primary/70 transition-all group">
+                                <Card className="bg-muted border-muted/50 hover:border-muted/70 transition-all group">
                                     <CardHeader>
                                         <div className="flex items-center gap-2 mb-2">
                                             <Badge variant="secondary" className="bg-primary/20 text-primary border-primary/30">

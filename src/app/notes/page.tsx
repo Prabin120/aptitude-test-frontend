@@ -11,9 +11,7 @@ import {
     ExternalLink,
     FileText,
     Loader2,
-    Plus,
     Calendar,
-    ArrowLeft
 } from "lucide-react"
 import { apiEntryPoint } from "@/consts"
 import { toast } from "sonner"

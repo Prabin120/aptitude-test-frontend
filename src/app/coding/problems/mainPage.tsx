@@ -7,6 +7,7 @@ import ReduxProvider from "@/redux/redux-provider"
 import { Problem } from "../commonInterface"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useGetAllQuestions } from "@/hooks/reactQuery"
+
 export interface ICodingFilters {
     title: string
     difficulty: string
@@ -63,7 +64,11 @@ export default function ProblemListPage() {
 
     return (
         <ReduxProvider>
-            <div className="container mx-auto">
+            <div className="container mx-auto mb-5 min-h-[75vh]">
+                <div className="flex items-center justify-between my-5">
+                    <h1 className="text-2xl font-bold">Coding Problems</h1>
+                    {/* <Link href="/coding/problems/add" className="bg-primary text-primary-foreground px-4 py-2 rounded-md hover:bg-primary/80 transition-colors">Add Problem</Link> */}
+                </div>
                 <div className="sticky top-0 bg-neutral-950 z-50">
                     <div className="pt-3">
                         <QuestionsFilters searchQuery={searchQuery} setSearchQuery={setSearchQuery} filteredProblems={filteredProblems} />

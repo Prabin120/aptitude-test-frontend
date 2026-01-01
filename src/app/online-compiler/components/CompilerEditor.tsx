@@ -35,18 +35,20 @@ import {
 } from "@/components/ui/sheet";
 import SettingsModal from "./SettingsModal";
 import LogoFull from "@/components/logo";
+import { SiPython, SiJavascript, SiCplusplus, SiC, SiGo } from 'react-icons/si';
+import { FaJava } from 'react-icons/fa';
 
 interface CompilerEditorProps {
     language: string;
 }
 
 const languages = [
-    { id: 'python', name: 'Python' },
-    { id: 'javascript', name: 'JavaScript' },
-    { id: 'cpp', name: 'C++' },
-    { id: 'c', name: 'C' },
-    { id: 'java', name: 'Java' },
-    { id: 'go', name: 'Go' },
+    { id: 'python', name: 'Python', icon: SiPython, color: 'text-[#3776AB]' },
+    { id: 'javascript', name: 'JavaScript', icon: SiJavascript, color: 'text-[#F7DF1E]' },
+    { id: 'cpp', name: 'C++', icon: SiCplusplus, color: 'text-[#00599C]' },
+    { id: 'c', name: 'C', icon: SiC, color: 'text-[#A8B9CC]' },
+    { id: 'java', name: 'Java', icon: FaJava, color: 'text-[#007396]' },
+    { id: 'go', name: 'Go', icon: SiGo, color: 'text-[#00ADD8]' },
 ];
 
 // localStorage key for persisting code during login redirect
@@ -727,8 +729,12 @@ const CompilerEditor: React.FC<CompilerEditorProps> = ({ language }) => {
                                             : "text-zinc-400 hover:bg-zinc-900 hover:text-zinc-200"
                                     )}
                                 >
-                                    {lang.name}
+                                    <div className="flex items-center gap-3">
+                                        <lang.icon className={cn("w-5 h-5", lang.color)} />
+                                        <span>{lang.name}</span>
+                                    </div>
                                     <ChevronRight className="w-3 h-3 opacity-50" />
+
                                 </Link>
                             ))}
                         </div>
