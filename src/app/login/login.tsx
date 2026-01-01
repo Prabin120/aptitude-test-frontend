@@ -33,6 +33,8 @@ const postingData = async (data: object, endPoint: string) => {
     return response
 }
 
+import posthog from "posthog-js"
+
 export function LoginForm() {
     const dispatch = useAppDispatch()
     const router = useRouter()
@@ -52,6 +54,15 @@ export function LoginForm() {
         if (response.status === 200 || response.status === 201) {
             dispatch(setUserState(responseData.data))
             dispatch(setAuthState(true))
+            // Track successful login
+            posthog.capture('user_login', {
+                method: 'email',
+                email: responseData.data.email
+            })
+            posthog.identify(responseData.data.username, {
+                email: responseData.data.email,
+                name: responseData.data.name
+            })
             router.back()
         } else {
             setError(responseData.message)
@@ -86,6 +97,15 @@ export function LoginForm() {
                         const responseData = await response.json()
                         dispatch(setAuthState(true))
                         dispatch(setUserState(responseData.data))
+                        // Track successful Google login
+                        posthog.capture('user_login', {
+                            method: 'google',
+                            email: responseData.data.email
+                        })
+                        posthog.identify(responseData.data.username, {
+                            email: responseData.data.email,
+                            name: responseData.data.name
+                        })
                         router.push("/")
                     } else {
                         alert("Some error occurs")

@@ -297,17 +297,17 @@ export default function AIChatTab({ slug, domain, contextData, onSaveToNotes }: 
                             className={`flex gap-3 ${msg.role === "user" ? "flex-row-reverse" : "flex-row"}`}
                         >
                             <Avatar className="w-8 h-8 mt-1">
-                                <AvatarFallback className={msg.role === "user" ? "bg-primary text-primary-foreground" : "bg-muted"}>
+                                <AvatarFallback className={msg.role === "user" ? "bg-primary text-primary-text" : "bg-muted"}>
                                     {msg.role === "user" ? <User size={14} /> : <Bot size={14} />}
                                 </AvatarFallback>
                             </Avatar>
 
                             <div className={`group flex flex-col max-w-[85%] ${msg.role === "user" ? "items-end" : "items-start"}`}>
                                 <div className={`rounded-lg p-3 text-sm ${msg.role === "user"
-                                    ? "bg-primary text-primary-foreground"
+                                    ? "bg-primary text-primary-text"
                                     : "bg-muted text-foreground"
                                     }`}>
-                                    <div className="prose dark:prose-invert text-sm break-words">
+                                    <div className="prose dark:prose-invert text-sm break-words whitespace-pre-wrap">
                                         <ReactMarkdown>
                                             {msg.content}
                                         </ReactMarkdown>

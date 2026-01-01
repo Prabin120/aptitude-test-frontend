@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import Link from "next/link"
-import { AlignLeft, CircleDollarSign, Coins, LogOut, User } from "lucide-react"
+import { AlignLeft, CircleDollarSign, Coins, LogOut, User, FileText } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
 import { usePathname, useRouter } from "next/navigation"
 import { setAuthState } from "@/redux/auth/authSlice"
@@ -241,6 +241,12 @@ const Header = () => {
                         View Profile
                       </Button>
                     </Link>
+                    <Link href={"/notes"} onClick={() => setIsSheetOpen(false)}>
+                      <Button className="w-full justify-start" variant="ghost">
+                        <FileText className="mr-2 h-4 w-4" />
+                        My Notes
+                      </Button>
+                    </Link>
                     <Link href={"/rewards"} onClick={() => setIsSheetOpen(false)}>
                       <Button className="w-full justify-start" variant="ghost">
                         <CircleDollarSign className="mr-2 h-4 w-4" />
@@ -348,6 +354,12 @@ const Header = () => {
                       <Button className="w-full justify-start" variant="ghost">
                         <User className="mr-2 h-4 w-4" />
                         View Profile
+                      </Button>
+                    </Link>
+                    <Link href={"/dashboard/notes"} onClick={() => setIsSheetOpen(false)}>
+                      <Button className="w-full justify-start" variant="ghost">
+                        <FileText className="mr-2 h-4 w-4" />
+                        My Notes
                       </Button>
                     </Link>
                     <Link href={"/rewards"} onClick={() => setIsSheetOpen(false)}>

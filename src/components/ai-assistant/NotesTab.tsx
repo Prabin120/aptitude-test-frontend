@@ -4,9 +4,9 @@ import { useState, useEffect } from "react"
 import { Textarea } from "../ui/textarea"
 import { Button } from "../ui/button"
 import { Loader2, Save } from "lucide-react"
-import { apiEntryPoint } from "@/consts" // Assuming this exists
+import { apiEntryPoint } from "@/consts"
 import { toast } from "sonner"
-// import { debounce } from "lodash" // Standard lodash debounce might be needed, or write custom
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 
 interface NotesTabProps {
     slug: string
@@ -17,33 +17,70 @@ interface NotesTabProps {
 
 export default function NotesTab({ slug, domain, externalUpdate, onUpdateConsumed }: NotesTabProps) {
     const [content, setContent] = useState("")
-    const [loading, setLoading] = useState(true)
-    const [saving, setSaving] = useState(false)
     const [lastSaved, setLastSaved] = useState<Date | null>(null)
+    const [isUnauthorized, setIsUnauthorized] = useState(false)
+    const queryClient = useQueryClient()
 
-    // Fetch note on mount
-    useEffect(() => {
-        const fetchNote = async () => {
-            try {
-                const res = await fetch(`${apiEntryPoint}/p/api/v1/notes/${slug}`, { credentials: "include" })
-                if (res.status === 404) {
-                    setContent("") // No note yet
-                } else if (res.ok) {
-                    const data = await res.json()
-                    setContent(data.content)
-                    setLastSaved(new Date(data.updatedAt))
-                } else if (res.status === 401) {
-                    setContent("Please login to view/edit your notes.")
-                }
-                // ignore other errors for now (e.g. 401 if not logged in, maybe show placeholder)
-            } catch (error) {
-                console.error("Failed to fetch note", error)
-            } finally {
-                setLoading(false)
+    // Fetch note
+    const { isLoading } = useQuery({
+        queryKey: ['note', slug],
+        queryFn: async () => {
+            const res = await fetch(`${apiEntryPoint}/p/api/v1/notes/${slug}`, { credentials: "include" })
+            if (res.status === 404) return { content: "" }
+            if (res.status === 401) {
+                setIsUnauthorized(true)
+                throw new Error("UNAUTHORIZED")
+            }
+            if (!res.ok) throw new Error("Failed to fetch note")
+            const data = await res.json()
+            setContent(data.content || "")
+            if (data.updatedAt) setLastSaved(new Date(data.updatedAt))
+            return data
+        },
+        retry: false,
+    })
+
+    // Mutation for saving
+    const mutation = useMutation({
+        mutationFn: async (newContent: string) => {
+            const body = {
+                slug,
+                domain,
+                content: newContent,
+                location: window.location.pathname
+            }
+
+            let res = await fetch(`${apiEntryPoint}/p/api/v1/notes`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(body),
+                credentials: "include"
+            })
+
+            // If note exists, update it instead
+            if (res.status === 409) {
+                res = await fetch(`${apiEntryPoint}/p/api/v1/notes/${slug}`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(body),
+                    credentials: "include"
+                })
+            }
+
+            if (!res.ok) throw new Error("Failed to save")
+            return res.json()
+        },
+        onSuccess: () => {
+            setLastSaved(new Date())
+            toast.success("Note saved")
+            queryClient.invalidateQueries({ queryKey: ['note', slug] })
+        },
+        onError: (error: Error) => {
+            if (error.message !== "UNAUTHORIZED") {
+                toast.error("Failed to save note")
             }
         }
-        fetchNote()
-    }, [slug])
+    })
 
     // Handle external updates (e.g. from Chat)
     useEffect(() => {
@@ -54,44 +91,34 @@ export default function NotesTab({ slug, domain, externalUpdate, onUpdateConsume
         }
     }, [externalUpdate, onUpdateConsumed])
 
-    const saveNote = async () => {
-        setSaving(true)
-        try {
-            const res = await fetch(`${apiEntryPoint}/p/api/v1/notes`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    slug,
-                    domain,
-                    content
-                }),
-                credentials: "include"
-            })
-
-            if (!res.ok) throw new Error("Failed to save")
-
-            setLastSaved(new Date())
-            toast.success("Note saved")
-        } catch (error) {
-            toast.error("Failed to save note")
-        } finally {
-            setSaving(false)
+    const handleSave = () => {
+        if (isUnauthorized) {
+            toast.error("Please login to save notes")
+            return
         }
+        mutation.mutate(content)
     }
 
-    // Auto-save logic could go here (using a debounce hook/function)
-    // For now, manual save + Ctrl+S
     const handleKeyDown = (e: React.KeyboardEvent) => {
         if ((e.ctrlKey || e.metaKey) && e.key === 's') {
             e.preventDefault()
-            saveNote()
+            handleSave()
         }
     }
 
-    if (loading) {
+    if (isLoading) {
         return (
             <div className="flex items-center justify-center h-full">
                 <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+            </div>
+        )
+    }
+
+    if (isUnauthorized) {
+        return (
+            <div className="flex flex-col items-center justify-center h-full p-4 text-center space-y-4">
+                <p className="text-muted-foreground">Please login to view and edit your notes.</p>
+                <Button onClick={() => window.location.href = "/login"}>Login</Button>
             </div>
         )
     }
@@ -112,11 +139,12 @@ export default function NotesTab({ slug, domain, externalUpdate, onUpdateConsume
                 <span>
                     {lastSaved ? `Saved ${lastSaved.toLocaleTimeString()}` : "Not saved yet"}
                 </span>
-                <Button size="sm" onClick={saveNote} disabled={saving}>
-                    {saving ? <Loader2 className="w-3 h-3 mr-2 animate-spin" /> : <Save className="w-3 h-3 mr-2" />}
+                <Button size="sm" onClick={handleSave} disabled={mutation.isPending}>
+                    {mutation.isPending ? <Loader2 className="w-3 h-3 mr-2 animate-spin" /> : <Save className="w-3 h-3 mr-2" />}
                     Save Note
                 </Button>
             </div>
         </div>
     )
 }
+

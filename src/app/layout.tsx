@@ -75,6 +75,8 @@ export const metadata: Metadata = {
   },
 };
 
+import { CSPostHogProvider } from "./posthog-provider";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -107,26 +109,28 @@ export default function RootLayout({
 
   return (
     <html lang="en" data-color-mode="dark">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased dark`}
-      >
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify([jsonLd, softwareAppSchema]) }}
-        />
+      <CSPostHogProvider>
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased dark`}
+        >
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify([jsonLd, softwareAppSchema]) }}
+          />
 
-        <ReactQueryProvider>
-          <AiProvider>
-            <MainHeader />
-            <main className="min-h-[82vh]">
-              {children}
-            </main>
-            <Toaster />
-            <Footer />
-            <AiAssistant />
-          </AiProvider>
-        </ReactQueryProvider>
-      </body>
+          <ReactQueryProvider>
+            <AiProvider>
+              <MainHeader />
+              <main className="min-h-[82vh]">
+                {children}
+              </main>
+              <Toaster />
+              <Footer />
+              <AiAssistant />
+            </AiProvider>
+          </ReactQueryProvider>
+        </body>
+      </CSPostHogProvider>
     </html>
   );
 }
