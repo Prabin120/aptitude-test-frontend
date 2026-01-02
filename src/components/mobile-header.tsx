@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Menu, BookOpen } from "lucide-react"
+import { Menu } from "lucide-react"
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet"
 import { Button } from "./ui/button"
 import Sidebar from "./sidebar"
