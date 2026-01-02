@@ -33,14 +33,18 @@ export default function MobileHeader() {
 
     return (
         <div className="md:hidden flex items-center justify-between p-3 border-b bg-card sticky top-0 z-40">
-            <div className="flex items-center gap-2">
+            <Link href="/">
+                <LogoFull />
+            </Link>
+
+            <div className="flex items-center gap-1">
                 <Sheet open={open} onOpenChange={setOpen}>
                     <SheetTrigger asChild>
                         <Button variant="ghost" size="icon" className="h-9 w-9">
                             <Menu className="w-5 h-5" />
                         </Button>
                     </SheetTrigger>
-                    <SheetContent side="left" className="p-0 w-[280px] border-r-0">
+                    <SheetContent side="right" className="p-0 w-[280px] border-r-0">
                         <div className="h-full flex flex-col" onClick={() => setOpen(false)}>
                             <div className="flex-1 overflow-y-auto">
                                 <Sidebar isMobile />
@@ -48,17 +52,6 @@ export default function MobileHeader() {
                         </div>
                     </SheetContent>
                 </Sheet>
-                <Link href="/">
-                    <LogoFull />
-                </Link>
-            </div>
-
-            <div className="flex items-center gap-1">
-                <Link href="/blogs">
-                    <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground hover:text-foreground">
-                        <BookOpen className="w-5 h-5" />
-                    </Button>
-                </Link>
             </div>
         </div>
     )
