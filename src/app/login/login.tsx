@@ -129,7 +129,7 @@ export function LoginForm() {
     }
 
     return (
-        <Card className="md:py-16 md:px-10">
+        <Card className="md:py-16 md:px-10 my-5">
             <Button className="w-full mb-4" variant={"secondary"} onClick={handleGoogleLogin}>
                 <svg
                     className="mr-2 -ml-1 w-4 h-4"

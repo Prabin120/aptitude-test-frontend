@@ -59,7 +59,7 @@ export default function BlogClient({ blog, error }: BlogClientProps) {
                 </Link>
 
                 {/* Article Header */}
-                <header className="mb-12">
+                <header>
                     <div className="flex items-center gap-3 mb-6">
                         <Badge variant="outline" className="text-primary border-primary/20 bg-primary/5 px-2.5 py-0.5">
                             {blog.category}
@@ -73,7 +73,7 @@ export default function BlogClient({ blog, error }: BlogClientProps) {
                         <span className="text-zinc-500 text-sm">{formatDate(blog.createdAt)}</span>
                     </div>
 
-                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-8 tracking-tight leading-[1.1]">
+                    <h1 className="text-2xl md:text-4xl lg:text-5xl font-extrabold text-white mb-8 tracking-tight leading-[1.1]">
                         {blog.title}
                     </h1>
 
