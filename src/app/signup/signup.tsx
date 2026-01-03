@@ -35,7 +35,6 @@ const postingData = async (data: object, endPoint: string) => {
     return response
 }
 
-import posthog from "posthog-js"
 
 export function SignupForm() {
     const dispatch = useAppDispatch()
@@ -72,14 +71,6 @@ export function SignupForm() {
         if (response.status === 200 || response.status === 201) {
             dispatch(setAuthState(true))
             dispatch(setUserState(responseData.data))
-            // Track successful signup
-            posthog.capture('user_signup', {
-                email: responseData.data.email
-            })
-            posthog.identify(responseData.data.username, {
-                email: responseData.data.email,
-                name: responseData.data.name
-            })
             router.push("/")
         } else {
             setError(responseData.message)
@@ -114,15 +105,6 @@ export function SignupForm() {
                         const responseData = await response.json()
                         dispatch(setAuthState(true))
                         dispatch(setUserState(responseData.data))
-                        // Track successful Google login
-                        posthog.capture('user_login', {
-                            method: 'google',
-                            email: responseData.data.email
-                        })
-                        posthog.identify(responseData.data.username, {
-                            email: responseData.data.email,
-                            name: responseData.data.name
-                        })
                         router.push("/")
                     } else {
                         alert("Some error occurs")

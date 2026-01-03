@@ -16,7 +16,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Loader2, Mail, Phone, MapPin } from "lucide-react"
+import { Loader2, Mail, MapPin } from "lucide-react"
 import { handlePostMethod } from "@/utils/apiCall"
 import { feedbackEndpoint } from "@/consts"
 import { toast } from "sonner"
@@ -92,12 +92,12 @@ export default function ContactPage() {
                         <div className="space-y-4">
                             <div className="flex items-center space-x-2">
                                 <Mail className="h-5 w-5 text-muted-foreground" />
-                                <span>prabinsharma120@gmail.com</span>
+                                <span>support@apticode.in</span>
                             </div>
-                            <div className="flex items-center space-x-2">
+                            {/* <div className="flex items-center space-x-2">
                                 <Phone className="h-5 w-5 text-muted-foreground" />
                                 <span>+91 93657 27136</span>
-                            </div>
+                            </div> */}
                             <div className="flex items-center space-x-2">
                                 <MapPin className="h-5 w-5 text-muted-foreground" />
                                 <span>21, 9th cross road, Tavarekere Main Rd, BTM 1st Stage, Bengaluru, Karnataka 560029</span>

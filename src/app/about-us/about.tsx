@@ -5,15 +5,15 @@ export default function AboutUsPage() {
   const teamMembers = [
     {
       name: "Prabin Sharma",
-      role: "CEO & Founder",
-      bio: "Jane has over 2 years of experience in education technology and is passionate about making learning accessible to everyone.",
+      role: "Software Engineer",
+      bio: "As a developer who navigated the competitive placement landscape, Prabin founded AptiCode to solve the problems he faced. He is dedicated to building tools that genuinely help students and professionals achieve their career ambitions in the tech world.",
       image: "/placeholder.svg?height=100&width=100",
     },
   ]
 
   return (
     <div className="container mx-auto py-10 px-4">
-      <h1 className="text-4xl font-bold mb-8 text-center">About TestMaster</h1>
+      <h1 className="text-4xl font-bold mb-8 text-center">About AptiCode</h1>
 
       <section className="mb-12">
         <Card>
@@ -22,7 +22,7 @@ export default function AboutUsPage() {
           </CardHeader>
           <CardContent>
             <p className="text-lg">
-              At TestMaster, we&apos;re committed to revolutionizing the way people prepare for and take tests. Our mission is to provide a cutting-edge, adaptive testing platform that helps individuals achieve their full potential and succeed in their academic and professional pursuits.
+              To empower every developer with a single, intelligent platform to master coding, conquer aptitude tests, and succeed in their career goals. We are committed to making placement preparation seamless, effective, and accessible to all.
             </p>
           </CardContent>
         </Card>
@@ -35,10 +35,10 @@ export default function AboutUsPage() {
           </CardHeader>
           <CardContent>
             <p className="mb-4">
-              Founded in 2024, TestMaster was born out of a desire to make test-taking less stressful and more effective. Our team of educators, technologists, and designers came together with a shared vision: to create a platform that adapts to each user&apos;s needs and provides personalized learning experiences.
+              AptiCode was born from a common frustration. As students and developers, we juggled countless platforms for coding practice, aptitude tests, and interview prep. The learning process was fragmented, inefficient, and often overwhelming. We knew there had to be a better way.
             </p>
             <p>
-              Since our inception, we&apos;ve helped thousands of students and professionals achieve their goals through our innovative approach to testing and assessment. We continue to evolve and improve our platform, always keeping our users&apos; success at the forefront of everything we do.
+              We envisioned a single, unified platform where aspiring developers could find everything they need to succeed. A place to practice coding on a mobile-friendly editor, sharpen aptitude skills with a vast question bank, and get AI-powered feedback to improve—all in one place. That vision became AptiCode.
             </p>
           </CardContent>
         </Card>
