@@ -7,6 +7,8 @@ import Footer from "@/components/ui/footer";
 import { AiProvider } from "@/context/AiContext";
 import AiAssistant from "@/components/ai-assistant/AiAssistant";
 import ReactQueryProvider from "./providers";
+import { Analytics } from '@vercel/analytics/react';
+
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -75,7 +77,6 @@ export const metadata: Metadata = {
   },
 };
 
-import { CSPostHogProvider } from "./posthog-provider";
 
 import AppNavigation from "@/components/app-navigation";
 
@@ -111,27 +112,26 @@ export default function RootLayout({
 
   return (
     <html lang="en" data-color-mode="dark">
-      <CSPostHogProvider>
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased dark`}
-        >
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: JSON.stringify([jsonLd, softwareAppSchema]) }}
-          />
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased dark`}
+      >
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify([jsonLd, softwareAppSchema]) }}
+        />
 
-          <ReactQueryProvider>
-            <AiProvider>
-              <AppNavigation>
-                {children}
-                <Footer />
-              </AppNavigation>
-              <Toaster />
-              <AiAssistant />
-            </AiProvider>
-          </ReactQueryProvider>
-        </body>
-      </CSPostHogProvider>
+        <ReactQueryProvider>
+          <AiProvider>
+            <AppNavigation>
+              {children}
+              <Footer />
+            </AppNavigation>
+            <Toaster />
+            <AiAssistant />
+          </AiProvider>
+        </ReactQueryProvider>
+        <Analytics />
+      </body>
     </html>
   );
 }
