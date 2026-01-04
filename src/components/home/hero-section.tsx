@@ -3,13 +3,16 @@
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
-import { ArrowRight, Code, Brain, Trophy, Users } from "lucide-react"
+import { ArrowRight, Code, Brain, Trophy, Users, Expand } from "lucide-react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 
 export default function HeroSection() {
   const [currentFeature, setCurrentFeature] = useState(0)
-  const features = ["Code", "Compete", "Contribute", "Earn"]
-  const colors = ["text-blue-400", "text-primary", "text-green-400", "text-yellow-400"]
+  const [codeOutput, setCodeOutput] = useState<string | null>(null)
+  const router = useRouter()
+  const features = ["Code", "Compete", "Contribute", "Online Tests"]
+  const colors = ["text-blue-400", "text-primary", "text-green-400", "text-purple-400"]
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -17,6 +20,13 @@ export default function HeroSection() {
     }, 2000)
     return () => clearInterval(interval)
   }, [features.length])
+
+  const runCode = () => {
+    // Simulate code execution
+    setTimeout(() => {
+      setCodeOutput("Output: 6")
+    }, 500)
+  }
 
   return (
     <section className="relative overflow-hidden py-20 md:py-32">
@@ -58,12 +68,12 @@ export default function HeroSection() {
                 <span className="text-gray-300">Aptitude Tests</span>
               </div>
               <div className="flex items-center gap-2">
-                <Trophy className="h-5 w-5 text-purple-400" />
+                <Trophy className="h-5 w-5 text-green-400" />
                 <span className="text-gray-300">Win Prizes</span>
               </div>
               <div className="flex items-center gap-2">
-                <Users className="h-5 w-5 text-green-400" />
-                <span className="text-gray-300">Group Tests</span>
+                <Users className="h-5 w-5 text-purple-400" />
+                <span className="text-gray-300">Online Tests</span>
               </div>
             </div>
           </motion.div>
@@ -85,43 +95,63 @@ export default function HeroSection() {
                 <div className="text-sm text-gray-400">AptiCode Challenge</div>
               </div>
               <div className="font-mono text-sm bg-black/80 p-4 rounded border border-gray-800 space-y-2">
-                <div className="text-gray-500">{`// Solve the challenge`}</div>
+                <div className="text-gray-500">{`# Solve the challenge`}</div>
                 <div>
-                  <span className="text-primary">function</span>{" "}
-                  <span className="text-blue-400">findMaxSubarraySum</span>
+                  <span className="text-primary">def</span>{" "}
+                  <span className="text-blue-400">find_max_subarray_sum</span>
                   <span className="text-gray-300">(</span>
                   <span className="text-orange-300">arr</span>
-                  <span className="text-gray-300">) {`{`}</span>
+                  <span className="text-gray-300">):</span>
                 </div>
                 <div className="pl-4">
-                  <span className="text-primary">let</span> <span className="text-blue-300">maxSoFar</span>
+                  <span className="text-blue-300">max_so_far</span>
                   <span className="text-gray-300"> = </span>
                   <span className="text-orange-300">arr</span>
                   <span className="text-gray-300">[</span>
                   <span className="text-yellow-300">0</span>
-                  <span className="text-gray-300">];</span>
+                  <span className="text-gray-300">]</span>
                 </div>
                 <div className="pl-4">
-                  <span className="text-primary">let</span> <span className="text-blue-300">maxEndingHere</span>
+                  <span className="text-blue-300">max_ending_here</span>
                   <span className="text-gray-300"> = </span>
                   <span className="text-orange-300">arr</span>
                   <span className="text-gray-300">[</span>
                   <span className="text-yellow-300">0</span>
-                  <span className="text-gray-300">];</span>
+                  <span className="text-gray-300">]</span>
                 </div>
-                <div className="pl-4 text-gray-500">{`// Your solution here...`}</div>
-                <div>
-                  <span className="text-gray-300">{`}`}</span>
+                <div className="pl-4 text-gray-500">{`# Your solution here...`}</div>
+                <div className="pl-4">
+                  <span className="text-primary">return</span> <span className="text-blue-300">max_so_far</span>
                 </div>
               </div>
               <div className="mt-4 flex items-center justify-between">
                 <div className="text-sm text-gray-400">
                   Difficulty: <span className="text-yellow-500">Medium</span>
                 </div>
-                <Button size="sm" className="bg-primary hover:bg-primary/80 text-primary-text">
-                  Submit Solution
-                </Button>
+                <div className="flex gap-2">
+                  <Button 
+                    size="sm" 
+                    variant="outline"
+                    className="border-primary text-primary hover:bg-primary/50"
+                    onClick={() => router.push('/online-compiler/python')}
+                  >
+                    <Expand className="w-4 h-4 mr-1" />
+                    Expand
+                  </Button>
+                  <Button 
+                    size="sm" 
+                    className="bg-primary hover:bg-primary/80 text-primary-text"
+                    onClick={runCode}
+                  >
+                    Run Code
+                  </Button>
+                </div>
               </div>
+              {codeOutput && (
+                <div className="mt-4 p-4 bg-gray-900 border border-gray-700 rounded">
+                  <div className="text-sm text-green-400 font-mono">{codeOutput}</div>
+                </div>
+              )}
             </div>
           </motion.div>
         </div>
