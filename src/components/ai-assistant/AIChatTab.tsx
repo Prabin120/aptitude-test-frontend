@@ -110,11 +110,11 @@ export default function AIChatTab({ slug, domain, contextData, onSaveToNotes }: 
     // Flatten messages from history
     // Backend returns messages in DESC order (newest first), so we need to reverse
     const historyMessages: Message[] = data?.pages.flatMap(page =>
-        page.aiCalls.map((call: { prompt: string, response: string }) => [
+        page.aiCalls.reverse().map((call: { prompt: string, response: string }) => [
             { role: "user" as const, content: call.prompt },
             { role: "model" as const, content: call.response }
         ])
-    ).flat().reverse() || [];
+    ).flat() || [];
 
     const displayMessages = historyMessages;
 
