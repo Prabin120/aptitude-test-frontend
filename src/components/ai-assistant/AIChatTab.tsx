@@ -1,16 +1,30 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { Send, User, Bot, Save, Loader2, RotateCcw, AlertCircle, History, Clock } from "lucide-react"
+import { Send, User, Bot, Save, Loader2, RotateCcw, AlertCircle, History, Clock, Settings, Terminal } from "lucide-react"
 import { Button } from "../ui/button"
 import { Input } from "../ui/input"
+import { Label } from "../ui/label"
 import { ScrollArea } from "../ui/scroll-area"
 import { Avatar, AvatarFallback } from "../ui/avatar"
+import { Dialog, DialogContent } from "@/components/ui/dialog"
 import { apiEntryPoint } from "@/consts"
 import ReactMarkdown from "react-markdown"
 import { toast } from "sonner"
 import { useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { v4 as uuidv4 } from 'uuid';
+import Link from "next/link"
+
+// API Key management for AI Chat
+const apticode_gemini_key = "apticode_gemini_key";
+
+const setAIApiKey = (apiKey: string) => {
+    localStorage.setItem(apticode_gemini_key, apiKey);
+}
+
+const getAIApiKey = () => {
+    return localStorage.getItem(apticode_gemini_key);
+}
 
 interface Message {
     role: "user" | "model"
@@ -31,6 +45,8 @@ export default function AIChatTab({ slug, domain, contextData, onSaveToNotes }: 
     const [conversationId, setConversationId] = useState<string | null>(null)
     const [contextLimitReached, setContextLimitReached] = useState(false)
     const [showConversations, setShowConversations] = useState(false)
+    const [showSettingsModal, setShowSettingsModal] = useState(false)
+    const [apiKey, setApiKey] = useState("")
 
     // Fetch conversation threads
     const { data: conversationsData } = useInfiniteQuery({
@@ -59,6 +75,12 @@ export default function AIChatTab({ slug, domain, contextData, onSaveToNotes }: 
             const newId = uuidv4();
             localStorage.setItem(storedKey, newId);
             setConversationId(newId);
+        }
+        
+        // Load API key if available
+        const storedApiKey = getAIApiKey();
+        if (storedApiKey) {
+            setApiKey(storedApiKey);
         }
     }, [slug]);
 
@@ -124,15 +146,15 @@ export default function AIChatTab({ slug, domain, contextData, onSaveToNotes }: 
         mutationFn: async (newMessageContent: string) => {
             const contextString = `Page: ${slug}, Section: ${domain}\n\nPage Content Context:\n${contextData || "No specific page context"}`
 
-            // Current history for context (simplified, ideally backend handles history reconstruction from DB if using conversationId, 
-            // but our backend still expects 'messages' array for context building in one go if stateless, but we added conversationId).
-            // However, the backend `chatWithAI` logic constructs prompt from `messages` body. 
-            // We should send the *visible* history + new message.
+            // Current history for context
             const currentHistory = displayMessages.map(m => ({ role: m.role, content: m.content }));
+            const userApiKey = getAIApiKey();
+            
             const payload = {
                 messages: [...currentHistory, { role: "user", content: newMessageContent }],
                 context: contextString,
-                conversationId: conversationId
+                conversationId: conversationId,
+                apiKey: userApiKey
             };
 
             const res = await fetch(`${apiEntryPoint}/p/api/v1/ai/chat`, {
@@ -150,6 +172,10 @@ export default function AIChatTab({ slug, domain, contextData, onSaveToNotes }: 
             }
             if (res.status === 401 || res.status === 403) {
                 throw new Error("UNAUTHORIZED");
+            }
+            if (res.status === 405) {
+                // Quota exceeded
+                throw new Error("QUOTA_EXCEEDED");
             }
             if (!res.ok) {
                 throw new Error(data.message || "Failed to send message");
@@ -172,6 +198,8 @@ export default function AIChatTab({ slug, domain, contextData, onSaveToNotes }: 
                         onClick: () => window.location.href = "/login"
                     }
                 });
+            } else if (error.message === "QUOTA_EXCEEDED") {
+                setShowSettingsModal(true);
             } else {
                 toast.error(error.message);
             }
@@ -197,11 +225,91 @@ export default function AIChatTab({ slug, domain, contextData, onSaveToNotes }: 
         if (scrollRef.current) {
             scrollRef.current.scrollIntoView({ behavior: "smooth" });
         }
-    }, [displayMessages.length, mutation.isPending]);
+    }, [displayMessages.length]);
+
+    // Settings Modal Component
+    const SettingsModal = () => (
+        <Dialog open={showSettingsModal} onOpenChange={setShowSettingsModal}>
+            <DialogContent className="max-w-3xl gap-0 p-0 overflow-hidden bg-zinc-950 border-zinc-800 text-zinc-100">
+                <div className="grid grid-cols-4 h-[500px]">
+                    {/* Sidebar */}
+                    <div className="col-span-1 border-r border-zinc-800 bg-zinc-900/50 p-4 space-y-2">
+                        <div className="mb-6 px-2">
+                            <h2 className="text-lg font-semibold flex items-center gap-2">
+                                <Settings className="w-5 h-5" />
+                                Settings
+                            </h2>
+                        </div>
+                        <button
+                            onClick={() => {}}
+                            className="w-full flex items-center gap-3 px-3 py-2 text-sm rounded-md transition-colors bg-zinc-800 text-white font-medium"
+                        >
+                            <Terminal className="w-4 h-4" />
+                            API Key Setup
+                        </button>
+                    </div>
+
+                    {/* Content */}
+                    <div className="col-span-3 p-6 overflow-y-auto">
+                        <div className="space-y-6">
+                            <div>
+                                <h3 className="text-xl font-medium mb-1">API Key Setup</h3>
+                                <p className="text-sm text-zinc-400">Add API key to access AptiCode AI for free.</p>
+                            </div>
+
+                            <div className="space-y-4">
+                                <div className="space-y-2">
+                                    <Label htmlFor="api-key" className="text-zinc-300">API Key (Google Gemini)</Label>
+                                    <div className="flex gap-2">
+                                        <Input
+                                            id="api-key"
+                                            value={apiKey}
+                                            onChange={(e) => setApiKey(e.target.value)}
+                                            type="password"
+                                            placeholder="AI..."
+                                            className="bg-zinc-900 border-zinc-700 focus-visible:ring-primary"
+                                        />
+                                        <Button 
+                                            onClick={() => {
+                                                setAIApiKey(apiKey);
+                                                toast.success("API Key saved successfully");
+                                                setShowSettingsModal(false);
+                                            }} 
+                                            className="bg-primary hover:bg-primary/90 text-primary-text"
+                                        >
+                                            Save
+                                        </Button>
+                                    </div>
+                                    <p className="text-xs text-zinc-500">
+                                        Your API key is stored locally in your browser. We will not store your API key anywhere. Read our <Link href="/privacy-policy" className="text-primary hover:text-primary/80 underline underline-offset-4">Privacy Policy</Link> for more details.
+                                    </p>
+                                </div>
+
+                                <div className="pt-4 border-t border-zinc-800">
+                                    <h4 className="text-sm font-medium mb-2 text-zinc-300">How to get an API Key?</h4>
+                                    <Link
+                                        href="/blogs/how-to-use-unlimited-ai-without-premium"
+                                        className="text-sm text-primary hover:text-primary/80 underline underline-offset-4"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        Get Free API Key &rarr;
+                                    </Link>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </DialogContent>
+        </Dialog>
+    );
 
 
     return (
         <div className="flex flex-col h-full relative">
+            {/* Settings Modal */}
+            <SettingsModal />
+            
             <div className="flex justify-between items-center p-2 border-b">
                 <div className="flex items-center gap-1">
                     <h3 className="text-sm font-medium">AI Assistant</h3>
