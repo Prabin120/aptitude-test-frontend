@@ -39,8 +39,15 @@ export default function HeroSection() {
       <div className="container mx-auto px-4 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-            <h1 className="text-3xl md:text-5xl font-bold mb-6">
-              Learn. <span className={colors[currentFeature]}>{features[currentFeature]}.</span> Grow.
+            <h1 className="text-3xl md:text-5xl font-bold mb-6 flex flex-wrap items-center gap-x-2">
+              <span>Learn.</span>
+              <span className="inline-grid text-left">
+                <span className="invisible row-start-1 col-start-1 select-none" aria-hidden="true">Online Tests.</span>
+                <span className={`${colors[currentFeature]} row-start-1 col-start-1`}>
+                  {features[currentFeature]}.
+                </span>
+              </span>
+              <span>Grow.</span>
             </h1>
             <p className="text-xl text-gray-300 mb-8 max-w-lg">
               The ultimate platform for developers to practice coding, compete in challenges, and earn rewards through
@@ -53,7 +60,12 @@ export default function HeroSection() {
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
-              <Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary/50">
+              <Button
+                size="lg"
+                variant="outline"
+                className="border-primary text-primary hover:bg-primary/50"
+                onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}
+              >
                 Explore Features
               </Button>
             </div>
@@ -129,8 +141,8 @@ export default function HeroSection() {
                   Difficulty: <span className="text-yellow-500">Medium</span>
                 </div>
                 <div className="flex gap-2">
-                  <Button 
-                    size="sm" 
+                  <Button
+                    size="sm"
                     variant="outline"
                     className="border-primary text-primary hover:bg-primary/50"
                     onClick={() => router.push('/online-compiler/python')}
@@ -138,8 +150,8 @@ export default function HeroSection() {
                     <Expand className="w-4 h-4 mr-1" />
                     Expand
                   </Button>
-                  <Button 
-                    size="sm" 
+                  <Button
+                    size="sm"
                     className="bg-primary hover:bg-primary/80 text-primary-text"
                     onClick={runCode}
                   >

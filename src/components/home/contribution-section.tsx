@@ -117,7 +117,7 @@ export default function ContributeSection() {
                       ))}
                     </div>
 
-                    <Button asChild className="w-full bg-secondary hover:bg-secondary/90">
+                    <Button asChild className="w-full bg-secondary hover:bg-secondary/90 text-secondary-text">
                       <Link href="/rewards">
                         View All Rewards <ArrowRight className="ml-2 h-4 w-4" />
                       </Link>

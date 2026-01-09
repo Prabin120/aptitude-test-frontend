@@ -107,7 +107,10 @@ export default function Sidebar({ isMobile = false }: { isMobile?: boolean }) {
         { label: "Rewards", href: "/rewards", icon: CircleDollarSign },
     ]
 
-    if (!mounted) return null
+    if (!mounted) {
+        if (isMobile) return null;
+        return <div className="hidden md:block w-[260px] border-r bg-card h-screen sticky top-0" />;
+    }
 
     const NavLink = ({ item, isCollapsed }: { item: NavItem; isCollapsed: boolean }) => {
         const isActive = pathname === item.href

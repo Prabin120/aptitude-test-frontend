@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Users, Trophy, Clock, Calendar, ArrowRight } from "lucide-react"
 import Link from "next/link"
 
-export default function TestsSection() {
+export default function TestsOverviewSection() {
   return (
     <section className="py-20 relative overflow-hidden">
       {/* <div className="absolute inset-0 bg-gradient-to-b from-black via-primary/20 to-black"></div> */}
@@ -184,7 +184,7 @@ export default function TestsSection() {
                           <div className="text-sm text-gray-400">Time Remaining</div>
                           <div className="text-xl font-mono">00:45:22</div>
                         </div>
-                        <Button className="bg-primary hover:bg-primary/90 text-primary-text">View Details</Button>
+                        {/* <Button className="bg-primary hover:bg-primary/90 text-primary-text">View Details</Button> */}
                       </div>
                     </div>
                   </div>
