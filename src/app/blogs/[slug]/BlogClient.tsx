@@ -10,6 +10,8 @@ interface BlogClientProps {
     error?: string
 }
 
+import { toast } from "sonner"
+
 export default function BlogClient({ blog, error }: BlogClientProps) {
     if (error || !blog) {
         return (
@@ -42,6 +44,32 @@ export default function BlogClient({ blog, error }: BlogClientProps) {
             month: 'long',
             day: 'numeric'
         })
+    }
+
+    const handleShare = async () => {
+        const shareData = {
+            title: blog.title,
+            text: `Check out this blog post: ${blog.title}`,
+            url: window.location.href,
+        }
+
+        try {
+            if (navigator.share) {
+                await navigator.share(shareData)
+            } else {
+                await navigator.clipboard.writeText(window.location.href)
+                toast.success("Link copied to clipboard")
+            }
+        } catch (err) {
+            console.error("Error sharing:", err)
+            // Fallback for cases where share is cancelled or fails
+            try {
+                await navigator.clipboard.writeText(window.location.href)
+                toast.success("Link copied to clipboard")
+            } catch (copyErr) {
+                console.error("Error copying to clipboard:", copyErr)
+            }
+        }
     }
 
     return (
@@ -89,7 +117,10 @@ export default function BlogClient({ blog, error }: BlogClientProps) {
                         </div>
 
                         <div className="flex items-center gap-3">
-                            <button className="p-2 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-700 transition-all">
+                            <button
+                                onClick={handleShare}
+                                className="p-2 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-700 transition-all"
+                            >
                                 <Share2 className="w-4 h-4" />
                             </button>
                         </div>
